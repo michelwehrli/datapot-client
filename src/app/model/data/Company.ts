@@ -1,3 +1,4 @@
+import FormHeadingComponent from '~/components/form/form-heading/form-heading'
 import InputSelectComponent from '~/components/form/input-select/input-select'
 import InputTextComponent, {
   EInputType,
@@ -11,6 +12,7 @@ import IPhonenumber from '~/interfaces/data/IPhonenumber'
 import DataService from '~/services/DataService'
 import Table from '../extend/Table'
 import Address from './Address'
+import Contact from './Contact'
 import Email from './Email'
 import Phonenumber from './Phonenumber'
 
@@ -20,6 +22,7 @@ export default class Company extends Table implements ICompany {
   addresses: Address[]
   emails: Email[]
   phonenumbers: Phonenumber[]
+  contact_person: Contact
   websites?: string[]
   remarks?: string
 
@@ -28,20 +31,26 @@ export default class Company extends Table implements ICompany {
     this.id = data.id ? data.id : undefined
     this.name = data.name ? data.name : undefined
     this.addresses = []
-    if (data.addresses)
+    if (data.addresses) {
       data.addresses.forEach((address: IAddress) => {
         this.addresses.push(new Address(address))
       })
+    }
     this.emails = []
-    if (data.emails)
+    if (data.emails) {
       data.emails.forEach((email: IEmail) => {
         this.emails.push(new Email(email))
       })
+    }
     this.phonenumbers = []
-    if (data.phonenumbers)
+    if (data.phonenumbers) {
       data.phonenumbers.forEach((phonenumber: IPhonenumber) => {
         this.phonenumbers.push(new Phonenumber(phonenumber))
       })
+    }
+    this.contact_person = data.contact_person
+      ? new Contact(data.contact_person)
+      : undefined
     this.websites = data.websites ? data.websites : []
 
     this.remarks = data.remarks
@@ -93,10 +102,16 @@ export default class Company extends Table implements ICompany {
     return {
       ...(isInitial && {
         name: this.fieldName,
+        __heading_1: new FormHeadingComponent('Kommunikation'),
         addresses: new InputMultipleComponent(
           (value: Address[]) => (this.addresses = value),
           this.addresses,
           () => new Address()
+        ),
+        contact_person: new InputSelectComponent(
+          (value: Contact) => (this.contact_person = value),
+          await Contact.getSelectMap(),
+          this.contact_person ? this.contact_person.id : undefined
         ),
         emails: new InputMultipleComponent(
           (value: Email[]) => (this.emails = value),
@@ -110,6 +125,7 @@ export default class Company extends Table implements ICompany {
           () => new Phonenumber(),
           true
         ),
+        __heading_2: new FormHeadingComponent('Weiteres'),
         websites: new InputMultipleComponent(
           (value: string[]) => (this.websites = value),
           this.websites,
