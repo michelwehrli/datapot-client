@@ -25,7 +25,7 @@ export default class CompanyWithLocation
   }
 
   public toString(): string {
-    return null
+    return this.company.toString()
   }
 
   public validate(): boolean {
@@ -34,10 +34,7 @@ export default class CompanyWithLocation
 
   private addressSelector: InputSelectComponent
 
-  public async getField(
-    isInitial: boolean,
-    changed?: (value: CompanyWithLocation) => void
-  ): Promise<any> {
+  public async getField(isInitial: boolean): Promise<any> {
     this.addressSelector = new InputSelectComponent(
       (value: Address) => (this.address = value),
       await CompanyWithLocation.getAddressSelectMap(this.company),
