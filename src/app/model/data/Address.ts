@@ -31,7 +31,7 @@ export default class Address extends Table implements IAddress {
     return this.id
   }
 
-  toString(): string {
+  toString(separator?: string): string {
     const values: string[] = []
     if (this.street) {
       values.push(this.street)
@@ -48,7 +48,7 @@ export default class Address extends Table implements IAddress {
     if (this.country && this.country.toString()) {
       values.push(this.country.toString())
     }
-    return values.join(', ')
+    return values.join(separator ? separator : ', ')
   }
 
   public validate(): boolean {
