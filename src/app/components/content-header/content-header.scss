@@ -1,0 +1,28 @@
+dp-content-header {
+  display: flex;
+  padding: 15px 15px 15px 20px;
+  background-color: #fafafa;
+  border-bottom: solid 1px $light;
+
+  h3 {
+    flex: 1;
+    margin: 0;
+    line-height: 32px;
+
+    i {
+      margin-right: 12px;
+      width: 22px;
+      text-align: center;
+    }
+  }
+
+  .buttons {
+    flex: 0;
+    display: flex;
+
+    dp-button {
+      flex: 0;
+      margin-left: 10px;
+    }
+  }
+}

@@ -1,0 +1,35 @@
+@import url('colors.scss');
+
+dp-module-crm {
+  display: flex;
+  height: 100%;
+
+  dp-navigation {
+    flex: 0 0 250px;
+  }
+
+  .right {
+    flex: 1;
+    max-width: calc(100vw - 250px);
+    display: flex;
+    flex-direction: column;
+
+    .content-outer {
+      flex: 1;
+      height: calc(100% - 31px);
+      padding: 20px 20px 0 10px;
+
+      .content {
+        box-shadow: 0 0 30px 0 rgba(0, 0, 0, 0.2);
+        height: 100%;
+        overflow: hidden;
+        border-radius: 6px;
+        background-color: $white;
+      }
+    }
+
+    dp-footer {
+      flex: 0;
+    }
+  }
+}

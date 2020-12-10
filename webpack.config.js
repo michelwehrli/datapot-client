@@ -1,0 +1,64 @@
+const path = require('path')
+const rules = require('require.all')('./tasks/rules')
+const plugins = require('require.all')('./tasks/plugins')
+const fs = require('fs')
+
+module.exports = (env) => {
+  const environment = env.NODE_ENV
+  env.NODE_ENV = JSON.stringify(environment)
+
+  rules((name, rule) => rule(environment))
+  plugins((name, rule) => rule(environment))
+
+  return {
+    mode: environment,
+    entry: {
+      app: [
+        path.resolve(__dirname, 'src/app/app.ts'),
+        path.resolve(__dirname, 'src/styles/app.scss'),
+      ],
+    },
+    output: {
+      filename: '[name].js',
+    },
+    module: {
+      rules: [...rules.files, ...rules.scripts, ...rules.styles],
+    },
+    plugins: [plugins.html, plugins.images, plugins.extractStyles],
+    devServer: {
+      open: true,
+      port: 4000,
+      host: 'new-crm.datapot.ch',
+      https: true,
+      key: fs.readFileSync('ssl/private1.key'),
+      cert: fs.readFileSync('ssl/private1.crt'),
+      hot: true,
+      historyApiFallback: true,
+      watchOptions: {
+        poll: true,
+      },
+      // proxy: { '/api': 'http://localhost:3000' }
+    },
+    optimization: {
+      minimizer: [plugins.uglify],
+      splitChunks: {
+        cacheGroups: {
+          vendor: {
+            chunks: 'all',
+            test: path.resolve(__dirname, 'node_modules'),
+            name: 'vendor',
+            enforce: true,
+          },
+        },
+      },
+    },
+    resolve: {
+      extensions: ['.ts', '.js'],
+      alias: {
+        styles: path.resolve(__dirname, 'src/styles'),
+        assets: path.resolve(__dirname, 'src/assets'),
+        '~': path.resolve(__dirname, 'src/app'),
+      },
+    },
+  }
+}

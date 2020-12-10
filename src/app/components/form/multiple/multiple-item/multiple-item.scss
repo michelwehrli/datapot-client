@@ -1,0 +1,55 @@
+@import '../../../../../styles/colors.scss';
+
+dp-multiple-item {
+  display: flex;
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 5px;
+  background-color: $nearly-white;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  .component {
+    flex: 1;
+
+    > p {
+      line-height: 36px;
+    }
+
+    > * {
+      margin-bottom: 10px;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  > dp-button {
+    margin-left: 10px;
+
+    &:last-child {
+      margin-right: 0;
+    }
+
+    button {
+      padding: 10px 12px;
+    }
+
+    &.hidden {
+      visibility: hidden;
+    }
+
+    &.sort {
+      display: none;
+
+      button {
+        background-color: transparent;
+        color: $light-active;
+        cursor: grab;
+      }
+    }
+  }
+}

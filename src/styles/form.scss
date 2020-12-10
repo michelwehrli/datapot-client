@@ -1,0 +1,163 @@
+@import 'colors.scss';
+
+input,
+select,
+textarea {
+  font-family: 'Quicksand', sans-serif;
+  font-size: 16px;
+  width: 100%;
+  min-width: 120px;
+}
+input[type='checkbox'] {
+  width: auto;
+  min-width: auto;
+  padding: 0;
+  margin: 0 4px 0 0;
+  top: 2px;
+  width: 15px;
+  height: 15px;
+  position: relative;
+}
+
+input {
+  padding: 8px 10px;
+  border-radius: 3px;
+  border: none;
+  background-color: $light;
+  outline: none;
+
+  &:hover,
+  &:focus {
+    background-color: $light-hover;
+  }
+}
+
+button,
+input[type='submit'],
+select,
+textarea {
+  border: none;
+  padding: 8px 12px;
+  margin-bottom: 15px;
+  border-radius: 4px;
+  font-size: 16px;
+  line-height: 18px;
+  appearance: none;
+  outline: none;
+  background-color: $light;
+
+  &:disabled {
+    cursor: default;
+
+    &:hover,
+    &:active {
+      background-color: transparent;
+    }
+  }
+
+  &:hover,
+  &:focus {
+    background-color: $light-hover;
+  }
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  &.transparent {
+    background-color: transparent;
+    color: $medium;
+
+    &:hover {
+      background-color: $nearly-white;
+    }
+
+    &:active {
+      background-color: $almost-white;
+    }
+  }
+
+  &.accent {
+    background-color: $accent;
+    color: $white;
+
+    &:hover {
+      background-color: $accent-hover;
+    }
+
+    &:active {
+      background-color: $accent-active;
+    }
+  }
+
+  &.positive {
+    background-color: $positive;
+    color: $white;
+
+    &:hover {
+      background-color: $positive-hover;
+    }
+
+    &:active {
+      background-color: $positive-active;
+    }
+  }
+
+  &.negative {
+    background-color: $negative;
+    color: $white;
+
+    &:hover {
+      background-color: $negative-hover;
+    }
+
+    &:active {
+      background-color: $negative-active;
+    }
+  }
+
+  &.right {
+    position: relative;
+    left: 100%;
+    transform: translateX(-100%);
+  }
+}
+
+button {
+  &:active {
+    background-color: $light-active;
+  }
+}
+
+button,
+input[type='submit'],
+input::-webkit-file-upload-button,
+select {
+  cursor: pointer;
+}
+
+input::-webkit-file-upload-button {
+  background-color: $accent;
+  color: $white;
+  margin: 0 10px 0 0;
+  padding: 9px 12px;
+  border-radius: 4px;
+  font-size: 16px;
+  line-height: 18px;
+  appearance: none;
+  outline: none;
+  border: none;
+  font-family: 'Quicksand', sans-serif;
+
+  &:hover {
+    background-color: $accent-hover;
+  }
+
+  &:active {
+    background-color: $accent-active;
+  }
+}
+
+select {
+  padding: 9px 34px 9px 12px;
+}

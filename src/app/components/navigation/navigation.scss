@@ -1,0 +1,64 @@
+dp-navigation {
+  padding: 20px;
+  overflow: auto;
+  direction: rtl;
+
+  * {
+    direction: ltr;
+  }
+
+  .user-wrap {
+    display: flex;
+    margin-bottom: 30px;
+
+    dp-button button {
+      padding-left: 8px;
+      padding-right: 6px;
+    }
+
+    button {
+      background-color: transparent;
+
+      &:hover {
+        background-color: $light-hover;
+      }
+
+      &:active {
+        background-color: $light-active;
+      }
+    }
+
+    .user {
+      border-radius: 6px;
+      margin-left: 0;
+      display: flex;
+      width: 100%;
+      margin-right: 2px;
+
+      .image {
+        height: 32px;
+        border-radius: 4px;
+        background-color: #fff;
+        margin-right: 10px;
+        flex: 0 0 32px;
+        overflow: hidden;
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          object-position: top;
+        }
+      }
+
+      p {
+        flex: 1;
+        padding: 6px 0;
+        white-space: nowrap;
+        text-align: left;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+  }
+}

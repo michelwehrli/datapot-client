@@ -1,0 +1,55 @@
+@import url('colors.scss');
+
+dp-navigation-item {
+  margin-bottom: 4px;
+  display: block;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  button {
+    display: block;
+    padding: 6px 12px;
+    border-radius: 4px;
+    width: 100%;
+    text-align: left;
+    user-select: none;
+    background: transparent;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    i {
+      margin-right: 12px;
+      width: 16px;
+      text-align: center;
+    }
+
+    &.big {
+      padding-top: 10px;
+      padding-bottom: 10px;
+    }
+
+    &:hover {
+      background: $light-hover;
+    }
+
+    &:active {
+      background: $light-active;
+    }
+
+    &.active {
+      color: $white;
+      background: $accent;
+
+      &:hover {
+        background: $accent-hover;
+      }
+
+      &:active {
+        background: $accent-active;
+      }
+    }
+  }
+}

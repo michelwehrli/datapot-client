@@ -1,0 +1,51 @@
+dp-module-login {
+  display: block;
+  width: 100%;
+
+  h1 {
+    margin-bottom: 30px;
+  }
+
+  .wrapper {
+    position: absolute;
+    top: 150px;
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 340px;
+    height: 200px;
+    width: 100%;
+  }
+
+  dp-field .label-wrap {
+    width: 140px;
+  }
+
+  .inputs {
+    margin-bottom: 15px;
+  }
+}
+
+dp-modal.small.login {
+  .inner {
+    height: auto !important;
+  }
+
+  dp-module-login .wrapper {
+    padding: 15px;
+    position: static;
+    top: auto;
+    left: auto;
+    height: auto;
+    transform: initial;
+  }
+}
+
+@media only screen and (max-width: $media-mobile) {
+  dp-login {
+    height: auto;
+
+    .wrapper {
+      padding: 0 40px;
+    }
+  }
+}

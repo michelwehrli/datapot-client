@@ -1,0 +1,33 @@
+dp-multiple {
+  display: flex;
+
+  &.empty {
+    .add {
+      display: none;
+    }
+  }
+
+  > .container {
+    flex: 1;
+
+    > dp-button button {
+      padding: 10px 12px;
+    }
+
+    > dp-multiple-item {
+      margin-bottom: 5px;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  > dp-button {
+    button {
+      padding: 10px 12px;
+      margin-top: 5px;
+      margin-left: 10px;
+    }
+  }
+}

@@ -1,0 +1,76 @@
+@import url('colors.scss');
+
+table {
+  border-spacing: 0;
+  min-width: 100%;
+
+  thead {
+    tr {
+      &.top th {
+        padding-bottom: 0;
+      }
+
+      &.bottom th {
+        padding-bottom: 10px;
+        border-bottom: solid 1px $light-hover;
+      }
+
+      th {
+        padding: 10px;
+        text-align: left;
+        border-right: solid 1px $light-hover;
+
+        &.hidden {
+          display: none;
+        }
+
+        &:first-child {
+          border-left: solid 1px $light-hover;
+        }
+
+        p {
+          font-weight: 500;
+          white-space: nowrap;
+        }
+      }
+    }
+  }
+  tbody {
+    tr {
+      cursor: pointer;
+
+      &:hover {
+        background-color: $accent-light !important;
+      }
+
+      &:nth-child(odd) {
+        background-color: $almost-white;
+      }
+
+      td {
+        padding-top: 6px;
+        padding-bottom: 6px;
+        padding-left: 10px;
+        padding-right: 10px;
+        min-width: 160px;
+        max-width: 340px;
+        height: 32px;
+        border-right: solid 1px $light-hover;
+
+        &.hidden {
+          display: none;
+        }
+
+        &:first-child {
+          border-left: solid 1px $light-hover;
+        }
+
+        p {
+          text-overflow: ellipsis;
+          overflow: hidden;
+          white-space: nowrap;
+        }
+      }
+    }
+  }
+}

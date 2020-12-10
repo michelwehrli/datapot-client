@@ -1,0 +1,14 @@
+dp-horizontal-wrapper {
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+
+  > * {
+    margin-right: 10px;
+    flex: 1;
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+}

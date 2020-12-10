@@ -1,0 +1,58 @@
+@import 'fonts';
+@import 'globals';
+@import 'typography';
+@import 'form';
+@import 'colors';
+@import 'variables';
+@import 'fa';
+@import 'table';
+
+// modules
+@import '../app/modules/login/login.scss';
+@import '../app/modules/crm/crm.scss';
+
+// contents
+@import '../app/contents/detail/detail.scss';
+@import '../app/contents/edit/edit.scss';
+@import '../app/contents/list/list.scss';
+@import '../app/contents/404/404.scss';
+
+// components
+@import '../app/components/button/button.scss';
+@import '../app/components/form-input/form-input.scss';
+@import '../app/components/footer/footer.scss';
+@import '../app/components/navigation/navigation.scss';
+@import '../app/components/navigation-item/navigation-item.scss';
+@import '../app/components/navigation-group/navigation-group.scss';
+@import '../app/components/content-header/content-header.scss';
+@import '../app/components/list/list.scss';
+@import '../app/components/datepicker/datepicker.scss';
+@import '../app/components/toast/toast.scss';
+@import '../app/components/modal/modal.scss';
+@import '../app/components/confirmation/confirmation.scss';
+@import '../app/components/document-selector/document-selector.scss';
+
+@import '../app/components/form/submit-button/submit-button.scss';
+@import '../app/components/form/input-text/input-text.scss';
+@import '../app/components/form/input-textarea/input-textarea.scss';
+@import '../app/components/form/input-date/input-date.scss';
+@import '../app/components/form/input-password/input-password.scss';
+@import '../app/components/form/input-select/input-select.scss';
+@import '../app/components/form/input-file/input-file.scss';
+@import '../app/components/form/input-document-selector/input-document-selector.scss';
+@import '../app/components/form/input-checkbox/input-checkbox.scss';
+@import '../app/components/form/field/field.scss';
+@import '../app/components/form/multiple/multiple.scss';
+@import '../app/components/form/multiple/multiple-item/multiple-item.scss';
+@import '../app/components/form/horizontal-wrapper/horizontal-wrapper.scss';
+@import '../app/components/form/form-heading/form-heading.scss';
+
+.toast-container {
+  position: absolute;
+  left: 0;
+  padding: 10px;
+  bottom: 0;
+  width: 250px;
+  height: auto;
+  pointer-events: none;
+}

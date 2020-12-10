@@ -1,0 +1,11 @@
+dp-checkbox {
+  input,
+  label {
+    cursor: pointer;
+  }
+
+  &.in-form {
+    padding: 8px 0 9px 0;
+    display: block;
+  }
+}

@@ -1,0 +1,13 @@
+dp-navigation-group {
+  margin-bottom: 20px;
+  display: block;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  p {
+    margin-bottom: 8px !important;
+    color: $medium;
+  }
+}

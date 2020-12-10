@@ -1,0 +1,66 @@
+dp-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+
+  &.small .inner {
+    width: 340px;
+    height: 150px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    .header {
+      display: none;
+    }
+    .content {
+      flex: 0 0 100%;
+    }
+  }
+
+  .inner {
+    width: 60vw;
+    height: 60vh;
+    background-color: $white;
+    position: absolute;
+    top: 20vh;
+    left: 20vw;
+    border-radius: 6px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 0 30px 0 rgba(0, 0, 0, 0.3);
+
+    .header {
+      background-color: #fafafa;
+      padding: 15px 15px 15px 20px;
+      position: sticky;
+      border-bottom: solid 1px $light;
+      display: flex;
+      flex: 1;
+
+      h3 {
+        flex: 1;
+        margin: 0;
+        line-height: 32px;
+
+        > i {
+          margin-right: 15px;
+          font-size: 16px;
+          position: relative;
+          bottom: 1px;
+        }
+      }
+    }
+
+    .content {
+      flex: 0 0 calc(100% - 63px);
+      height: 1px;
+      overflow: auto;
+    }
+  }
+}

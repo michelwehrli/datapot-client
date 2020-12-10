@@ -1,0 +1,30 @@
+dp-field {
+  display: block;
+  margin-bottom: 8px;
+  display: flex;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  .label-wrap {
+    width: 240px;
+    margin-top: 8px;
+    padding-right: 10px;
+
+    label {
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      display: block;
+    }
+  }
+
+  .container {
+    flex: 1;
+
+    > p {
+      line-height: 36px;
+    }
+  }
+}

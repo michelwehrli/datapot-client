@@ -1,0 +1,61 @@
+@import url('colors.scss');
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+a,
+span,
+label,
+strong,
+input[type='text'],
+input[type='submit'],
+select,
+button {
+  font-family: 'Quicksand', sans-serif;
+  margin: 0;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-weight: 500;
+}
+
+h1 {
+  font-size: 24px;
+}
+h2 {
+  font-size: 22px;
+}
+h3 {
+  font-size: 20px;
+}
+h4 {
+  font-size: 18px;
+}
+p,
+a,
+label,
+input[type='text'],
+input[type='submit'],
+select,
+button {
+  font-size: 16px;
+}
+
+h1,
+h2,
+h3,
+h4,
+p {
+  margin-bottom: 15px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}

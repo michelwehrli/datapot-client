@@ -1,0 +1,17 @@
+@import '../../../../styles/colors.scss';
+
+dp-input-text {
+  display: block;
+
+  &.required {
+    input {
+      border-left: solid 3px $accent-medium;
+    }
+
+    &.error {
+      input {
+        border-left: solid 3px $negative;
+      }
+    }
+  }
+}

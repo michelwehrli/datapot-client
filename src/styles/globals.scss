@@ -1,0 +1,30 @@
+$background-color: #fbfbfb;
+$scrollbar-track: #eee;
+$scrollbar-thumb: #bbb;
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+}
+
+body {
+  min-width: 320px;
+  background-color: $background-color;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: $scrollbar-track;
+}
+::-webkit-scrollbar-thumb {
+  background: $scrollbar-thumb;
+}

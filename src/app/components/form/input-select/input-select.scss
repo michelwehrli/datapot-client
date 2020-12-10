@@ -1,0 +1,25 @@
+@import '../../../../styles/colors.scss';
+
+dp-select {
+  position: relative;
+  display: block;
+
+  i {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 12px;
+  }
+
+  &.required {
+    select {
+      border-left: solid 2px $accent;
+    }
+
+    &.error {
+      select {
+        border-left: solid 3px $negative;
+      }
+    }
+  }
+}

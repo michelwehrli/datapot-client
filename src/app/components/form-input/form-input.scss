@@ -1,0 +1,31 @@
+@import url('variables.scss');
+
+dp-form-input {
+  display: flex;
+  width: 100%;
+  margin-bottom: 15px;
+
+  label {
+    margin-right: 16px;
+    line-height: 36px;
+    flex: 0 0 100px;
+  }
+
+  input {
+    flex: 1;
+  }
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+@media only screen and (max-width: $media-mobile) {
+  dp-form-input {
+    flex-direction: column;
+
+    label {
+      flex: 0;
+    }
+  }
+}

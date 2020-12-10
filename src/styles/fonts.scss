@@ -1,0 +1,51 @@
+//
+// Font-face generator for all the fonts of the project,
+// will be useful to add different files for each font.
+//
+@font-face {
+  font-family: 'Quicksand';
+  font-weight: 300;
+  src: url('../assets/fonts/Quicksand/Quicksand-Light.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Quicksand';
+  font-weight: 400;
+  src: url('../assets/fonts/Quicksand/Quicksand-Regular.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Quicksand';
+  font-weight: 500;
+  src: url('../assets/fonts/Quicksand/Quicksand-Medium.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Quicksand';
+  font-weight: 600;
+  src: url('../assets/fonts/Quicksand/Quicksand-SemiBold.ttf')
+    format('truetype');
+}
+@font-face {
+  font-family: 'Quicksand';
+  font-weight: 700;
+  src: url('../assets/fonts/Quicksand/Quicksand-Bold.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Font Awesome 5 Free';
+  font-weight: 400;
+  src: url('../assets/fonts/FontAwesome5/fa-regular-400.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Font Awesome 5 Free';
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+  src: url('../assets/fonts/FontAwesome5/fa-regular-400.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Font Awesome 5 Free';
+  font-style: normal;
+  font-weight: 900;
+  font-display: block;
+  src: url('../assets/fonts/FontAwesome5/fa-solid-900.ttf') format('truetype');
+}

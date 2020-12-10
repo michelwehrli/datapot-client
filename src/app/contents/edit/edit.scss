@@ -1,0 +1,15 @@
+dp-content-edit {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  dp-content-header {
+    flex: 0 0 63px;
+  }
+
+  form {
+    padding: 20px;
+    flex: 1;
+    overflow: auto;
+  }
+}

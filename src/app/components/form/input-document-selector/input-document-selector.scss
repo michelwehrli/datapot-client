@@ -1,0 +1,29 @@
+dp-input-document-selector {
+  display: flex;
+
+  dp-button button {
+    padding: 10px 12px;
+  }
+
+  img {
+    width: 36px;
+    height: 36px;
+    object-fit: cover;
+    margin-left: 10px;
+    border-radius: 3px;
+  }
+
+  .flexer {
+    flex: 1;
+  }
+
+  dp-button.js-clear button,
+  dp-button.js-preview button {
+    padding-left: 14px;
+    margin-left: 10px;
+  }
+
+  .hidden {
+    display: none;
+  }
+}
