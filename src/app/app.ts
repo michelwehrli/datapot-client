@@ -1,7 +1,6 @@
 import ButtonComponent from './components/button/button'
 import ContentHeaderComponent from './components/content-header/content-header'
 import FooterComponent from './components/footer/footer'
-import FormInputComponent from './components/form-input/form-input'
 import FieldComponent from './components/form/field/field'
 import InputCheckboxComponent from './components/form/input-checkbox/input-checkbox'
 import InputSelectComponent from './components/form/input-select/input-select'
@@ -48,7 +47,6 @@ import ConfirmationComponent from './components/confirmation/confirmation'
   /* COMPONENTS */
   customElements.define('dp-button', ButtonComponent)
   customElements.define('dp-submit-button', SubmitButtonComponent)
-  customElements.define('dp-form-input', FormInputComponent)
   customElements.define('dp-navigation', NavigationComponent)
   customElements.define('dp-navigation-item', NavigationItemComponent)
   customElements.define('dp-navigation-group', NavigationGroupComponent)
