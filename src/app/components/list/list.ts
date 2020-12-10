@@ -3,7 +3,6 @@ import { ETypeMatch } from '~/enums/ETypeMatch'
 import ListTemplate from '~/model/ListTemplate'
 import DataService from '~/services/DataService'
 import { Router } from '~/services/Router'
-import SessionService from '~/services/SessionService'
 import ButtonComponent from '../button/button'
 import ConfirmationComponent from '../confirmation/confirmation'
 import InputCheckboxComponent from '../form/input-checkbox/input-checkbox'
@@ -188,10 +187,17 @@ export default class ListComponent extends BaseComponent {
       const trElement: HTMLElement = document.createElement('tr')
 
       trElement.addEventListener('click', () => {
-        Router.navigate(
-          `${Router.getUrl(['CrmModule', 'EditContent'])}/${entry.getId()}`,
-          'crm'
-        )
+        if (entry.getDetail && entry.getDetail()) {
+          Router.navigate(
+            `${Router.getUrl(['CrmModule', 'DetailContent'])}/${entry.getId()}`,
+            'crm'
+          )
+        } else {
+          Router.navigate(
+            `${Router.getUrl(['CrmModule', 'EditContent'])}/${entry.getId()}`,
+            'crm'
+          )
+        }
       })
 
       for (const key in this.datamodel) {

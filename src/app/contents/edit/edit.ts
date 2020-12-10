@@ -82,7 +82,14 @@ export default class EditContent extends BaseComponent {
                 color: 'neutral',
                 click: () => {
                   modal.close()
-                  Router.navigate(`crm/list/${this.table}`, 'crm')
+                  if (this.obj.getDetail && this.obj.getDetail()) {
+                    Router.navigate(
+                      `crm/detail/${this.table}/${this.id}`,
+                      'crm'
+                    )
+                  } else {
+                    Router.navigate(`crm/list/${this.table}`, 'crm')
+                  }
                 },
               },
               {
@@ -99,7 +106,11 @@ export default class EditContent extends BaseComponent {
           true
         )
       } else {
-        Router.navigate(`crm/list/${this.table}`, 'crm')
+        if (this.obj.getDetail && this.obj.getDetail()) {
+          Router.navigate(`crm/detail/${this.table}/${this.id}`, 'crm')
+        } else {
+          Router.navigate(`crm/list/${this.table}`, 'crm')
+        }
       }
     })
     saveButton.addEventListener('button-click', async () => {
