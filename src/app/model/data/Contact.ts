@@ -531,62 +531,6 @@ export default class Contact extends Table implements IContact {
           </div>
         </div>
       </div>
-
-      <!--<div class="flex-container">
-        <div class="flex">
-          <p>${this.title ? this.title.toString() : '-'}</p>
-          <p>${this.toString()}</p>
-          <p>${this.partner ? this.partner.toString() : '-'}</p>
-          <p>${this.addresses
-            .map((address) => {
-              return address.toString('<br />')
-            })
-            .join('')}</p>
-          <p>${this.emails
-            .map((email) => {
-              return `<a href="mailto:${email.toString()}">${email.toString()}</a>`
-            })
-            .join('<br />')}</p>
-          <p>${this.phonenumbers_business
-            .map((number) => {
-              return `<a href="tel:${number.toString()}">${number.toString()}</a>`
-            })
-            .join('<br />')}</p>
-          <p>${this.phonenumbers_private
-            .map((number) => {
-              return `<a href="tel:${number.toString()}">${number.toString()}</a>`
-            })
-            .join('<br />')}</p>
-          <p>${this.companiesWithLocation
-            .map((companyWithLocation) => {
-              return companyWithLocation.toString()
-            })
-            .join('<br />')}</p>
-          <p>${this.positions
-            .map((position) => {
-              return position
-            })
-            .join('<br />')}</p>
-          <p>${this.social_medias
-            .map((social_media) => {
-              return `<a href="${social_media.toString()}" target="_blank" rel="noopener">${social_media.type.toString()}</a>`
-            })
-            .join('<br />')}</p>
-          <p>${this.rwstatus.toString()}</p>
-          <p>${this.relationship.toString()}</p>
-          <p>${this.categories
-            .map((category) => {
-              return category.toString()
-            })
-            .join('<br />')}</p>
-          <p>${this.gender.toString()}</p>
-          <p>${new Date(this.birthdate).toLocaleDateString('de-CH', {
-            day: '2-digit',
-            month: 'long',
-            year: 'numeric',
-          })}</p>
-        </div>
-      </div>-->
     `
   }
 
