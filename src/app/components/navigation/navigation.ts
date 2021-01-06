@@ -23,10 +23,13 @@ export default class NavigationComponent extends BaseComponent {
   public init(): void {
     this.createNavigation().then(() => {
       if (Router.getParams()) {
-        const navPoint: string = Router.getParams()[0]
+        const navPoint: string = Router.getUrl(Router.getRoute())
         if (navPoint && this.navItems && this.navItems[navPoint]) {
           this.navItems[navPoint].setAttribute('active', 'true')
           this.activeItem = this.navItems[navPoint]
+          requestAnimationFrame(() => {
+            this.activeItem.scrollIntoViewIfNeeded()
+          })
         }
       }
     })
@@ -78,7 +81,12 @@ export default class NavigationComponent extends BaseComponent {
         const groupComponent = new NavigationGroupComponent(group.__meta.title)
         this.items.appendChild(groupComponent)
 
-        Object.values(processedDatamodel[group.__meta.number])
+        let items: [] = processedDatamodel[group.__meta.number]
+        if (group.__meta.additionalItems) {
+          items = items.concat(group.__meta.additionalItems) as []
+        }
+
+        Object.values(items)
           .sort((a: any, b: any) => {
             if (a.__meta.titlePlural < b.__meta.titlePlural) {
               return -1
@@ -99,7 +107,13 @@ export default class NavigationComponent extends BaseComponent {
             const navItem: NavigationItemComponent = new NavigationItemComponent(
               item.__meta
             )
-            this.navItems[item.__meta.name] = navItem
+
+            let route = `crm/list/${item.__meta.name}`
+            if (item.__meta.navigate) {
+              route = item.__meta.navigate
+            }
+
+            this.navItems[route] = navItem
             groupComponent.addItem(navItem)
 
             navItem.addEventListener('click', () => {
@@ -108,7 +122,8 @@ export default class NavigationComponent extends BaseComponent {
               }
               this.activeItem = navItem
               this.activeItem.setAttribute('active', 'true')
-              Router.navigate(`crm/list/${item.__meta.name}`, 'crm')
+
+              Router.navigate(route, 'crm')
             })
           })
       })

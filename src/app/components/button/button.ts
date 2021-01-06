@@ -76,6 +76,9 @@ export default class ButtonComponent extends BaseComponent {
       this.button.disabled = newValue === 'true'
     }
     if (name === 'classes') {
+      this.button.classList.forEach((c) => {
+        this.button.classList.remove(c)
+      })
       newValue.split(' ').forEach((className) => {
         this.button.classList.add(className)
       })

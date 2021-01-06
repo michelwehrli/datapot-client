@@ -14,7 +14,9 @@ export class ToastService {
   ): ToastComponent {
     const toast = new ToastComponent(text, type)
     toast.addEventListener('click', () => {
-      toast.parentNode.removeChild(toast)
+      if (toast && toast.parentNode) {
+        toast.parentNode.removeChild(toast)
+      }
     })
     setTimeout(() => {
       toast.classList.add('visible')
@@ -25,7 +27,9 @@ export class ToastService {
         toast.classList.remove('visible')
         setTimeout(() => {
           if (toast.parentNode) {
-            toast.parentNode.removeChild(toast)
+            if (toast && toast.parentNode) {
+              toast.parentNode.removeChild(toast)
+            }
           }
         }, 200)
       }, timeoutMs)
@@ -34,7 +38,9 @@ export class ToastService {
   }
 
   public static remove(toast: ToastComponent): void {
-    toast.parentNode.removeChild(toast)
+    if (toast && toast.parentNode) {
+      toast.parentNode.removeChild(toast)
+    }
   }
 }
 

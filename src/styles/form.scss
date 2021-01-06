@@ -47,12 +47,8 @@ textarea {
   background-color: $light;
 
   &:disabled {
-    cursor: default;
-
-    &:hover,
-    &:active {
-      background-color: transparent;
-    }
+    opacity: 0.6;
+    pointer-events: none;
   }
 
   &:hover,

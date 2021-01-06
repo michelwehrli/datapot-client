@@ -2,6 +2,7 @@ import BaseComponent from '~/baseComponent'
 import tmpl from './navigation-item.html'
 
 export default class NavigationItemComponent extends BaseComponent {
+  [x: string]: any
   button: HTMLButtonElement
   span: HTMLSpanElement
   icon: HTMLElement

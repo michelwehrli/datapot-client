@@ -7,6 +7,8 @@ dp-confirmation {
     flex: 1;
     padding: 15px;
     margin: 0;
+    max-height: 240px;
+    overflow: auto;
   }
 
   .buttons {
@@ -16,6 +18,7 @@ dp-confirmation {
     direction: rtl;
     background-color: #fafafa;
     border-top: 1px solid $light;
+    flex: 0 0 53px;
 
     dp-button {
       margin-left: 10px;

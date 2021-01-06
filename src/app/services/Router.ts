@@ -23,11 +23,14 @@ export class Router {
   public static getParams(): string[] {
     return this.currentParams
   }
-  public static getUrl(route: string[]): string {
-    this.currentRoute = route
-    return `${
-      this.routesReverse[this.currentRoute.join(',')]
-    }/${this.currentParams.join('/')}`
+  public static getUrl(route: string[] = this.currentRoute): string {
+    const routes = this.routesReverse[route.join(',')].split('/')
+    if (this.currentParams.length) {
+      this.currentParams.forEach((entry) => {
+        routes.push(entry)
+      })
+    }
+    return routes.join('/')
   }
 
   public static add(route: string, ...componentTypes: string[]): void {

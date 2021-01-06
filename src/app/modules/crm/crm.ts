@@ -3,6 +3,7 @@ import NavigationComponent from '~/components/navigation/navigation'
 import NotFoundContent from '~/contents/404/404'
 import DetailContent from '~/contents/detail/detail'
 import EditContent from '~/contents/edit/edit'
+import ExportContent from '~/contents/export/export'
 import ListContent from '~/contents/list/list'
 import DataService from '~/services/DataService'
 import { Router } from '~/services/Router'
@@ -40,12 +41,15 @@ export default class CrmModule extends BaseComponent {
         case 'DetailContent':
           this.contentContainer.appendChild(new DetailContent())
           break
+        case 'ExportContent':
+          this.contentContainer.appendChild(new ExportContent())
+          break
         case 'NotFoundContent':
           this.contentContainer.appendChild(new NotFoundContent())
           break
       }
     } else {
-      this.contentContainer.appendChild(new ListContent())
+      this.contentContainer.appendChild(new NotFoundContent())
     }
   }
 }

@@ -9,7 +9,7 @@ dp-modal {
 
   &.small .inner {
     width: 340px;
-    height: 150px;
+    height: auto;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -18,7 +18,6 @@ dp-modal {
       display: none;
     }
     .content {
-      flex: 0 0 100%;
     }
   }
 
@@ -41,7 +40,7 @@ dp-modal {
       position: sticky;
       border-bottom: solid 1px $light;
       display: flex;
-      flex: 1;
+      flex: 0 0 64px;
 
       h3 {
         flex: 1;
@@ -58,9 +57,7 @@ dp-modal {
     }
 
     .content {
-      flex: 0 0 calc(100% - 63px);
-      height: 1px;
-      overflow: auto;
+      flex: 1;
     }
   }
 }

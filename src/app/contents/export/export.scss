@@ -1,0 +1,51 @@
+.exports {
+  padding: 20px;
+
+  table {
+    thead tr th {
+      border-bottom: solid 1px $light-hover;
+      border-right: none;
+      border-left: none;
+    }
+
+    tbody tr {
+      background-color: transparent;
+      cursor: default;
+
+      &:hover {
+        background-color: transparent !important;
+      }
+
+      td {
+        padding-top: 16px;
+        padding-bottom: 16px;
+        border-bottom: solid 1px $light-hover;
+        border-right: none;
+        border-left: none;
+
+        p {
+          margin-bottom: 4px;
+        }
+
+        .progress-wrapper {
+          display: flex;
+
+          progress {
+            width: 100%;
+            height: 20px;
+            width: 200px;
+          }
+
+          span {
+            font-size: 12px;
+            margin-left: 10px;
+            top: 2px;
+            width: 80px;
+            position: relative;
+            white-space: nowrap;
+          }
+        }
+      }
+    }
+  }
+}
