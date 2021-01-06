@@ -7,6 +7,7 @@ import { ETypeMatch } from '~/enums/ETypeMatch'
 import DataService from '~/services/DataService'
 import { Router } from '~/services/Router'
 import { EToastType, ToastService } from '~/services/ToastService'
+
 import tmpl from './detail.html'
 
 export default class DetailContent extends BaseComponent {

@@ -307,54 +307,278 @@ export default class Contact extends Table implements IContact {
   }
 
   public getDetail(): string {
+    const mobilePhones: Phonenumber[] = []
+    const businessPhones: Phonenumber[] = []
+    const homePhones: Phonenumber[] = []
+    this.phonenumbers_business.map((p: Phonenumber) => {
+      if (p.line && p.line.uniquename === 'mobile') {
+        mobilePhones.push(p)
+      } else {
+        businessPhones.push(p)
+      }
+    })
+    this.phonenumbers_private.map((p: Phonenumber) => {
+      if (p.line && p.line.uniquename === 'mobile') {
+        mobilePhones.push(p)
+      } else {
+        homePhones.push(p)
+      }
+    })
+
+    const privateEmail = this.emails.filter((p) => {
+      return p.type.uniquename === 'private'
+    })
+    const businessEmail = this.emails.filter((p) => {
+      return p.type.uniquename === 'business'
+    })
+
     return `
-      <div class="flex-container">
+    <div class="container">
+      <div class="flex">
+        <div class="flex-item">
+            <h4>Persönliche Informationen</h4>
+            ${this.salutation ? `<p>${this.salutation.toString()}</p>` : ''}
+            ${this.title ? `<p>${this.title.toString()}</p>` : ''}
+            <p>
+              ${this.givenname ? this.givenname : ''}${
+      this.surname ? ` <u>${this.surname}</u>` : ''
+    }</p>
+            ${
+              this.birthdate
+                ? `
+                <h4>Geburtstag</h4><p>${new Date(
+                  this.birthdate
+                ).toLocaleDateString('ch-DE', {
+                  year: 'numeric',
+                  month: '2-digit',
+                  day: '2-digit',
+                })}</p>`
+                : ''
+            }
+            ${
+              this.websites && this.websites.length
+                ? `<h4>Websites</h4>
+                ${this.websites.map((w) => {
+                  return `<p><a href="${w}" target="_blank" rel="noopener">${w}</a></p>`
+                })}`
+                : ''
+            }
+          </div>
+          <div class="flex-item">
+            <h4>Geschäftliche Informationen</h4>
+            ${
+              this.positions
+                ? this.positions.map((p) => {
+                    return `<p>${p}</p>`
+                  })
+                : ''
+            }
+            ${this.department ? `${this.department}` : ''}
+            <h4>Status</h4>
+            ${this.rwstatus ? `<p>${this.rwstatus.label}</p>` : ''}
+            ${this.relationship ? `<p>${this.relationship.label}</p>` : ''}
+            ${
+              this.categories
+                ? `<p>${this.categories
+                    .map((c) => {
+                      return c.label
+                    })
+                    .join(', ')}</p>`
+                : ''
+            }
+            ${
+              this.remarks
+                ? `
+              <h4>Status</h4>
+              <p>${this.remarks}</p>
+              `
+                : ''
+            }
+          </div>
+        </div>
+      </div>
+      <div class="flex">
+        <div class="flex-item">
+          <div class="container">
+            ${
+              this.addresses && this.addresses.length
+                ? `
+                <h4>Adressen</h4>
+                ${this.addresses
+                  .map((address) => {
+                    return `<p>${address.toString('<br />')}</p>`
+                  })
+                  .join('<br />')}
+                `
+                : ''
+            }
+          </div>
+        </div>
+        <div class="flex-item">
+          <div class="container">
+            ${
+              this.companiesWithLocation && this.companiesWithLocation.length
+                ? `
+                <h4>Firmen</h4>
+                ${this.companiesWithLocation
+                  .map((companyWithLocation) => {
+                    return `<p>${companyWithLocation.company.toString()}
+                      <br />
+                      ${companyWithLocation.address.toString('<br />')}</p>`
+                  })
+                  .join('<br />')}
+                `
+                : ''
+            }
+          </div>
+        </div>
+      </div>
+      <div class="flex">
+        <div class="flex-item">
+          <div class="container">
+            ${
+              mobilePhones && mobilePhones.length
+                ? `
+                <h4>Mobilnummern</h4>
+                ${mobilePhones
+                  .map((p) => {
+                    return `<p><a href="tel:${
+                      p.number
+                    }">${p.toString()}</a></p>`
+                  })
+                  .join('')}`
+                : ''
+            }
+            ${
+              homePhones && homePhones.length
+                ? `
+                <h4>Privatnummern</h4>
+                ${homePhones
+                  .map((p) => {
+                    return `<p><a href="tel:${
+                      p.number
+                    }">${p.toString()}</a></p>`
+                  })
+                  .join('')}`
+                : ''
+            }
+            ${
+              businessPhones && businessPhones.length
+                ? `
+                <h4>Geschäftsnummern</h4>
+                ${businessPhones
+                  .map((p) => {
+                    return `<p><a href="tel:${
+                      p.number
+                    }">${p.toString()}</a></p>`
+                  })
+                  .join('')}`
+                : ''
+            }
+          </div>
+        </div>
+        <div class="flex-item">
+          <div class="container">
+            ${
+              privateEmail && privateEmail.length
+                ? `
+                <h4>Private E-Mail Adressen</h4>
+                ${privateEmail
+                  .map((e) => {
+                    return `<p><a href="mailto:${e.address}">${e.address}</a></p>`
+                  })
+                  .join('')}`
+                : ''
+            }
+            ${
+              businessEmail && businessEmail.length
+                ? `
+                <h4>Geschäftliche E-Mail Adressen</h4>
+                ${businessEmail
+                  .map((e) => {
+                    return `<p><a href="mailto:${e.address}">${e.address}</a></p>`
+                  })
+                  .join('')}`
+                : ''
+            }
+          </div>
+        </div>
+        <div class="flex-item">
+          <div class="container">
+            ${
+              this.social_medias && this.social_medias.length
+                ? `
+                <h4>Soziale Medien</h4>
+                ${this.social_medias
+                  .map((sm) => {
+                    return `<p><a href="${sm.url}" target="_blank" rel="noopener">${sm.type.label}</a></p>`
+                  })
+                  .join('')}
+                <br />`
+                : ''
+            }
+            ${
+              businessEmail && businessEmail.length
+                ? `
+                <h4>Geschäftliche E-Mail Adressen</h4>
+                ${businessEmail
+                  .map((e) => {
+                    return `<p><a href="mailto:${e.address}">${e.address}</a></p>`
+                  })
+                  .join('')}`
+                : ''
+            }
+          </div>
+        </div>
+      </div>
+
+      <!--<div class="flex-container">
         <div class="flex">
           <p>${this.title ? this.title.toString() : '-'}</p>
           <p>${this.toString()}</p>
           <p>${this.partner ? this.partner.toString() : '-'}</p>
           <p>${this.addresses
             .map((address) => {
-              return address.toString('<br>')
+              return address.toString('<br />')
             })
             .join('')}</p>
           <p>${this.emails
             .map((email) => {
               return `<a href="mailto:${email.toString()}">${email.toString()}</a>`
             })
-            .join('<br>')}</p>
+            .join('<br />')}</p>
           <p>${this.phonenumbers_business
             .map((number) => {
               return `<a href="tel:${number.toString()}">${number.toString()}</a>`
             })
-            .join('<br>')}</p>
+            .join('<br />')}</p>
           <p>${this.phonenumbers_private
             .map((number) => {
               return `<a href="tel:${number.toString()}">${number.toString()}</a>`
             })
-            .join('<br>')}</p>
+            .join('<br />')}</p>
           <p>${this.companiesWithLocation
             .map((companyWithLocation) => {
               return companyWithLocation.toString()
             })
-            .join('<br>')}</p>
+            .join('<br />')}</p>
           <p>${this.positions
             .map((position) => {
               return position
             })
-            .join('<br>')}</p>
+            .join('<br />')}</p>
           <p>${this.social_medias
             .map((social_media) => {
               return `<a href="${social_media.toString()}" target="_blank" rel="noopener">${social_media.type.toString()}</a>`
             })
-            .join('<br>')}</p>
+            .join('<br />')}</p>
           <p>${this.rwstatus.toString()}</p>
           <p>${this.relationship.toString()}</p>
           <p>${this.categories
             .map((category) => {
               return category.toString()
             })
-            .join('<br>')}</p>
+            .join('<br />')}</p>
           <p>${this.gender.toString()}</p>
           <p>${new Date(this.birthdate).toLocaleDateString('de-CH', {
             day: '2-digit',
@@ -362,7 +586,7 @@ export default class Contact extends Table implements IContact {
             year: 'numeric',
           })}</p>
         </div>
-      </div>
+      </div>-->
     `
   }
 
