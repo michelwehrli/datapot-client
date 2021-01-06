@@ -6,6 +6,7 @@ import EditContent from '~/contents/edit/edit'
 import ExportContent from '~/contents/export/export'
 import ListContent from '~/contents/list/list'
 import DataService from '~/services/DataService'
+import ExportService from '~/services/ExportService'
 import { Router } from '~/services/Router'
 import SessionService from '~/services/SessionService'
 import tmpl from './crm.html'
@@ -21,6 +22,7 @@ export default class CrmModule extends BaseComponent {
   public async init(): Promise<void> {
     await DataService.init()
     await SessionService.init()
+    ExportService.init()
     this.navigation.init()
     this.contentContainer = this.querySelector('.content')
     this.handleNavigated()
