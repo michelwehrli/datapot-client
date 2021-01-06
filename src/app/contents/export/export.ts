@@ -1,6 +1,6 @@
 import BaseComponent from '~/baseComponent'
 import ContentHeaderComponent from '~/components/content-header/content-header'
-import ExportService, { IExportObject } from '~/services/ExportService'
+import ExportService from '~/services/ExportService'
 import TitleService from '~/services/TitleService'
 
 import tmpl from './export.html'

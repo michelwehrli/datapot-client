@@ -3,6 +3,7 @@ import { ETypeMatch } from '~/enums/ETypeMatch'
 import ListTemplate from '~/model/ListTemplate'
 import DataService from '~/services/DataService'
 import { Router } from '~/services/Router'
+
 import ButtonComponent from '../button/button'
 import ConfirmationComponent from '../confirmation/confirmation'
 import InputCheckboxComponent from '../form/input-checkbox/input-checkbox'
@@ -44,6 +45,8 @@ export default class ListComponent extends BaseComponent {
   initialSortOrder: ISortOrder
   currentSortOrder: ISortOrder
 
+  loadingTimeout: NodeJS.Timer
+
   constructor() {
     super(tmpl)
 
@@ -83,7 +86,7 @@ export default class ListComponent extends BaseComponent {
         }
       }
 
-      ;(async () => {
+      const asyncFn = async () => {
         const data: any[] = await DataService.getData(
           `${this.db}/${this.table}`
         )
@@ -94,7 +97,8 @@ export default class ListComponent extends BaseComponent {
           this.data.push(new ETypeMatch[this.table](entry))
         }
         this.init()
-      })()
+      }
+      asyncFn()
     }
 
     this.resetButton.addEventListener('button-click', () => {
@@ -151,7 +155,7 @@ export default class ListComponent extends BaseComponent {
   }
 
   private async init() {
-    const loadingTimeout = setTimeout(() => {
+    this.loadingTimeout = setTimeout(() => {
       this.listContent.classList.add('loading')
     }, 50)
 
@@ -163,12 +167,12 @@ export default class ListComponent extends BaseComponent {
       if (this.data && this.data.length) {
         setTimeout(() => {
           this.handleData(() => {
-            clearTimeout(loadingTimeout)
+            clearTimeout(this.loadingTimeout)
             this.listContent.classList.remove('loading')
           })
         }, 0)
       } else {
-        clearTimeout(loadingTimeout)
+        clearTimeout(this.loadingTimeout)
         this.listContent.classList.remove('loading')
         this.listContent.classList.add('nothingfound')
       }
@@ -218,6 +222,15 @@ export default class ListComponent extends BaseComponent {
 
       fragment.appendChild(trElement)
     }
+
+    if (!data.length) {
+      this.listContent.classList.add('nothingfound')
+      clearTimeout(this.loadingTimeout)
+      this.listContent.classList.remove('loading')
+    } else {
+      this.listContent.classList.remove('nothingfound')
+    }
+
     this.tableBody.addEventListener(
       'DOMNodeInserted',
       () => {

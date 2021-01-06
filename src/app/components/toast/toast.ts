@@ -9,4 +9,8 @@ export default class ToastComponent extends BaseComponent {
     this.classList.add(type)
     this.querySelector('p').innerText = text
   }
+
+  public setText(text: string): void {
+    this.querySelector('p').innerText = text
+  }
 }

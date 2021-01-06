@@ -23,8 +23,13 @@
         border-right: none;
         border-left: none;
 
-        p {
+        strong {
+          display: block;
           margin-bottom: 4px;
+        }
+
+        p {
+          white-space: initial;
         }
 
         .progress-wrapper {

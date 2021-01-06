@@ -2,8 +2,9 @@ import ButtonComponent from '~/components/button/button'
 import ConfirmationComponent from '~/components/confirmation/confirmation'
 import ModalComponent from '~/components/modal/modal'
 import ToastComponent from '~/components/toast/toast'
+
 import HttpService from './HttpService'
-import { ToastService, EToastType } from './ToastService'
+import { EToastType, ToastService } from './ToastService'
 
 export default class ExportService {
   private static isInited = false
@@ -11,13 +12,14 @@ export default class ExportService {
     {
       name: 'office-365-export',
       title: 'Office 365',
-      description: 'Alle Kontaktdaten ins Office 365 exportieren.',
+      description: 'Alle Kontakt- und Firmendaten ins Office 365 exportieren.',
       isAsync: true,
     },
     {
-      name: 'excel-export',
-      title: 'Excel-Datei',
-      description: 'Alle Daten als Excel-Datei herunterladen.',
+      name: 'csv-export',
+      title: 'Kontakte herunterladen',
+      description:
+        'Alle Kontakte als CSV-Datei herunterladen. Die Daten haben die selbe Struktur wie das Ursprungs-Excel-File.',
     },
   ]
   private static exports: ExportObject[] = []
@@ -92,9 +94,10 @@ class ExportObject {
       if (this.downloadButton) {
         this.downloadButton.addEventListener('button-click', async () => {
           const result = await HttpService.get(
-            `task/${this.config.name}/start`,
+            `task/${this.config.name}/open`,
             true
           )
+          console.log(result)
           if (result && result.data) {
             if (result.data.url) {
               window.open(result.data.url)
@@ -152,25 +155,38 @@ class ExportObject {
 
       if (!this.exportToast) {
         this.exportToast = ToastService.add(
-          `Export ${this.config.title} läuft...`,
+          `Export "${this.config.title}" läuft...${
+            currentStatus.data.statusText
+              ? '\n' + currentStatus.data.statusText
+              : ''
+          }`,
           EToastType.INFO
+        )
+      } else {
+        this.exportToast.setText(
+          `Export "${this.config.title}" läuft...${
+            currentStatus.data.statusText
+              ? '\n' + currentStatus.data.statusText
+              : ''
+          }`
         )
       }
     } else {
       if (this.exportToast) {
         ToastService.remove(this.exportToast)
+        this.exportToast = undefined
       }
 
       if (wasRunning && this.aborted) {
         ToastService.add(
-          `Du hast den Export "${this.config.title}" abgebrochen.`,
+          `Du hast den Export "${this.config.title}" abgebrochen und es konnten nicht alle Aufgaben abgeschlossen werden. Ein kompletter Import bereinigt die Daten.`,
           EToastType.NEGATIVE,
-          3000
+          8000
         )
       } else if (wasRunning) {
         const modal = new ModalComponent(
           new ConfirmationComponent(
-            `Der Export "${this.config.title}" wurde erfolgreich abgeschlossen. Hier die Zusammenfassung:\n\nÜbersprungen: ${currentStatus.data.metrics.skipped}\nHinzugefügt: ${currentStatus.data.metrics.added}\nAktualisiert: ${currentStatus.data.metrics.updated}\nEntfernt: ${currentStatus.data.metrics.deleted}\nFehler: ${currentStatus.data.metrics.errored}\n\nKontakte auf dem Server: ${currentStatus.data.metrics.serverCount}\nKontakte auf Office 365: ${currentStatus.data.metrics.o365Count}`,
+            `Der Export "${this.config.title}" wurde erfolgreich abgeschlossen. Hier die Zusammenfassung:\n\nUnverändert: ${currentStatus.data.metrics.skipped}\nHinzugefügt: ${currentStatus.data.metrics.added}\nAktualisiert: ${currentStatus.data.metrics.updated}\nEntfernt: ${currentStatus.data.metrics.deleted}\nFehler: ${currentStatus.data.metrics.errored}\n\nKontakte im Datapot: ${currentStatus.data.metrics.serverCount}\nKontakte auf Office 365: ${currentStatus.data.metrics.o365Count}`,
             [
               {
                 title: 'Okay',
