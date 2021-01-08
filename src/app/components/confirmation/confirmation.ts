@@ -23,5 +23,5 @@ export default class ConfirmationComponent extends BaseComponent {
 interface IConfirmationButtonConfig {
   title: string
   color: string
-  click: () => void
+  click: (e: Event) => void
 }

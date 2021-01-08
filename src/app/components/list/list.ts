@@ -7,8 +7,7 @@ import { Router } from '~/services/Router'
 import ButtonComponent from '../button/button'
 import ConfirmationComponent from '../confirmation/confirmation'
 import InputCheckboxComponent from '../form/input-checkbox/input-checkbox'
-import InputDateComponent from '../form/input-date/input-date'
-import InputTextComponent, { EInputType } from '../form/input-text/input-text'
+import InputTextComponent from '../form/input-text/input-text'
 import ModalComponent from '../modal/modal'
 import tmpl from './list.html'
 
@@ -36,6 +35,7 @@ export default class ListComponent extends BaseComponent {
   db: string
   table: string
   data: any[] = []
+  initialCount: number
   datamodel: any = {}
 
   visibleColumns: any = {}
@@ -96,6 +96,7 @@ export default class ListComponent extends BaseComponent {
         for (const entry of data) {
           this.data.push(new ETypeMatch[this.table](entry))
         }
+        this.initialCount = this.data.length
         this.init()
       }
       asyncFn()
@@ -182,7 +183,7 @@ export default class ListComponent extends BaseComponent {
   private async handleData(callback?): Promise<any> {
     let data: any[] = this.filter()
     data = this.sort(data)
-    this.count.innerText = data.length.toString()
+    this.count.innerText = `${data.length.toString()} von ${this.initialCount}`
     const fragment: DocumentFragment = document.createDocumentFragment()
 
     this.saveConfiguration()
@@ -190,16 +191,18 @@ export default class ListComponent extends BaseComponent {
     for (const entry of data) {
       const trElement: HTMLElement = document.createElement('tr')
 
-      trElement.addEventListener('click', () => {
+      trElement.addEventListener('click', (e) => {
         if (entry.getDetail && entry.getDetail()) {
           Router.navigate(
             `${Router.getUrl(['CrmModule', 'DetailContent'])}/${entry.getId()}`,
-            'crm'
+            'crm',
+            e
           )
         } else {
           Router.navigate(
             `${Router.getUrl(['CrmModule', 'EditContent'])}/${entry.getId()}`,
-            'crm'
+            'crm',
+            e
           )
         }
       })
@@ -254,9 +257,13 @@ export default class ListComponent extends BaseComponent {
     } else if (entry[fieldName]) {
       let value = entry[fieldName].toString()
       if (model.type === 'date') {
-        value = new Date(parseInt(value)).toLocaleDateString('de-ch')
+        value = new Date(parseInt(value)).toLocaleDateString('ch-DE', {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit',
+        })
       }
-      values.push(value)
+      values.push(value.split('\n').join(' '))
     } else {
       values.push('')
     }
@@ -317,36 +324,19 @@ export default class ListComponent extends BaseComponent {
         thElement.appendChild(innerElement)
         this.tableHeaderTop.appendChild(thElement)
 
-        let element: any
-
-        switch (model.type) {
-          case 'number':
-            element = new InputTextComponent(
-              (value: string) => {
-                this.setFilter(key, value)
-                this.handleData()
-              },
-              EInputType.NUMBER,
-              this.filters[key]
-            )
-            break
-          case 'date':
-            element = new InputDateComponent((value: number) => {
-              this.setFilter(key, value)
-              this.handleData()
-            }, this.filters[key])
-            break
-          default:
-            element = new InputTextComponent(
-              (value: string) => {
-                this.setFilter(key, value)
-                this.handleData()
-              },
-              undefined,
-              this.filters[key]
-            )
-            break
-        }
+        const element = new InputTextComponent(
+          (value: string) => {
+            this.setFilter(key, value)
+            this.handleData()
+          },
+          undefined,
+          this.filters[key],
+          undefined,
+          undefined,
+          {
+            clearable: 'true',
+          }
+        )
 
         this.filterInputs.push(element)
 

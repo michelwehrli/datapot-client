@@ -2,8 +2,11 @@ import InputSelectComponent from '~/components/form/input-select/input-select'
 import InputTextComponent, {
   EInputType,
 } from '~/components/form/input-text/input-text'
+import ModalComponent from '~/components/modal/modal'
+import EditContent from '~/contents/edit/edit'
 import IPhonenumber from '~/interfaces/data/IPhonenumber'
 import Table from '../extend/Table'
+import EmailType from './EmailType'
 import PhonenumberLine from './PhonenumberLine'
 import PhonenumberType from './PhonenumberType'
 
@@ -52,13 +55,53 @@ export default class Phonenumber extends Table implements IPhonenumber {
       (value: PhonenumberType) => (this.type = value),
       await PhonenumberType.getSelectMap('data', 'phonenumber_type'),
       this.type ? this.type.uniquename : undefined,
-      true
+      true,
+      () => {
+        const modal = new ModalComponent(
+          new EditContent(
+            true,
+            ['phonenumber_type'],
+            async (value: PhonenumberType) => {
+              this.fieldType.update(
+                await PhonenumberType.getSelectMap('data', 'phonenumber_type'),
+                value.uniquename
+              )
+              this.type = value
+              modal.close()
+            }
+          ),
+          undefined,
+          undefined,
+          undefined,
+          true
+        )
+      }
     )
     this.fieldLine = new InputSelectComponent(
       (value: PhonenumberLine) => (this.line = value),
       await PhonenumberLine.getSelectMap('data', 'phonenumber_line'),
       this.line ? this.line.uniquename : undefined,
-      true
+      true,
+      () => {
+        const modal = new ModalComponent(
+          new EditContent(
+            true,
+            ['phonenumber_line'],
+            async (value: PhonenumberLine) => {
+              this.fieldLine.update(
+                await PhonenumberLine.getSelectMap('data', 'phonenumber_line'),
+                value.uniquename
+              )
+              this.type = value
+              modal.close()
+            }
+          ),
+          undefined,
+          undefined,
+          undefined,
+          true
+        )
+      }
     )
 
     return {

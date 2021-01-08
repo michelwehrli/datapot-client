@@ -1,24 +1,58 @@
 @import '../../../../styles/colors.scss';
 
 dp-select {
-  position: relative;
-  display: block;
+  display: flex;
+  width: 100%;
 
-  i {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    right: 12px;
+  select {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
   }
 
-  &.required {
-    select {
-      border-left: solid 2px $accent;
+  .input-wrap {
+    position: relative;
+    flex: 1;
+
+    i {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      right: 12px;
+      margin-top: 1px;
+      pointer-events: none;
     }
 
-    &.error {
+    &.required {
       select {
-        border-left: solid 3px $negative;
+        border-left: solid 2px $accent;
+      }
+
+      &.error {
+        select {
+          border-left: solid 3px $negative;
+        }
+      }
+    }
+  }
+
+  dp-button {
+    display: none;
+
+    &.visible {
+      display: block;
+    }
+
+    button {
+      padding-top: 10px;
+      padding-bottom: 10px;
+      padding-left: 8px;
+      padding-right: 8px;
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+
+      span,
+      i {
+        opacity: 0.5;
       }
     }
   }

@@ -7,6 +7,9 @@ import InputSelectComponent from '~/components/form/input-select/input-select'
 import InputTextComponent, {
   EInputType,
 } from '~/components/form/input-text/input-text'
+import ListComponent from '~/components/list/list'
+import ModalComponent from '~/components/modal/modal'
+import EditContent from '~/contents/edit/edit'
 import IUser from '~/interfaces/system/IUser'
 import DataService from '~/services/DataService'
 import Table from '../extend/Table'
@@ -91,6 +94,29 @@ export default class User extends Table implements IUser {
       configP.innerText = '-'
     }
 
+    const designComponent = new InputSelectComponent(
+      (value: Design) => (this.design = value),
+      await Design.getSelectMap('system', 'design'),
+      this.design ? this.design.uniquename : undefined,
+      undefined,
+      () => {
+        const modal = new ModalComponent(
+          new EditContent(true, ['design'], async (value: Design) => {
+            designComponent.update(
+              await Design.getSelectMap('system', 'design'),
+              value.uniquename
+            )
+            this.design = value
+            modal.close()
+          }),
+          undefined,
+          undefined,
+          undefined,
+          true
+        )
+      }
+    )
+
     return {
       username: this.fieldUsername,
       surname: new InputTextComponent(
@@ -116,11 +142,7 @@ export default class User extends Table implements IUser {
         (value: Document) => (this.image = value),
         this.image
       ),
-      design: new InputSelectComponent(
-        (value: Design) => (this.design = value),
-        await Design.getSelectMap('system', 'design'),
-        this.design ? this.design.uniquename : undefined
-      ),
+      design: designComponent,
       issuperuser: new InputCheckboxComponent(
         (value: boolean) => (this.issuperuser = value),
         this.issuperuser,

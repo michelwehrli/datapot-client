@@ -2,6 +2,8 @@ import InputSelectComponent from '~/components/form/input-select/input-select'
 import InputTextComponent, {
   EInputType,
 } from '~/components/form/input-text/input-text'
+import ModalComponent from '~/components/modal/modal'
+import EditContent from '~/contents/edit/edit'
 import ISocialmedia from '~/interfaces/data/ISocialmedia'
 import Table from '../extend/Table'
 import SocialmediaType from './SocialmediaType'
@@ -47,7 +49,27 @@ export default class Socialmedia extends Table implements ISocialmedia {
       (value: SocialmediaType) => (this.type = value),
       await SocialmediaType.getSelectMap('data', 'socialmedia_type'),
       this.type ? this.type.uniquename : undefined,
-      true
+      true,
+      () => {
+        const modal = new ModalComponent(
+          new EditContent(
+            true,
+            ['socialmedia_type'],
+            async (value: SocialmediaType) => {
+              this.fieldType.update(
+                await SocialmediaType.getSelectMap('data', 'socialmedia_type'),
+                value.uniquename
+              )
+              this.type = value
+              modal.close()
+            }
+          ),
+          undefined,
+          undefined,
+          undefined,
+          true
+        )
+      }
     )
 
     return {

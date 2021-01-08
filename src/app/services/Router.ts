@@ -8,6 +8,8 @@ export class Router {
   private static currentParams: string[]
   private static listeners: Map<string, Map<string, Function>> = new Map()
 
+  private static previousContainer: string
+
   public static init(): void {
     const protocol: string = window.location.protocol
     const host: string = window.location.host
@@ -15,6 +17,14 @@ export class Router {
       .replace(`${protocol}//${host}/`, '')
       .replace(/^\/|\/$/g, '')
     this.parseRoute(route)
+
+    history.replaceState({ route: route }, null, route)
+
+    window.addEventListener('popstate', (e) => {
+      if (e.state) {
+        this.navigate(e.state.route, e.state.container, undefined, true)
+      }
+    })
   }
 
   public static getRoute(): string[] {
@@ -38,10 +48,23 @@ export class Router {
     this.routesReverse[componentTypes.join(',')] = route
   }
 
-  public static navigate(route: string, container?: string): void {
+  public static navigate(
+    route: string,
+    container?: string,
+    e?: MouseEvent,
+    dontPush = false
+  ): void {
     this.parseRoute(route)
-    history.pushState(null, null, route)
-    this.history.push(route)
+    if (e && e.ctrlKey) {
+      window.open(route)
+      return
+    }
+    this.previousContainer = container
+    this.parseRoute(route)
+    if (!dontPush) {
+      history.pushState({ route: route, container: container }, null, route)
+      this.history.push(route)
+    }
     this.raise(`${container ? `${container}-` : ''}navigated`)
   }
   public static refresh(): void {

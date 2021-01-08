@@ -36,8 +36,8 @@ export default class ListContent extends BaseComponent {
 
       this.contentHeader.addButtons(newButton)
 
-      newButton.addEventListener('click', () => {
-        Router.navigate(`crm/edit/${table}`, 'crm')
+      newButton.addEventListener('click', (e) => {
+        Router.navigate(`crm/edit/${table}`, 'crm', e)
       })
     }
   }

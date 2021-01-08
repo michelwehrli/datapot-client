@@ -26,10 +26,13 @@ export default class EditContent extends BaseComponent {
 
   private __hash: string
 
-  constructor() {
+  constructor(isInModal = false, p: string[], onSave: (value: any) => void) {
     super(tmpl)
 
-    const params: any[] = Router.getParams()
+    let params: any[] = Router.getParams()
+    if (isInModal) {
+      params = p
+    }
     if (!params || !params[0]) {
       Router.navigate('crm/404')
       return
@@ -45,56 +48,100 @@ export default class EditContent extends BaseComponent {
 
     this.contentHeader.setAttribute(
       'title',
-      `${datamodel.__meta.title} bearbeiten`
+      `${datamodel.__meta.title} ${params[1] ? 'bearbeiten' : 'anlegen'}`
     )
     this.contentHeader.setAttribute('icon', datamodel.__meta.icon)
 
     TitleService.setTitle(datamodel.__meta.titlePlural)
 
-    const backButton = new ButtonComponent('Zurück', 'fa fa-arrow-left')
+    let backButton
+    let rocketButton
+    let trashButton
+    if (!isInModal) {
+      backButton = new ButtonComponent('Zurück', 'fa fa-arrow-left')
+      rocketButton = new ButtonComponent(undefined, 'fa fa-rocket')
+      trashButton = new ButtonComponent(undefined, 'fa fa-trash', 'negative')
+    }
     const saveButton = new ButtonComponent(
       'Speichern',
       'fa fa-save',
       'positive'
     )
-    const rocketButton = new ButtonComponent(undefined, 'fa fa-rocket')
-    const trashButton = new ButtonComponent(
-      undefined,
-      'fa fa-trash',
-      'negative'
-    )
 
-    this.contentHeader.addButtons(
-      backButton,
-      saveButton,
-      rocketButton,
-      trashButton
-    )
+    if (!isInModal) {
+      this.contentHeader.addButtons(backButton)
+    }
+    this.contentHeader.addButtons(saveButton)
+    if (!isInModal) {
+      this.contentHeader.addButtons(rocketButton, trashButton)
+    }
 
-    backButton.addEventListener('button-click', () => {
-      if (this.__hash !== md5(JSON.stringify(this.obj))) {
+    if (!isInModal) {
+      backButton.addEventListener('button-click', (e) => {
+        if (this.__hash !== md5(JSON.stringify(this.obj))) {
+          const modal = new ModalComponent(
+            new ConfirmationComponent(
+              'Möchest du das das Formular wirklich verlassen? Deine ungespeicherten Änderungen gehen verloren!',
+              [
+                {
+                  title: 'Ja, verlassen',
+                  color: 'neutral',
+                  click: (e: MouseEvent) => {
+                    modal.close()
+                    if (this.obj.getDetail && this.obj.getDetail()) {
+                      Router.navigate(
+                        `crm/detail/${this.table}/${this.id}`,
+                        'crm',
+                        e
+                      )
+                    } else {
+                      Router.navigate(`crm/list/${this.table}`, 'crm', e)
+                    }
+                  },
+                },
+                {
+                  title: 'Abbrechen',
+                  color: 'positive',
+                  click: () => {
+                    modal.close()
+                  },
+                },
+              ]
+            ),
+            undefined,
+            undefined,
+            true
+          )
+        } else {
+          if (this.obj.getDetail && this.obj.getDetail()) {
+            Router.navigate(`crm/detail/${this.table}/${this.id}`, 'crm', e)
+          } else {
+            Router.navigate(`crm/list/${this.table}`, 'crm', e)
+          }
+        }
+      })
+      rocketButton.addEventListener('button-click', async (e) => {
+        const result: any = await this.save()
+        if (result.success) {
+          Router.navigate(`crm/edit/${this.table}`, 'crm', e)
+        }
+      })
+      trashButton.addEventListener('button-click', async () => {
         const modal = new ModalComponent(
           new ConfirmationComponent(
-            'Möchest du das das Formular wirklich verlassen? Deine ungespeicherten Änderungen gehen verloren!',
+            'Möchtest du diesen Eintrag wirklich löschen? Das kann nicht rückgängig gemacht werden.',
             [
               {
-                title: 'Ja, verlassen',
-                color: 'neutral',
-                click: () => {
+                title: 'Ja, löschen',
+                color: 'negative',
+                click: async () => {
                   modal.close()
-                  if (this.obj.getDetail && this.obj.getDetail()) {
-                    Router.navigate(
-                      `crm/detail/${this.table}/${this.id}`,
-                      'crm'
-                    )
-                  } else {
-                    Router.navigate(`crm/list/${this.table}`, 'crm')
-                  }
+                  await this.trash()
                 },
               },
               {
                 title: 'Abbrechen',
-                color: 'positive',
+                color: 'neutral',
                 click: () => {
                   modal.close()
                 },
@@ -105,57 +152,26 @@ export default class EditContent extends BaseComponent {
           undefined,
           true
         )
-      } else {
-        if (this.obj.getDetail && this.obj.getDetail()) {
-          Router.navigate(`crm/detail/${this.table}/${this.id}`, 'crm')
+      })
+      trashButton.style.display = 'none'
+    }
+    saveButton.addEventListener('button-click', async (e: MouseEvent) => {
+      const result: any = await this.save()
+      if (result.success && this.isNew) {
+        if (!onSave) {
+          Router.navigate(
+            `crm/edit/${this.table}/${result.obj.getId()}`,
+            'crm',
+            e
+          )
         } else {
-          Router.navigate(`crm/list/${this.table}`, 'crm')
+          onSave(result.obj)
         }
       }
     })
-    saveButton.addEventListener('button-click', async () => {
-      const result: any = await this.save()
-      if (result.success && this.isNew) {
-        Router.navigate(`crm/edit/${this.table}/${result.obj.getId()}`, 'crm')
-      }
-    })
-    rocketButton.addEventListener('button-click', async () => {
-      const result: any = await this.save()
-      if (result.success) {
-        Router.navigate(`crm/edit/${this.table}`, 'crm')
-      }
-    })
-    trashButton.addEventListener('button-click', async () => {
-      const modal = new ModalComponent(
-        new ConfirmationComponent(
-          'Möchtest du diesen Eintrag wirklich löschen? Das kann nicht rückgängig gemacht werden.',
-          [
-            {
-              title: 'Ja, löschen',
-              color: 'negative',
-              click: async () => {
-                modal.close()
-                await this.trash()
-              },
-            },
-            {
-              title: 'Abbrechen',
-              color: 'neutral',
-              click: () => {
-                modal.close()
-              },
-            },
-          ]
-        ),
-        undefined,
-        undefined,
-        true
-      )
-    })
-    trashButton.style.display = 'none'
 
     this.loadEntry(this.table, this.id, datamodel, (hasData) => {
-      if (hasData) {
+      if (hasData && !isInModal) {
         trashButton.style.display = 'block'
       }
       this.isNew = !hasData
@@ -173,7 +189,7 @@ export default class EditContent extends BaseComponent {
       data = await DataService.getData(`${this.db}/${table}/${id}`)
     }
     if (!data) {
-      Router.navigate('crm/404')
+      Router.navigate('crm/404', 'crm')
     }
     cb(Object.keys(data).length > 0)
     const type = ETypeMatch[table]

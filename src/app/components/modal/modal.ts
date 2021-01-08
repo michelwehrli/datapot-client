@@ -15,19 +15,27 @@ export default class ModalComponent extends BaseComponent {
     childComponent: any,
     title?: string,
     icon?: string,
-    isSmall?: boolean
+    isSmall?: boolean,
+    isBig?: boolean
   ) {
     super(tmpl)
 
-    this.span.innerText = title
+    if (title) {
+      this.span.innerText = title
+    }
     if (icon) {
       icon.split(' ').forEach((c) => {
         this.i.classList.add(c)
       })
     }
-
     if (isSmall) {
       this.classList.add('small')
+    }
+    if (isBig) {
+      this.classList.add('big')
+    }
+    if (!icon) {
+      this.i.classList.add('hidden')
     }
 
     this.closeButton.addEventListener('button-click', () => this.close())

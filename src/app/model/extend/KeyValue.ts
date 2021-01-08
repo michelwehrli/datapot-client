@@ -46,7 +46,9 @@ export default class KeyValue extends Table implements IKeyValue {
       label: new InputTextComponent(
         (value: string) => (this.label = value),
         EInputType.TEXT,
-        this.label
+        this.label,
+        undefined,
+        true
       ),
     }
   }

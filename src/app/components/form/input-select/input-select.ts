@@ -1,8 +1,10 @@
 import BaseComponent from '~/baseComponent'
+import ButtonComponent from '~/components/button/button'
 import tmpl from './input-select.html'
 
 export default class InputSelectComponent extends BaseComponent {
   select: HTMLSelectElement = this.querySelector('select')
+  button: ButtonComponent = this.querySelector('dp-button')
 
   private lookup: Map<any, any> = new Map()
 
@@ -14,7 +16,8 @@ export default class InputSelectComponent extends BaseComponent {
     changed: (value) => void,
     values?: Map<string | number, string>,
     value?: string | number,
-    required?: boolean
+    required?: boolean,
+    addButtonFunction?: () => void
   ) {
     super(tmpl)
 
@@ -33,6 +36,18 @@ export default class InputSelectComponent extends BaseComponent {
       }
     })
 
+    this.popuplate(values, value)
+
+    if (addButtonFunction) {
+      this.button.classList.add('visible')
+      this.button.addEventListener('button-click', () => addButtonFunction())
+    }
+  }
+
+  public update(
+    values: Map<string | number, string>,
+    value: string | number
+  ): void {
     this.popuplate(values, value)
   }
 

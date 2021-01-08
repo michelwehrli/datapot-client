@@ -1,4 +1,4 @@
-import IUser from '~/interfaces/IUser'
+import IUser from '~/interfaces/system/IUser'
 import HttpService from './HttpService'
 import SessionService from './SessionService'
 
@@ -24,8 +24,11 @@ export default class DataService {
     }
   }
 
-  public static async getData<T>(query: string): Promise<T | T[]> {
-    const result = await HttpService.get(query)
+  public static async getData<T>(
+    query: string,
+    useDefaultBase = false
+  ): Promise<T | T[]> {
+    const result = await HttpService.get(query, useDefaultBase)
     if (!result.authorized) {
       SessionService.notAuthorized()
       return

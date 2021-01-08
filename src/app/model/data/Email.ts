@@ -2,6 +2,8 @@ import InputSelectComponent from '~/components/form/input-select/input-select'
 import InputTextComponent, {
   EInputType,
 } from '~/components/form/input-text/input-text'
+import ModalComponent from '~/components/modal/modal'
+import EditContent from '~/contents/edit/edit'
 import IEmail from '~/interfaces/data/IEmail'
 import Table from '../extend/Table'
 import EmailType from './EmailType'
@@ -48,7 +50,23 @@ export default class Email extends Table implements IEmail {
       (value: EmailType) => (this.type = value),
       await EmailType.getSelectMap('data', 'email_type'),
       this.type ? this.type.uniquename : undefined,
-      true
+      undefined,
+      () => {
+        const modal = new ModalComponent(
+          new EditContent(true, ['email_type'], async (value: EmailType) => {
+            this.fieldType.update(
+              await EmailType.getSelectMap('data', 'email_type'),
+              value.uniquename
+            )
+            this.type = value
+            modal.close()
+          }),
+          undefined,
+          undefined,
+          undefined,
+          true
+        )
+      }
     )
 
     return {

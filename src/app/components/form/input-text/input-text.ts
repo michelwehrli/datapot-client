@@ -1,11 +1,13 @@
 import BaseComponent from '~/baseComponent'
+import ButtonComponent from '~/components/button/button'
 import tmpl from './input-text.html'
 
 export default class InputTextComponent extends BaseComponent {
   input: HTMLInputElement
+  button: ButtonComponent = this.querySelector('dp-button')
 
   static get observedAttributes(): string[] {
-    return ['type', 'value', 'placeholder']
+    return ['type', 'value', 'placeholder', 'clearable']
   }
 
   constructor(
@@ -37,8 +39,13 @@ export default class InputTextComponent extends BaseComponent {
       this.input.addEventListener('change', () => changed(this.input.value))
     }
     for (const additional in additionals) {
-      this.input.setAttribute(additional, additionals[additional])
+      this.setAttribute(additional, additionals[additional])
     }
+
+    this.button.addEventListener('button-click', () => {
+      this.input.value = ''
+      changed(this.input.value)
+    })
   }
 
   attributeChangedCallback(
@@ -54,6 +61,9 @@ export default class InputTextComponent extends BaseComponent {
     }
     if (attrName === 'placeholder') {
       this.input.placeholder = newValue
+    }
+    if (attrName === 'clearable') {
+      this.classList.add('clearable')
     }
   }
 

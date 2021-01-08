@@ -24,6 +24,7 @@ export default class CrmModule extends BaseComponent {
     await SessionService.init()
     ExportService.init()
     this.navigation.init()
+    this.navigation.navigated()
     this.contentContainer = this.querySelector('.content')
     this.handleNavigated()
     Router.on('crm-navigated', 'crm', async () => await this.handleNavigated())
@@ -31,6 +32,8 @@ export default class CrmModule extends BaseComponent {
 
   private handleNavigated() {
     this.contentContainer.innerHTML = ''
+
+    this.navigation.navigated()
 
     if (Router.getRoute() && Router.getRoute()[1]) {
       switch (Router.getRoute()[1]) {

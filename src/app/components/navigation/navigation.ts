@@ -49,6 +49,34 @@ export default class NavigationComponent extends BaseComponent {
     }
   }
 
+  public navigated(): void {
+    if (Router.getRoute() && this.navItems) {
+      const navItem = this.getNavitemRecursive(Router.getUrl(Router.getRoute()))
+      if (navItem) {
+        if (this.activeItem) {
+          this.activeItem.setAttribute('active', 'false')
+        }
+        navItem.setAttribute('active', 'true')
+        this.activeItem = navItem
+        requestAnimationFrame(() => {
+          this.activeItem.scrollIntoViewIfNeeded()
+        })
+      }
+    }
+  }
+
+  public getNavitemRecursive(route: string): NavigationItemComponent {
+    if (route && route.length) {
+      if (this.navItems[route]) {
+        return this.navItems[route]
+      }
+      const split = route.split('/')
+      split.pop()
+      return this.getNavitemRecursive(split.join('/'))
+    }
+    return null
+  }
+
   private async createNavigation(): Promise<void> {
     const datamodel = DataService.getDatamodel()
     if (!datamodel) {
@@ -78,6 +106,10 @@ export default class NavigationComponent extends BaseComponent {
         return 0
       })
       .forEach((group) => {
+        if (group.__meta.superOnly && !SessionService.user.issuperuser) {
+          return
+        }
+
         const groupComponent = new NavigationGroupComponent(group.__meta.title)
         this.items.appendChild(groupComponent)
 
@@ -104,6 +136,10 @@ export default class NavigationComponent extends BaseComponent {
               : 1
           })
           .forEach((item: any) => {
+            if (item.__meta.superOnly && !SessionService.user.issuperuser) {
+              return
+            }
+
             const navItem: NavigationItemComponent = new NavigationItemComponent(
               item.__meta
             )
@@ -114,16 +150,17 @@ export default class NavigationComponent extends BaseComponent {
             }
 
             this.navItems[route] = navItem
+            this.navItems[`crm/detail/${item.__meta.name}`] = navItem
             groupComponent.addItem(navItem)
 
-            navItem.addEventListener('click', () => {
+            navItem.addEventListener('click', (e) => {
               if (this.activeItem) {
                 this.activeItem.setAttribute('active', 'false')
               }
               this.activeItem = navItem
               this.activeItem.setAttribute('active', 'true')
 
-              Router.navigate(route, 'crm')
+              Router.navigate(route, 'crm', e)
             })
           })
       })

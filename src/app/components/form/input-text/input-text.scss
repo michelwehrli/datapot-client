@@ -14,4 +14,30 @@ dp-input-text {
       }
     }
   }
+
+  dp-button {
+    display: none;
+  }
+
+  &.clearable {
+    .wrap {
+      display: flex;
+
+      input {
+        border-top-right-radius: 0px;
+        border-bottom-right-radius: 0px;
+      }
+
+      dp-button {
+        display: block;
+
+        button {
+          padding-top: 10px;
+          padding-bottom: 10px;
+          border-top-left-radius: 0px;
+          border-bottom-left-radius: 0px;
+        }
+      }
+    }
+  }
 }

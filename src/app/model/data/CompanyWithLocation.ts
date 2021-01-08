@@ -1,5 +1,7 @@
 import HorizontalWrapperComponent from '~/components/form/horizontal-wrapper/horizontal-wrapper'
 import InputSelectComponent from '~/components/form/input-select/input-select'
+import ModalComponent from '~/components/modal/modal'
+import EditContent from '~/contents/edit/edit'
 import IAddress from '~/interfaces/data/IAddress'
 import ICompanyWithLocation from '~/interfaces/data/ICompanyWithLocation'
 import Table from '../extend/Table'
@@ -33,6 +35,7 @@ export default class CompanyWithLocation
   }
 
   private addressSelector: InputSelectComponent
+  private companySelector: InputSelectComponent
 
   public async getField(isInitial: boolean): Promise<any> {
     this.addressSelector = new InputSelectComponent(
@@ -41,19 +44,40 @@ export default class CompanyWithLocation
       this.address ? this.address.id : undefined
     )
 
+    this.companySelector = new InputSelectComponent(
+      async (value: Company) => {
+        this.addressSelector.setValues(
+          await CompanyWithLocation.getAddressSelectMap(value)
+        )
+        this.company = value
+      },
+      await Company.getSelectMap(),
+      this.company ? this.company.id : undefined,
+      undefined,
+      () => {
+        const modal = new ModalComponent(
+          new EditContent(true, ['company'], async (value: Company) => {
+            this.addressSelector.update(
+              await CompanyWithLocation.getAddressSelectMap(value),
+              value.addresses[value.addresses.length - 1].id
+            )
+            this.address = value.addresses[value.addresses.length - 1]
+            this.companySelector.update(await Company.getSelectMap(), value.id)
+            this.company = value
+            modal.close()
+          }),
+          undefined,
+          undefined,
+          undefined,
+          true
+        )
+      }
+    )
+
     return {
       ...(!isInitial && {
         company: new HorizontalWrapperComponent([
-          new InputSelectComponent(
-            async (value: Company) => {
-              this.addressSelector.setValues(
-                await CompanyWithLocation.getAddressSelectMap(value)
-              )
-              this.company = value
-            },
-            await Company.getSelectMap(),
-            this.company ? this.company.id : undefined
-          ),
+          this.companySelector,
           this.addressSelector,
         ]),
       }),
@@ -64,9 +88,11 @@ export default class CompanyWithLocation
     company: Company
   ): Promise<Map<string, any>> {
     const ret: Map<string, any> = new Map()
-    for (const raw of company.addresses as IAddress[]) {
-      const entry = new Address(raw)
-      ret[entry.id] = { realValue: entry, value: entry.toString() }
+    if (company) {
+      for (const raw of company.addresses as IAddress[]) {
+        const entry = new Address(raw)
+        ret[entry.id] = { realValue: entry, value: entry.toString() }
+      }
     }
     return ret
   }

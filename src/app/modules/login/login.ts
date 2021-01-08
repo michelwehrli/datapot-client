@@ -26,7 +26,7 @@ export default class LoginModule extends BaseComponent {
 
     setTimeout(async () => {
       if (await SessionService.isLoggedIn()) {
-        Router.navigate('crm/list/contact')
+        Router.navigate('crm/list/contact', 'crm')
         return
       }
     })
@@ -83,7 +83,7 @@ export default class LoginModule extends BaseComponent {
                 !Router.getRoute() ||
                 Router.getRoute().indexOf('LoginModule') > -1
               ) {
-                Router.navigate('crm/list/contact')
+                Router.navigate('crm/list/contact', 'crm')
               } else {
                 Router.refresh()
               }
