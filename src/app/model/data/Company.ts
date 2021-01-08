@@ -69,6 +69,9 @@ export default class Company extends Table implements ICompany {
       `special/employees/${this.id}`,
       true
     )
+    if (!contactsRaw || !contactsRaw.length) {
+      return
+    }
     return contactsRaw.map((cr) => {
       return new Contact(cr)
     })
@@ -121,7 +124,10 @@ export default class Company extends Table implements ICompany {
         contact_person: new InputSelectComponent(
           (value: Contact) => (this.contact_person = value),
           await Contact.getSelectMap(),
-          this.contact_person ? this.contact_person.id : undefined
+          this.contact_person ? this.contact_person.id : undefined,
+          undefined,
+          undefined,
+          true
         ),
         emails: new InputMultipleComponent(
           (value: Email[]) => (this.emails = value),

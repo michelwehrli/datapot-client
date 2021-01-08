@@ -1,4 +1,4 @@
-@import '../../../../styles/colors.scss';
+@import '../../../../styles/colors';
 
 dp-select {
   display: flex;
@@ -52,7 +52,7 @@ dp-select {
 
       span,
       i {
-        opacity: 0.5;
+        opacity: .5;
       }
     }
   }

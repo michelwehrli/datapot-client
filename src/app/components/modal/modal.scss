@@ -4,7 +4,7 @@ dp-modal {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.6);
+  background-color: rgba(0, 0, 0, .6);
   backdrop-filter: blur(8px);
 
   &.small .inner {
@@ -42,10 +42,10 @@ dp-modal {
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 0 30px 0 rgba(0, 0, 0, 0.3);
+    box-shadow: 0 0 30px 0 rgba(0, 0, 0, .3);
 
     .header {
-      background-color: #fafafa;
+      background-color: #FAFAFA;
       padding: 15px 15px 15px 20px;
       position: sticky;
       border-bottom: solid 1px $light;

@@ -57,11 +57,13 @@ export default class KeyValue extends Table implements IKeyValue {
     db: string,
     table: string
   ): Promise<Map<string, string>> {
-    const values = await DataService.getData(`${db}/${table}`)
+    const values = (await DataService.getData(`${db}/${table}`)) as any[]
     const ret: Map<string, string> = new Map()
-    for (const raw of values as IKeyValue[]) {
-      const entry = new ETypeMatch[table](raw)
-      ret[entry.uniquename] = { realValue: entry, value: entry.label }
+    if (values && values.length) {
+      for (const raw of values as IKeyValue[]) {
+        const entry = new ETypeMatch[table](raw)
+        ret[entry.uniquename] = { realValue: entry, value: entry.label }
+      }
     }
     return ret
   }

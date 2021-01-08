@@ -7,6 +7,7 @@ import FieldComponent from '~/components/form/field/field'
 import ModalComponent from '~/components/modal/modal'
 import { ETypeMatch } from '~/enums/ETypeMatch'
 import DataService from '~/services/DataService'
+import HttpService from '~/services/HttpService'
 import { Router } from '~/services/Router'
 import TitleService from '~/services/TitleService'
 import { EToastType, ToastService } from '~/services/ToastService'
@@ -26,7 +27,7 @@ export default class EditContent extends BaseComponent {
 
   private __hash: string
 
-  constructor(isInModal = false, p: string[], onSave: (value: any) => void) {
+  constructor(isInModal = false, p?: string[], onSave?: (value: any) => void) {
     super(tmpl)
 
     let params: any[] = Router.getParams()
@@ -81,14 +82,14 @@ export default class EditContent extends BaseComponent {
         if (this.__hash !== md5(JSON.stringify(this.obj))) {
           const modal = new ModalComponent(
             new ConfirmationComponent(
-              'Möchest du das das Formular wirklich verlassen? Deine ungespeicherten Änderungen gehen verloren!',
+              'Möchest du das das Formular wirklich verlassen?\n\n Deine ungespeicherten Änderungen gehen verloren!',
               [
                 {
                   title: 'Ja, verlassen',
                   color: 'neutral',
                   click: (e: MouseEvent) => {
                     modal.close()
-                    if (this.obj.getDetail && this.obj.getDetail()) {
+                    if (this.obj.getDetail && this.id) {
                       Router.navigate(
                         `crm/detail/${this.table}/${this.id}`,
                         'crm',
@@ -101,7 +102,7 @@ export default class EditContent extends BaseComponent {
                 },
                 {
                   title: 'Abbrechen',
-                  color: 'positive',
+                  color: 'neutral',
                   click: () => {
                     modal.close()
                   },
@@ -113,7 +114,7 @@ export default class EditContent extends BaseComponent {
             true
           )
         } else {
-          if (this.obj.getDetail && this.obj.getDetail()) {
+          if (this.obj.getDetail && this.id) {
             Router.navigate(`crm/detail/${this.table}/${this.id}`, 'crm', e)
           } else {
             Router.navigate(`crm/list/${this.table}`, 'crm', e)
@@ -157,15 +158,18 @@ export default class EditContent extends BaseComponent {
     }
     saveButton.addEventListener('button-click', async (e: MouseEvent) => {
       const result: any = await this.save()
-      if (result.success && this.isNew) {
-        if (!onSave) {
-          Router.navigate(
-            `crm/edit/${this.table}/${result.obj.getId()}`,
-            'crm',
-            e
-          )
-        } else {
-          onSave(result.obj)
+      if (result.success) {
+        HttpService.clearCache()
+        if (this.isNew) {
+          if (!onSave) {
+            Router.navigate(
+              `crm/edit/${this.table}/${result.obj.getId()}`,
+              'crm',
+              e
+            )
+          } else {
+            onSave(result.obj)
+          }
         }
       }
     })
@@ -208,9 +212,10 @@ export default class EditContent extends BaseComponent {
       }
     }
 
-    // TODO: does not always work because it happens to early.
-    // TODO: wait for all fields to be done with initializing
-    this.__hash = md5(JSON.stringify(this.obj))
+    // JO ISCH GRUSIG, MER DOCH GLICH
+    setTimeout(() => {
+      this.__hash = md5(JSON.stringify(this.obj))
+    }, 500)
   }
 
   private async save(): Promise<any> {

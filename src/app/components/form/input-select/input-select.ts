@@ -17,7 +17,8 @@ export default class InputSelectComponent extends BaseComponent {
     values?: Map<string | number, string>,
     value?: string | number,
     required?: boolean,
-    addButtonFunction?: () => void
+    addButtonFunction?: () => void,
+    disabled = false
   ) {
     super(tmpl)
 
@@ -41,6 +42,10 @@ export default class InputSelectComponent extends BaseComponent {
     if (addButtonFunction) {
       this.button.classList.add('visible')
       this.button.addEventListener('button-click', () => addButtonFunction())
+    }
+
+    if (disabled) {
+      this.select.disabled = true
     }
   }
 

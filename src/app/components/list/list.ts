@@ -86,6 +86,10 @@ export default class ListComponent extends BaseComponent {
         }
       }
 
+      this.loadingTimeout = setTimeout(() => {
+        this.listContent.classList.add('loading')
+      }, 100)
+
       const asyncFn = async () => {
         const data: any[] = await DataService.getData(
           `${this.db}/${this.table}`
@@ -156,28 +160,22 @@ export default class ListComponent extends BaseComponent {
   }
 
   private async init() {
-    this.loadingTimeout = setTimeout(() => {
-      this.listContent.classList.add('loading')
-    }, 50)
-
     setTimeout(() => {
       this.buildTableHeader()
       this.initializeFields()
       this.initializeTemplates()
 
       if (this.data && this.data.length) {
-        setTimeout(() => {
-          this.handleData(() => {
-            clearTimeout(this.loadingTimeout)
-            this.listContent.classList.remove('loading')
-          })
-        }, 0)
+        this.handleData(() => {
+          clearTimeout(this.loadingTimeout)
+          this.listContent.classList.remove('loading')
+        })
       } else {
         clearTimeout(this.loadingTimeout)
         this.listContent.classList.remove('loading')
         this.listContent.classList.add('nothingfound')
       }
-    })
+    }, 0)
   }
 
   private async handleData(callback?): Promise<any> {
@@ -191,7 +189,7 @@ export default class ListComponent extends BaseComponent {
     for (const entry of data) {
       const trElement: HTMLElement = document.createElement('tr')
 
-      trElement.addEventListener('click', (e) => {
+      trElement.addEventListener('mouseup', (e) => {
         if (entry.getDetail && entry.getDetail()) {
           Router.navigate(
             `${Router.getUrl(['CrmModule', 'DetailContent'])}/${entry.getId()}`,
@@ -234,17 +232,16 @@ export default class ListComponent extends BaseComponent {
       this.listContent.classList.remove('nothingfound')
     }
 
-    this.tableBody.addEventListener(
-      'DOMNodeInserted',
-      () => {
-        if (callback) {
-          callback()
-        }
-      },
-      { once: true, passive: true }
-    )
+    const mo: MutationObserver = new MutationObserver(() => {
+      if (callback) {
+        mo.disconnect()
+        callback()
+      }
+    })
+    mo.observe(this.tableBody, { childList: true })
 
     this.tableBody.innerHTML = ''
+
     this.tableBody.appendChild(fragment)
   }
 
@@ -256,14 +253,18 @@ export default class ListComponent extends BaseComponent {
       }
     } else if (entry[fieldName]) {
       let value = entry[fieldName].toString()
-      if (model.type === 'date') {
-        value = new Date(parseInt(value)).toLocaleDateString('ch-DE', {
-          year: 'numeric',
-          month: '2-digit',
-          day: '2-digit',
-        })
+      if (value) {
+        if (model.type === 'date') {
+          value = new Date(parseInt(value)).toLocaleDateString('de-CH', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+          })
+        }
+        values.push(value.split('\n').join(' '))
+      } else {
+        values.push('')
       }
-      values.push(value.split('\n').join(' '))
     } else {
       values.push('')
     }

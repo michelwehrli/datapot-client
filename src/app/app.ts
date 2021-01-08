@@ -34,6 +34,7 @@ import InputDocumentSelectorComponent from './components/form/input-document-sel
 import ModalComponent from './components/modal/modal'
 import DocumentSelectorComponent from './components/document-selector/document-selector'
 import ConfirmationComponent from './components/confirmation/confirmation'
+import DesignService from './services/DesignService'
 ;(async () => {
   /* MODULES */
   customElements.define('dp-module-login', LoginModule)
@@ -93,6 +94,9 @@ import ConfirmationComponent from './components/confirmation/confirmation'
 
   /* ROUTING */
   Router.init()
+  window.addEventListener('load', () => {
+    DesignService.init('dark')
+  })
 
   Router.on('navigated', 'app', async () => await handleNavigated())
   async function handleNavigated() {

@@ -3,6 +3,12 @@ export default class HttpService {
   private static dataBase = 'https://core.datapot.ch/api/123/data/'
   private static defaultBase = 'https://core.datapot.ch/api/123/'
 
+  private static cache: Map<string, any> = new Map()
+
+  public static clearCache(): void {
+    this.cache = new Map()
+  }
+
   public static async getDatamodel(): Promise<any> {
     return await (
       await fetch(`${this.datamodelBase}`, {
@@ -15,15 +21,28 @@ export default class HttpService {
   }
 
   public static async get(url: string, useDefaultBase = false): Promise<any> {
-    return await (
-      await fetch(
+    if (this.cache && this.cache.has(url)) {
+      return this.cache.get(url)
+    }
+
+    let result = null
+    try {
+      result = await fetch(
         useDefaultBase ? `${this.defaultBase}${url}` : `${this.dataBase}${url}`,
         {
           mode: 'cors',
           credentials: 'include',
         }
       )
-    ).json()
+    } catch (exc) {
+      // donothing
+    }
+
+    if (result) {
+      result = await result.json()
+      this.cache.set(url, result)
+    }
+    return result
   }
 
   public static async post(

@@ -1,4 +1,4 @@
-@import url('colors.scss');
+@import '../../../styles/colors';
 
 dp-module-crm {
   display: flex;
@@ -20,7 +20,7 @@ dp-module-crm {
       padding: 20px 20px 0 10px;
 
       .content {
-        box-shadow: 0 0 30px 0 rgba(0, 0, 0, 0.2);
+        box-shadow: 0 0 30px 0 rgba(0, 0, 0, .2);
         height: 100%;
         overflow: hidden;
         border-radius: 6px;

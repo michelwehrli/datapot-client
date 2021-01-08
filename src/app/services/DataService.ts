@@ -29,6 +29,9 @@ export default class DataService {
     useDefaultBase = false
   ): Promise<T | T[]> {
     const result = await HttpService.get(query, useDefaultBase)
+    if (!result) {
+      return
+    }
     if (!result.authorized) {
       SessionService.notAuthorized()
       return

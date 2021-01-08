@@ -42,8 +42,7 @@ export default class Contact extends Table implements IContact {
   companiesWithLocation: CompanyWithLocation[]
   department?: string
   positions?: string[]
-  phonenumbers_business: Phonenumber[]
-  phonenumbers_private: Phonenumber[]
+  phonenumbers: Phonenumber[]
   emails: Email[]
   birthdate?: number
   partner?: Contact
@@ -83,16 +82,10 @@ export default class Contact extends Table implements IContact {
     }
     this.department = data.department ? data.department : undefined
     this.positions = data.positions ? data.positions : []
-    this.phonenumbers_business = []
-    if (data.phonenumbers_business) {
-      data.phonenumbers_business.forEach((phonenumber: IPhonenumber) => {
-        this.phonenumbers_business.push(new Phonenumber(phonenumber))
-      })
-    }
-    this.phonenumbers_private = []
-    if (data.phonenumbers_private) {
-      data.phonenumbers_private.forEach((phonenumber: IPhonenumber) => {
-        this.phonenumbers_private.push(new Phonenumber(phonenumber))
+    this.phonenumbers = []
+    if (data.phonenumbers) {
+      data.phonenumbers.forEach((phonenumber: IPhonenumber) => {
+        this.phonenumbers.push(new Phonenumber(phonenumber))
       })
     }
     this.emails = []
@@ -155,11 +148,7 @@ export default class Contact extends Table implements IContact {
       const innerValid = email.validate()
       if (valid) valid = innerValid
     }
-    for (const phonenumber of this.phonenumbers_business) {
-      const innerValid = phonenumber.validate()
-      if (valid) valid = innerValid
-    }
-    for (const phonenumber of this.phonenumbers_private) {
+    for (const phonenumber of this.phonenumbers) {
       const innerValid = phonenumber.validate()
       if (valid) valid = innerValid
     }
@@ -373,15 +362,9 @@ export default class Contact extends Table implements IContact {
           () => new Email(),
           true
         ),
-        phonenumbers_business: new InputMultipleComponent(
-          (value: Phonenumber[]) => (this.phonenumbers_business = value),
-          this.phonenumbers_business,
-          () => new Phonenumber(),
-          true
-        ),
-        phonenumbers_private: new InputMultipleComponent(
-          (value: Phonenumber[]) => (this.phonenumbers_private = value),
-          this.phonenumbers_private,
+        phonenumbers: new InputMultipleComponent(
+          (value: Phonenumber[]) => (this.phonenumbers = value),
+          this.phonenumbers,
           () => new Phonenumber(),
           true
         ),
@@ -426,18 +409,15 @@ export default class Contact extends Table implements IContact {
     const mobilePhones: Phonenumber[] = []
     const businessPhones: Phonenumber[] = []
     const homePhones: Phonenumber[] = []
-    this.phonenumbers_business.map((p: Phonenumber) => {
-      if (p.line && p.line.uniquename === 'mobile') {
+    this.phonenumbers.map((p: Phonenumber) => {
+      if (p.line.uniquename === 'mobile') {
         mobilePhones.push(p)
       } else {
-        businessPhones.push(p)
-      }
-    })
-    this.phonenumbers_private.map((p: Phonenumber) => {
-      if (p.line && p.line.uniquename === 'mobile') {
-        mobilePhones.push(p)
-      } else {
-        homePhones.push(p)
+        if (p.type.uniquename === 'business') {
+          businessPhones.push(p)
+        } else {
+          homePhones.push(p)
+        }
       }
     })
 

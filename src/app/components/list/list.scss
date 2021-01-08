@@ -1,4 +1,4 @@
-@import '../../../styles/colors.scss';
+@import '../../../styles/colors';
 
 dp-list {
   overflow: auto;
@@ -39,7 +39,7 @@ dp-list {
           }
 
           .sort-button button {
-            color: #ccc;
+            color: #CCCCCC;
           }
           .sort-button.active button {
             color: $black;
@@ -100,7 +100,7 @@ dp-list {
     flex: 0;
     display: flex;
     padding: 6px 12px;
-    background-color: #fafafa;
+    background-color: #FAFAFA;
     border-top: solid 1px $light;
 
     .modal {
@@ -108,9 +108,9 @@ dp-list {
       border-radius: 4px;
       bottom: 34px;
       padding: 10px;
-      box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+      box-shadow: 0 0 10px 0 rgba(0, 0, 0, .2);
       display: none;
-      background-color: #fafafa;
+      background-color: #FAFAFA;
       user-select: none;
 
       &.active {

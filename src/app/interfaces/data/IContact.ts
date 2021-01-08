@@ -23,8 +23,7 @@ export default abstract class IContact {
   abstract companiesWithLocation?: CompanyWithLocation[]
   abstract department?: string
   abstract positions?: string[]
-  abstract phonenumbers_business?: Phonenumber[]
-  abstract phonenumbers_private?: Phonenumber[]
+  abstract phonenumbers?: Phonenumber[]
   abstract emails?: Email[]
   abstract birthdate?: number
   abstract partner?: Contact

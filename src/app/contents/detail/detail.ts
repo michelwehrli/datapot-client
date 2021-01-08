@@ -28,6 +28,7 @@ export default class DetailContent extends BaseComponent {
 
     if (!params || !params[0] || !params[1]) {
       Router.navigate('crm/404')
+      return
     } else {
       this.table = params[0]
       this.identifier = params[1]
@@ -51,11 +52,11 @@ export default class DetailContent extends BaseComponent {
 
     this.contentHeader.addButtons(backButton, editButton, trashButton)
 
-    backButton.addEventListener('button-click', (e) => {
+    backButton.addEventListener('button-click', (e: MouseEvent) => {
       Router.navigate(`crm/list/${this.table}`, 'crm', e)
     })
 
-    editButton.addEventListener('button-click', (e) => {
+    editButton.addEventListener('button-click', (e: MouseEvent) => {
       Router.navigate(`crm/edit/${this.table}/${this.identifier}`, 'crm', e)
     })
 

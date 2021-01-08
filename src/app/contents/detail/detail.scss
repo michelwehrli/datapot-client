@@ -1,4 +1,4 @@
-@import url('colors.scss');
+@import '../../../styles/colors';
 
 dp-content-detail {
   display: flex;
@@ -59,7 +59,8 @@ dp-content-detail {
         }
 
         &.none {
-          opacity: 0.3;
+          opacity: .3;
+          user-select: none;
         }
       }
 
@@ -79,9 +80,8 @@ dp-content-detail {
         font-weight: 500;
 
         a.iconlink {
-          display: inline-block;
           margin-left: 6px;
-          opacity: 0.6;
+          opacity: .6;
           top: -2px;
           cursor: pointer;
           position: relative;
@@ -92,15 +92,18 @@ dp-content-detail {
         }
 
         a {
+          display: inline-block;
+
           i.linkicon {
             margin-right: 6px;
             font-size: 12px;
-            opacity: 0.8;
+            opacity: .8;
           }
         }
 
         &.none {
-          opacity: 0.3;
+          opacity: .3;
+          user-select: none;
         }
 
         &.remark {
@@ -131,7 +134,7 @@ dp-content-detail {
           margin-left: 8px;
           position: relative;
           top: -1px;
-          opacity: 0.8;
+          opacity: .8;
           font-size: 14px;
         }
       }

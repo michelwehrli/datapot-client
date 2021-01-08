@@ -7,6 +7,7 @@ import ExportContent from '~/contents/export/export'
 import ListContent from '~/contents/list/list'
 import DataService from '~/services/DataService'
 import ExportService from '~/services/ExportService'
+import HttpService from '~/services/HttpService'
 import { Router } from '~/services/Router'
 import SessionService from '~/services/SessionService'
 import tmpl from './crm.html'
@@ -23,6 +24,11 @@ export default class CrmModule extends BaseComponent {
     await DataService.init()
     await SessionService.init()
     ExportService.init()
+
+    // build cache
+    HttpService.get('data/contact')
+    HttpService.get('data/company')
+
     this.navigation.init()
     this.navigation.navigated()
     this.contentContainer = this.querySelector('.content')

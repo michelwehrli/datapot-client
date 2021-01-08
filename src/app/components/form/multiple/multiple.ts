@@ -81,17 +81,16 @@ export default class InputMultipleComponent extends BaseComponent {
           value
         )
       }
+      let item
       if (this.isHorizontal) {
-        const item = new InputMultipleItemComponent(
+        item = new InputMultipleItemComponent(
           new HorizontalWrapperComponent(field)
         )
-        item.addEventListener('remove', () => this.rem(value))
-        this.container.appendChild(item)
       } else {
-        const item = new InputMultipleItemComponent(field)
-        item.addEventListener('remove', () => this.rem(value))
-        this.container.appendChild(item)
+        item = new InputMultipleItemComponent(field)
       }
+      item.addEventListener('remove', () => this.rem(value))
+      this.container.appendChild(item)
     })
   }
 }

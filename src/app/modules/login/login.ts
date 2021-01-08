@@ -83,7 +83,7 @@ export default class LoginModule extends BaseComponent {
                 !Router.getRoute() ||
                 Router.getRoute().indexOf('LoginModule') > -1
               ) {
-                Router.navigate('crm/list/contact', 'crm')
+                Router.navigate('crm/list/contact')
               } else {
                 Router.refresh()
               }

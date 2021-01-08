@@ -14,11 +14,11 @@ export default class InputMultipleItemComponent extends BaseComponent {
   constructor(fragments: any | any[], buttonsHidden?: boolean) {
     super(tmpl)
 
-    try {
+    if (fragments.constructor.name === 'Object') {
       Object.values(fragments).forEach((fragment: HTMLElement) => {
         this.component.appendChild(fragment)
       })
-    } catch (exc) {
+    } else {
       this.component.appendChild(fragments)
     }
 
