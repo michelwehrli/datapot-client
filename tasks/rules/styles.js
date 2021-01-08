@@ -6,6 +6,9 @@ module.exports = () => {
       use: [
         {
           loader: 'style-loader', // Creates style nodes from JS strings
+          options: {
+            injectType: 'singletonStyleTag',
+          },
         },
         {
           loader: 'css-loader', // Translates CSS into CommonJS
@@ -13,7 +16,9 @@ module.exports = () => {
         {
           loader: 'postcss-loader', // More CSS Plugins
           options: {
-            plugins: () => [require('autoprefixer')],
+            postcssOptions: {
+              plugins: [require('autoprefixer')],
+            },
           },
         },
         {

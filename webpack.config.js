@@ -5,7 +5,6 @@ const fs = require('fs')
 
 module.exports = (env) => {
   const environment = env.NODE_ENV
-  env.NODE_ENV = JSON.stringify(environment)
 
   rules((name, rule) => rule(environment))
   plugins((name, rule) => rule(environment))
