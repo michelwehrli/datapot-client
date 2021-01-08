@@ -37,7 +37,8 @@ module.exports = (env) => {
       watchOptions: {
         poll: true,
       },
-      // proxy: { '/api': 'http://localhost:3000' }
+      contentBase: './dist',
+      compress: true,
     },
     optimization: {
       minimizer: [plugins.uglify],
