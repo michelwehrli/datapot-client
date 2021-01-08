@@ -11,11 +11,6 @@
     "lint:styles": "stylelint \"./src/**/*.scss\" --fix",
     "lint:editor": "eclint fix"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run lint"
-    }
-  },
   "dependencies": {
     "@babel/polyfill": "^7.10.4",
     "@types/md5": "^2.2.1",
