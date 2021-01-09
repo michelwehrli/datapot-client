@@ -1,5 +1,3 @@
-@import '../../../../styles/colors';
-
 dp-input-file {
   display: flex;
   flex-direction: column;
@@ -11,14 +9,14 @@ dp-input-file {
   .error {
     display: none;
     margin-top: 10px;
-    color: $negative;
+    color: var(--negative);
   }
 
   img {
     width: 100%;
     height: 250px;
     object-fit: contain;
-    background-color: $almost-white;
+    background-color: var(--almost-white);
     padding: 5px;
     margin-top: 10px;
     display: none;

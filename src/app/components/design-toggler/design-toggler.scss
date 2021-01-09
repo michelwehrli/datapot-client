@@ -1,0 +1,45 @@
+dp-design-toggler {
+  direction: ltr;
+  margin-top: 40px;
+  display: flex;
+
+  p {
+    margin: 0 10px 0 0;
+  }
+
+  .toggler {
+    position: relative;
+    border-radius: 15px;
+    width: 36px;
+    padding: 10px;
+    cursor: pointer;
+    opacity: 0.6;
+    background-color: var(--accent-active);
+    transition: opacity 0.2s ease-in-out 0s,
+      background-color 0.2s ease-in-out 0s;
+
+    :hover {
+      opacity: 1;
+    }
+
+    &.dark {
+      background-color: var(--accent-light);
+
+      .thumb {
+        background-color: var(--accent-active);
+        right: 19px;
+      }
+    }
+
+    .thumb {
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      top: 3px;
+      right: 3px;
+      transition: left 0.2s ease-in-out 0s, right 0.2s ease-in-out 0s;
+      border-radius: 100%;
+      background-color: var(--light);
+    }
+  }
+}

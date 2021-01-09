@@ -1,9 +1,7 @@
-@import '../../../styles/colors';
-
 dp-datepicker {
   display: block;
   width: 240px;
-  background-color: $light;
+  background-color: var(--light);
   border-radius: 4px;
   overflow: hidden;
 
@@ -14,8 +12,8 @@ dp-datepicker {
   header {
     width: 100%;
     padding: 8px;
-    background-color: $light-hover;
-    border-bottom: solid 1px $light-active;
+    background-color: var(--light-hover);
+    border-bottom: solid 1px var(--light-active);
     display: flex;
 
     div {
@@ -70,7 +68,7 @@ dp-datepicker {
 
       > span {
         text-align: center;
-        color: $medium;
+        color: var(--medium);
       }
 
       dp-button,
@@ -92,8 +90,8 @@ dp-datepicker {
         }
 
         &.active button {
-          background-color: $accent;
-          color: $white;
+          background-color: var(--accent);
+          color: var(--white);
         }
       }
     }

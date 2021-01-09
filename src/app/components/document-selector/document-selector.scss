@@ -4,7 +4,7 @@ dp-document-selector {
 
     .document {
       display: flex;
-      background-color: $almost-white;
+      background-color: var(--almost-white);
       padding-right: 15px;
       cursor: pointer;
       user-select: none;
@@ -17,11 +17,11 @@ dp-document-selector {
       }
 
       &:hover {
-        background-color: $light-hover;
+        background-color: var(--light-hover);
       }
 
       &:active {
-        background-color: $light-active;
+        background-color: var(--light-active);
       }
 
       img {

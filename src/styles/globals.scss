@@ -1,7 +1,3 @@
-$background-color: #FBFBFB;
-$scrollbar-track: #EEEEEE;
-$scrollbar-thumb: #BBBBBB;
-
 html,
 body {
   padding: 0;
@@ -11,7 +7,7 @@ body {
 
 body {
   min-width: 320px;
-  background-color: $background-color;
+  background-color: var(--background-color);
 }
 
 * {
@@ -23,8 +19,8 @@ body {
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: $scrollbar-track;
+  background: var(--scrollbar-track);
 }
 ::-webkit-scrollbar-thumb {
-  background: $scrollbar-thumb;
+  background: var(--scrollbar-thumb);
 }

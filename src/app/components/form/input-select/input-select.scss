@@ -1,5 +1,3 @@
-@import '../../../../styles/colors';
-
 dp-select {
   display: flex;
   width: 100%;
@@ -20,16 +18,17 @@ dp-select {
       right: 12px;
       margin-top: 1px;
       pointer-events: none;
+      color: var(--font-base);
     }
 
     &.required {
       select {
-        border-left: solid 2px $accent;
+        border-left: solid 2px var(--accent);
       }
 
       &.error {
         select {
-          border-left: solid 3px $negative;
+          border-left: solid 3px var(--negative);
         }
       }
     }
@@ -52,7 +51,7 @@ dp-select {
 
       span,
       i {
-        opacity: .5;
+        opacity: 0.5;
       }
     }
   }

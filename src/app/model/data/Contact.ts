@@ -455,11 +455,11 @@ export default class Contact extends Table implements IContact {
               !this.additional_names || !this.additional_names.length
                 ? ' none'
                 : ''
-            }"><span></span><span>${
+            }">${
               this.additional_names && this.additional_names.length
-                ? this.additional_names.join(' ')
-                : '-'
-            }</span></p>`}
+                ? `<span></span><span>${this.additional_names.join(' ')}</span>`
+                : ''
+            }</p>`}
               
             ${`<p class="text-flex${
               !this.surname ? ' none' : ''
@@ -645,7 +645,13 @@ export default class Contact extends Table implements IContact {
         <div class="flex-item">
           <div class="container">
             ${
-              businessEmail && businessEmail.length
+              businessEmail &&
+              businessEmail.length &&
+              businessEmail.filter((email) => {
+                return new RegExp(
+                  /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}/g
+                ).test(email.address)
+              }).length
                 ? `
                 <h4>Geschäftliche E-Mail Adressen</h4>
                 ${businessEmail
@@ -656,7 +662,13 @@ export default class Contact extends Table implements IContact {
                 : '<h4 class="none">Geschäftliche E-Mail Adressen</h4><p class="none">Keine E-Mail-Adressen</p>'
             }
             ${
-              privateEmail && privateEmail.length
+              privateEmail &&
+              privateEmail.length &&
+              privateEmail.filter((email) => {
+                return new RegExp(
+                  /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}/g
+                ).test(email.address)
+              }).length
                 ? `
                 <h4>Private E-Mail-Adressen</h4>
                 ${privateEmail

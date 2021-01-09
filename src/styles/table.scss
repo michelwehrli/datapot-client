@@ -1,5 +1,3 @@
-@import 'colors';
-
 table {
   border-spacing: 0;
   min-width: 100%;
@@ -12,20 +10,20 @@ table {
 
       &.bottom th {
         padding-bottom: 10px;
-        border-bottom: solid 1px $light-hover;
+        border-bottom: solid 1px var(--light-hover);
       }
 
       th {
         padding: 10px;
         text-align: left;
-        border-right: solid 1px $light-hover;
+        border-right: solid 1px var(--light-hover);
 
         &.hidden {
           display: none;
         }
 
         &:first-child {
-          border-left: solid 1px $light-hover;
+          border-left: solid 1px var(--light-hover);
         }
 
         p {
@@ -40,11 +38,11 @@ table {
       cursor: pointer;
 
       &:hover {
-        background-color: $accent-light !important;
+        background-color: var(--tr-hover) !important;
       }
 
       &:nth-child(odd) {
-        background-color: $almost-white;
+        background-color: var(--list-odd);
       }
 
       td {
@@ -55,14 +53,14 @@ table {
         min-width: 160px;
         max-width: 340px;
         height: 32px;
-        border-right: solid 1px $light-hover;
+        border-right: solid 1px var(--light-hover);
 
         &.hidden {
           display: none;
         }
 
         &:first-child {
-          border-left: solid 1px $light-hover;
+          border-left: solid 1px var(--light-hover);
         }
 
         p {

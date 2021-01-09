@@ -7,6 +7,7 @@ module.exports = () => {
         {
           loader: 'style-loader', // Creates style nodes from JS strings
           options: {
+            insert: 'head',
             injectType: 'singletonStyleTag',
           },
         },

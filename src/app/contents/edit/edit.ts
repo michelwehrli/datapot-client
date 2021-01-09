@@ -9,6 +9,7 @@ import { ETypeMatch } from '~/enums/ETypeMatch'
 import DataService from '~/services/DataService'
 import HttpService from '~/services/HttpService'
 import { Router } from '~/services/Router'
+import SessionService from '~/services/SessionService'
 import TitleService from '~/services/TitleService'
 import { EToastType, ToastService } from '~/services/ToastService'
 import tmpl from './edit.html'
@@ -241,6 +242,8 @@ export default class EditContent extends BaseComponent {
       }
       ToastService.remove(toast)
       if (result.success) {
+        await SessionService.refresh()
+
         this.__hash = md5(JSON.stringify(this.obj))
         ToastService.add(
           'Der Eintrag wurde erfolgreich gespeichert.',

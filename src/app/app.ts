@@ -34,7 +34,9 @@ import InputDocumentSelectorComponent from './components/form/input-document-sel
 import ModalComponent from './components/modal/modal'
 import DocumentSelectorComponent from './components/document-selector/document-selector'
 import ConfirmationComponent from './components/confirmation/confirmation'
-import DesignService from './services/DesignService'
+import DesignTogglerComponent from './components/design-toggler/design-toggler'
+
+import '../styles/app.scss'
 ;(async () => {
   /* MODULES */
   customElements.define('dp-module-login', LoginModule)
@@ -70,6 +72,7 @@ import DesignService from './services/DesignService'
     'dp-input-document-selector',
     InputDocumentSelectorComponent
   )
+  customElements.define('dp-design-toggler', DesignTogglerComponent)
   customElements.define('dp-modal', ModalComponent)
   customElements.define('dp-multiple', InputMultipleComponent)
   customElements.define('dp-multiple-item', InputMultipleItemComponent)
@@ -94,9 +97,7 @@ import DesignService from './services/DesignService'
 
   /* ROUTING */
   Router.init()
-  window.addEventListener('load', () => {
-    DesignService.init('dark')
-  })
+  await SessionService.init()
 
   Router.on('navigated', 'app', async () => await handleNavigated())
   async function handleNavigated() {

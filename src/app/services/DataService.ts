@@ -26,9 +26,10 @@ export default class DataService {
 
   public static async getData<T>(
     query: string,
-    useDefaultBase = false
+    useDefaultBase = false,
+    noCache = false
   ): Promise<T | T[]> {
-    const result = await HttpService.get(query, useDefaultBase)
+    const result = await HttpService.get(query, useDefaultBase, noCache)
     if (!result) {
       return
     }
@@ -88,4 +89,5 @@ export default class DataService {
 export interface ILoginResult {
   success: boolean
   user: IUser
+  error?: string
 }

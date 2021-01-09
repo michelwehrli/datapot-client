@@ -3,6 +3,7 @@ import DataService from '~/services/DataService'
 import { Router } from '~/services/Router'
 import SessionService from '~/services/SessionService'
 import ButtonComponent from '../button/button'
+import DesignTogglerComponent from '../design-toggler/design-toggler'
 import NavigationGroupComponent from '../navigation-group/navigation-group'
 import NavigationItemComponent from '../navigation-item/navigation-item'
 import tmpl from './navigation.html'
@@ -14,6 +15,9 @@ export default class NavigationComponent extends BaseComponent {
   imageE: HTMLImageElement = this.querySelector('.js-image')
   logoutButton: ButtonComponent = this.querySelector('.js-logout')
   activeItem: NavigationItemComponent
+  designToggler: DesignTogglerComponent = this.querySelector(
+    'dp-design-toggler'
+  )
 
   constructor() {
     super(tmpl)
@@ -47,6 +51,10 @@ export default class NavigationComponent extends BaseComponent {
     ) {
       this.imageE.src = SessionService.user.image.previewUrl
     }
+  }
+
+  public getDesignToggler(): DesignTogglerComponent {
+    return this.designToggler
   }
 
   public navigated(): void {

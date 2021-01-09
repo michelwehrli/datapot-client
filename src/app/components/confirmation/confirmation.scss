@@ -16,8 +16,8 @@ dp-confirmation {
     display: flex;
     text-align: right;
     direction: rtl;
-    background-color: #FAFAFA;
-    border-top: 1px solid $light;
+    background-color: var(--nearly-white);
+    border-top: 1px solid var(--light);
     flex: 0 0 53px;
 
     dp-button {

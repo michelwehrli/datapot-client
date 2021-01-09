@@ -1,16 +1,14 @@
-@import '../../../../styles/colors';
-
 dp-input-text {
   display: block;
 
   &.required {
     input {
-      border-left: solid 3px $accent-medium;
+      border-left: solid 3px var(--accent-medium);
     }
 
     &.error {
       input {
-        border-left: solid 3px $negative;
+        border-left: solid 3px var(--negative);
       }
     }
   }

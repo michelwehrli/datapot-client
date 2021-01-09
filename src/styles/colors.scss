@@ -1,27 +1,86 @@
-$light: #EFEFEF;
-$light-hover: #E2E2E2;
-$light-active: #C9C9C9;
+:root {
+  .design-light {
+    --light: #efefef;
+    --light-hover: #e2e2e2;
+    --light-active: #c9c9c9;
 
-$white: #FFFFFF;
-$nearly-white: #FAFAFA;
-$almost-white: #F5F5F5;
-$medium: #888888;
-$black: #000000;
+    --white: #ffffff;
+    --nearly-white: #fafafa;
+    --almost-white: #f5f5f5;
+    --medium: #888888;
+    --black: #000000;
+    --content-header-background: var(--nearly-white);
+    --content-background: #ffffff;
 
-$accent-light: #DBDCEB;
-$accent-medium: #8990BC;
-$accent: #3E456D;
-$accent-hover: #2C304C;
-$accent-active: #191C2C;
+    --accent-light: #dbdceb;
+    --accent-medium: #8990bc;
+    --accent: #3e456d;
+    --accent-hover: #2c304c;
+    --accent-active: #191c2c;
 
-$positive: #00B32D;
-$positive-hover: #009A27;
-$positive-active: #008020;
+    --positive: #00b32d;
+    --positive-hover: #009a27;
+    --positive-active: #008020;
 
-$negative: #FF3344;
-$negative-hover: #FF0015;
-$negative-active: #CC0011;
+    --negative: #ff3344;
+    --negative-hover: #ff0015;
+    --negative-active: #cc0011;
 
-$info: #00ABFF;
-$info-hover: #0089CC;
-$info-active: #006799;
+    --info: #00abff;
+    --info-hover: #0089cc;
+    --info-active: #006799;
+
+    --background-color: #fbfbfb;
+    --scrollbar-track: #eeeeee;
+    --scrollbar-thumb: #bbbbbb;
+
+    --font-base: #000000;
+    --font-base-light: #ffffff;
+
+    --list-odd: var(--almost-white);
+    --link-base: var(--accent-medium);
+    --tr-hover: var(--accent-light);
+  }
+  .design-dark {
+    --light: #101010;
+    --light-hover: #2d2d2d;
+    --light-active: #363636;
+
+    --white: #ffffff;
+    --nearly-white: #1d1d1d;
+    --almost-white: #0a0a0a;
+    --medium: #777777;
+    --black: #000000;
+    --content-header-background: #333333;
+    --content-background: #222222;
+
+    --accent-light: #dbdceb;
+    --accent-medium: #8990bc;
+    --accent: #3e456d;
+    --accent-hover: #2c304c;
+    --accent-active: #191c2c;
+
+    --positive: #00b32d;
+    --positive-hover: #009a27;
+    --positive-active: #008020;
+
+    --negative: #ff3344;
+    --negative-hover: #ff0015;
+    --negative-active: #cc0011;
+
+    --info: #00abff;
+    --info-hover: #0089cc;
+    --info-active: #006799;
+
+    --background-color: #111;
+    --scrollbar-track: #111111;
+    --scrollbar-thumb: #444444;
+
+    --font-base: #ddd;
+    --font-base-light: #000000;
+
+    --list-odd: #303030;
+    --link-base: var(--accent-light);
+    --tr-hover: var(--accent-hover);
+  }
+}

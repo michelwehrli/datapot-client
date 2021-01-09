@@ -15,7 +15,7 @@ export default class ContentHeaderComponent extends BaseComponent {
     super(tmpl)
   }
 
-  public addButtons(...buttons: ButtonComponent[]) {
+  public addButtons(...buttons: ButtonComponent[]): void {
     buttons.forEach((button) => {
       this.buttons.appendChild(button)
     })

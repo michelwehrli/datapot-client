@@ -3,7 +3,7 @@
 
   table {
     thead tr th {
-      border-bottom: solid 1px $light-hover;
+      border-bottom: solid 1px var(--light-hover);
       border-right: none;
       border-left: none;
     }
@@ -19,7 +19,7 @@
       td {
         padding-top: 16px;
         padding-bottom: 16px;
-        border-bottom: solid 1px $light-hover;
+        border-bottom: solid 1px var(--light-hover);
         border-right: none;
         border-left: none;
 

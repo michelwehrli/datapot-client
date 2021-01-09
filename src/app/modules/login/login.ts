@@ -5,6 +5,7 @@ import InputTextComponent, {
   EInputType,
 } from '~/components/form/input-text/input-text'
 import DataService, { ILoginResult } from '~/services/DataService'
+import DesignService from '~/services/DesignService'
 import { Router } from '~/services/Router'
 import SessionService from '~/services/SessionService'
 import { EToastType, ToastService } from '~/services/ToastService'
@@ -23,6 +24,15 @@ export default class LoginModule extends BaseComponent {
 
   constructor(done?: () => void) {
     super(tmpl)
+
+    if (
+      window.matchMedia &&
+      window.matchMedia('(prefers-color-scheme: dark)').matches
+    ) {
+      DesignService.init('dark')
+    } else {
+      DesignService.init('light')
+    }
 
     setTimeout(async () => {
       if (await SessionService.isLoggedIn()) {
@@ -92,7 +102,9 @@ export default class LoginModule extends BaseComponent {
         } else {
           this.passwordField.setAttribute('value', '')
           ToastService.add(
-            'Du konntest nicht angemeldet werden.',
+            `Du konntest nicht angemeldet werden. ${
+              result.error ? `(${result.error})` : ''
+            }`,
             EToastType.NEGATIVE,
             3000
           )

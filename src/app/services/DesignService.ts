@@ -1,27 +1,31 @@
+import DesignTogglerComponent from '~/components/design-toggler/design-toggler'
+
 export default class DesignService {
   public static designStyles: Map<string, HTMLStyleElement> = new Map()
 
-  public static init(design: string): void {
-    return
-    this.designStyles.set(
-      'light',
-      document.querySelectorAll('style')[0] as HTMLStyleElement
-    )
-    this.designStyles.set(
-      'dark',
-      document.querySelectorAll('style')[1] as HTMLStyleElement
-    )
-
-    this.toggle(design)
+  public static init(
+    design: string,
+    designToggler?: DesignTogglerComponent
+  ): void {
+    this.toggle(design, designToggler)
   }
 
-  public static toggle(design: string): void {
+  public static toggle(
+    design: string,
+    designToggler?: DesignTogglerComponent
+  ): void {
     if (design === 'light') {
-      this.designStyles.get('light').removeAttribute('media')
-      this.designStyles.get('dark').setAttribute('media', 'max-width: 1px;')
+      document.body.classList.add('design-light')
+      document.body.classList.remove('design-dark')
+      if (designToggler) {
+        designToggler.setAttribute('design', 'light')
+      }
     } else {
-      this.designStyles.get('light').setAttribute('media', 'max-width: 1px;')
-      this.designStyles.get('dark').removeAttribute('media')
+      document.body.classList.add('design-dark')
+      document.body.classList.remove('design-light')
+      if (designToggler) {
+        designToggler.setAttribute('design', 'dark')
+      }
     }
   }
 }

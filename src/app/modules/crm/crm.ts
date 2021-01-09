@@ -6,6 +6,7 @@ import EditContent from '~/contents/edit/edit'
 import ExportContent from '~/contents/export/export'
 import ListContent from '~/contents/list/list'
 import DataService from '~/services/DataService'
+import DesignService from '~/services/DesignService'
 import ExportService from '~/services/ExportService'
 import HttpService from '~/services/HttpService'
 import { Router } from '~/services/Router'
@@ -26,20 +27,32 @@ export default class CrmModule extends BaseComponent {
     ExportService.init()
 
     // build cache
-    HttpService.get('data/contact')
-    HttpService.get('data/company')
+    HttpService.get('data/contact', false, true)
+    HttpService.get('data/company', false, true)
 
     this.navigation.init()
     this.navigation.navigated()
     this.contentContainer = this.querySelector('.content')
     this.handleNavigated()
     Router.on('crm-navigated', 'crm', async () => await this.handleNavigated())
+
+    if (
+      SessionService.user &&
+      SessionService.user.design &&
+      SessionService.user.design.uniquename
+    ) {
+      DesignService.init(
+        SessionService.user.design.uniquename,
+        this.navigation.getDesignToggler()
+      )
+    }
   }
 
-  private handleNavigated() {
+  private async handleNavigated() {
     this.contentContainer.innerHTML = ''
 
     this.navigation.navigated()
+    DesignService.toggle(SessionService.user.design.uniquename)
 
     if (Router.getRoute() && Router.getRoute()[1]) {
       switch (Router.getRoute()[1]) {

@@ -1,9 +1,8 @@
 dp-content-header {
   display: flex;
   padding: 15px 15px 15px 20px;
-  background-color: #FAFAFA;
-  border-bottom: solid 1px $light;
-
+  background-color: var(--content-header-background);
+  border-bottom: solid 1px var(--light);
   h3 {
     flex: 1;
     margin: 0;

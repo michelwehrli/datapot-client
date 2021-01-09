@@ -1,7 +1,9 @@
 dp-navigation {
-  padding: 20px 20px 65px 20px;
+  padding: 20px;
   overflow: auto;
   direction: rtl;
+  display: flex;
+  flex-direction: column;
 
   * {
     direction: ltr;
@@ -20,11 +22,11 @@ dp-navigation {
       background-color: transparent;
 
       &:hover {
-        background-color: $light-hover;
+        background-color: var(--light-hover);
       }
 
       &:active {
-        background-color: $light-active;
+        background-color: var(--light-active);
       }
     }
 
@@ -38,7 +40,7 @@ dp-navigation {
       .image {
         height: 32px;
         border-radius: 4px;
-        background-color: #FFFFFF;
+        background-color: #ffffff;
         margin-right: 10px;
         flex: 0 0 32px;
         overflow: hidden;

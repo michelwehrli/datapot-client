@@ -12,10 +12,7 @@ module.exports = (env) => {
   return {
     mode: environment,
     entry: {
-      app: [
-        path.resolve(__dirname, 'src/app/app.ts'),
-        path.resolve(__dirname, 'src/styles/app.scss'),
-      ],
+      app: [path.resolve(__dirname, 'src/app/app.ts')],
     },
     output: {
       filename: '[name].js',

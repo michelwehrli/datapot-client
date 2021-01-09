@@ -75,6 +75,7 @@ class ExportObject {
             `task/${this.config.name}/${
               !this.loggedin ? 'login' : this.running ? 'stop' : 'start'
             }`,
+            true,
             true
           )
           this.poll()
@@ -95,6 +96,7 @@ class ExportObject {
         this.downloadButton.addEventListener('button-click', async () => {
           const result = await HttpService.get(
             `task/${this.config.name}/open`,
+            true,
             true
           )
           console.log(result)
@@ -124,6 +126,7 @@ class ExportObject {
   private async poll() {
     const currentStatus = await HttpService.get(
       `task/${this.config.name}/status`,
+      true,
       true
     )
 

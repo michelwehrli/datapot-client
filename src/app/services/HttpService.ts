@@ -20,8 +20,12 @@ export default class HttpService {
     ).json()
   }
 
-  public static async get(url: string, useDefaultBase = false): Promise<any> {
-    if (this.cache && this.cache.has(url)) {
+  public static async get(
+    url: string,
+    useDefaultBase = false,
+    noCache = false
+  ): Promise<any> {
+    if (!noCache && this.cache && this.cache.has(url)) {
       return this.cache.get(url)
     }
 
@@ -40,7 +44,9 @@ export default class HttpService {
 
     if (result) {
       result = await result.json()
-      this.cache.set(url, result)
+      if (!noCache) {
+        this.cache.set(url, result)
+      }
     }
     return result
   }

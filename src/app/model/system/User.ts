@@ -7,11 +7,11 @@ import InputSelectComponent from '~/components/form/input-select/input-select'
 import InputTextComponent, {
   EInputType,
 } from '~/components/form/input-text/input-text'
-import ListComponent from '~/components/list/list'
 import ModalComponent from '~/components/modal/modal'
 import EditContent from '~/contents/edit/edit'
 import IUser from '~/interfaces/system/IUser'
 import DataService from '~/services/DataService'
+import DesignService from '~/services/DesignService'
 import Table from '../extend/Table'
 import Design from './Design'
 import Document from './Document'
@@ -95,7 +95,10 @@ export default class User extends Table implements IUser {
     }
 
     const designComponent = new InputSelectComponent(
-      (value: Design) => (this.design = value),
+      (value: Design) => {
+        this.design = value
+        DesignService.toggle(value.uniquename)
+      },
       await Design.getSelectMap('system', 'design'),
       this.design ? this.design.uniquename : undefined,
       undefined,
@@ -149,7 +152,6 @@ export default class User extends Table implements IUser {
         datamodel['issuperuser'].label,
         true
       ),
-      configuration: configP,
     }
   }
 }

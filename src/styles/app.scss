@@ -2,8 +2,6 @@
 @import 'globals';
 @import 'typography';
 @import 'form';
-@import 'colors';
-@import 'colors_dark';
 @import 'variables';
 @import 'fa';
 @import 'table';
@@ -32,6 +30,7 @@
 @import '../app/components/modal/modal.scss';
 @import '../app/components/confirmation/confirmation.scss';
 @import '../app/components/document-selector/document-selector.scss';
+@import '../app/components/design-toggler/design-toggler.scss';
 
 @import '../app/components/form/submit-button/submit-button.scss';
 @import '../app/components/form/input-text/input-text.scss';

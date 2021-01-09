@@ -1,5 +1,3 @@
-@import 'colors';
-
 input,
 select,
 textarea {
@@ -23,12 +21,12 @@ input {
   padding: 8px 10px;
   border-radius: 3px;
   border: none;
-  background-color: $light;
+  background-color: var(--light);
   outline: none;
 
   &:hover,
   &:focus {
-    background-color: $light-hover;
+    background-color: var(--light-hover);
   }
 }
 
@@ -44,71 +42,76 @@ textarea {
   line-height: 18px;
   appearance: none;
   outline: none;
-  background-color: $light;
+  background-color: var(--light);
 
   &:disabled {
-    opacity: .6;
+    opacity: 0.6;
     pointer-events: none;
   }
 
   &:hover,
   &:focus {
-    background-color: $light-hover;
+    background-color: var(--light-hover);
   }
 
   &:last-child {
     margin-bottom: 0;
   }
 
+  span {
+    color: inherit;
+  }
+
   &.transparent {
     background-color: transparent;
-    color: $medium;
+    color: var(--medium);
 
     &:hover {
-      background-color: $nearly-white;
+      background-color: var(--nearly-white);
     }
 
     &:active {
-      background-color: $almost-white;
+      background-color: var(--almost-white);
     }
   }
 
   &.accent {
-    background-color: $accent;
-    color: $white;
+    background-color: var(--accent);
+    color: var(--white) !important;
 
     &:hover {
-      background-color: $accent-hover;
+      background-color: var(--accent-hover);
     }
 
     &:active {
-      background-color: $accent-active;
+      background-color: var(--accent-active);
+      color: var(--font-base-light);
     }
   }
 
   &.positive {
-    background-color: $positive;
-    color: $white;
+    background-color: var(--positive);
+    color: var(--white);
 
     &:hover {
-      background-color: $positive-hover;
+      background-color: var(--positive-hover);
     }
 
     &:active {
-      background-color: $positive-active;
+      background-color: var(--positive-active);
     }
   }
 
   &.negative {
-    background-color: $negative;
-    color: $white;
+    background-color: var(--negative);
+    color: var(--white);
 
     &:hover {
-      background-color: $negative-hover;
+      background-color: var(--negative-hover);
     }
 
     &:active {
-      background-color: $negative-active;
+      background-color: var(--negative-active);
     }
   }
 
@@ -121,7 +124,7 @@ textarea {
 
 button {
   &:active {
-    background-color: $light-active;
+    background-color: var(--light-active);
   }
 }
 
@@ -133,8 +136,8 @@ select {
 }
 
 input::-webkit-file-upload-button {
-  background-color: $accent;
-  color: $white;
+  background-color: var(--accent);
+  color: var(--white);
   margin: 0 10px 0 0;
   padding: 9px 12px;
   border-radius: 4px;
@@ -146,11 +149,11 @@ input::-webkit-file-upload-button {
   font-family: 'Quicksand', sans-serif;
 
   &:hover {
-    background-color: $accent-hover;
+    background-color: var(--accent-hover);
   }
 
   &:active {
-    background-color: $accent-active;
+    background-color: var(--accent-active);
   }
 }
 
