@@ -1,7 +1,7 @@
 export default class HttpService {
-  private static datamodelBase = 'https://core.datapot.ch/api/123/datamodel'
-  private static dataBase = 'https://core.datapot.ch/api/123/data/'
-  private static defaultBase = 'https://core.datapot.ch/api/123/'
+  private static datamodelBase = 'https://new-core.datapot.ch/api/123/datamodel'
+  private static dataBase = 'https://new-core.datapot.ch/api/123/data/'
+  private static defaultBase = 'https://new-core.datapot.ch/api/123/'
 
   private static cache: Map<string, any> = new Map()
 

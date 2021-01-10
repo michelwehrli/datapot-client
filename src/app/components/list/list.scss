@@ -37,10 +37,10 @@ dp-list {
           }
 
           .sort-button button {
-            color: #cccccc;
+            color: var(--font-medium);
           }
           .sort-button.active button {
-            color: var(--black);
+            color: var(--font-base);
           }
         }
       }

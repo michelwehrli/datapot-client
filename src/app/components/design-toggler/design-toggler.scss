@@ -2,9 +2,17 @@ dp-design-toggler {
   direction: ltr;
   margin-top: 40px;
   display: flex;
+  opacity: 0.2;
+  transition: opacity 0.2s ease-in-out 0s;
+
+  &:hover {
+    opacity: 1;
+  }
 
   p {
     margin: 0 10px 0 0;
+    position: relative;
+    top: -1px;
   }
 
   .toggler {
@@ -13,14 +21,9 @@ dp-design-toggler {
     width: 36px;
     padding: 10px;
     cursor: pointer;
-    opacity: 0.6;
     background-color: var(--accent-active);
     transition: opacity 0.2s ease-in-out 0s,
       background-color 0.2s ease-in-out 0s;
-
-    :hover {
-      opacity: 1;
-    }
 
     &.dark {
       background-color: var(--accent-light);

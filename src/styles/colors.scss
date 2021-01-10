@@ -35,10 +35,11 @@
     --scrollbar-thumb: #bbbbbb;
 
     --font-base: #000000;
+    --font-medium: #aaa;
     --font-base-light: #ffffff;
 
     --list-odd: var(--almost-white);
-    --link-base: var(--accent-medium);
+    --link-base: var(--accent);
     --tr-hover: var(--accent-light);
   }
   .design-dark {
@@ -77,6 +78,7 @@
     --scrollbar-thumb: #444444;
 
     --font-base: #ddd;
+    --font-medium: #555;
     --font-base-light: #000000;
 
     --list-odd: #303030;
