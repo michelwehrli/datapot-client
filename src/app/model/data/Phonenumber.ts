@@ -33,9 +33,15 @@ export default class Phonenumber extends Table implements IPhonenumber {
   }
 
   public validate(): boolean {
-    this.fieldNumber.classList.toggle('error', !this.number)
-    this.fieldType.classList.toggle('error', !this.type)
-    this.fieldLine.classList.toggle('error', !this.line)
+    if (this.fieldNumber) {
+      this.fieldNumber.classList.toggle('error', !this.number)
+    }
+    if (this.fieldType) {
+      this.fieldType.classList.toggle('error', !this.type)
+    }
+    if (this.fieldLine) {
+      this.fieldLine.classList.toggle('error', !this.line)
+    }
     return !!this.number && !!this.type && !!this.line
   }
 

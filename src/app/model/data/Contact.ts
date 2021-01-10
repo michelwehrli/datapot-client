@@ -450,16 +450,14 @@ export default class Contact extends Table implements IContact {
             }"><span>Vorname</span><span>${
               this.givenname ? this.givenname : '-'
             }</span></p>`}
-              
-            ${`<p class="text-flex${
-              !this.additional_names || !this.additional_names.length
-                ? ' none'
-                : ''
-            }">${
+            
+            ${
               this.additional_names && this.additional_names.length
-                ? `<span></span><span>${this.additional_names.join(' ')}</span>`
+                ? `<p class="text-flex"><span></span><span>${this.additional_names.join(
+                    ' '
+                  )}</span></p>`
                 : ''
-            }</p>`}
+            }
               
             ${`<p class="text-flex${
               !this.surname ? ' none' : ''
@@ -471,7 +469,7 @@ export default class Contact extends Table implements IContact {
               !this.birthdate ? ' none' : ''
             }"><span>Geburtstag</span><span>${
               this.birthdate
-                ? new Date(this.birthdate).toLocaleDateString('ch-DE', {
+                ? new Date(this.birthdate).toLocaleDateString('de-CH', {
                     year: 'numeric',
                     month: 'long',
                     day: '2-digit',
