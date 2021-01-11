@@ -37,7 +37,7 @@ export default class InputSelectComponent extends BaseComponent {
       }
     })
 
-    this.popuplate(values, value)
+    this.populate(values, value)
 
     if (addButtonFunction) {
       this.button.classList.add('visible')
@@ -53,7 +53,7 @@ export default class InputSelectComponent extends BaseComponent {
     values: Map<string | number, string>,
     value: string | number
   ): void {
-    this.popuplate(values, value)
+    this.populate(values, value)
   }
 
   attributeChangedCallback(
@@ -67,18 +67,19 @@ export default class InputSelectComponent extends BaseComponent {
   }
 
   setValues(values: Map<string | number, any>, value?: string | number): void {
-    this.popuplate(values, value)
+    this.populate(values, value)
   }
 
   getValue(): string {
     return this.select.value
   }
 
-  private popuplate(values, value) {
+  private populate(values, value) {
     this.select.innerHTML = ''
 
     const option: HTMLOptionElement = document.createElement('option')
     option.innerText = '-- Bitte wählen --'
+    option.value = ''
     this.select.appendChild(option)
 
     Object.keys(values).forEach((key) => {

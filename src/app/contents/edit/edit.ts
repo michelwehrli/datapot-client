@@ -220,7 +220,7 @@ export default class EditContent extends BaseComponent {
   }
 
   private async save(): Promise<any> {
-    if (this.obj.validate()) {
+    if (this.obj && this.obj.validate()) {
       const toast = ToastService.add(
         'Eintrag wird gespeichert...',
         EToastType.INFO

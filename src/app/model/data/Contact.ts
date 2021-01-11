@@ -141,20 +141,19 @@ export default class Contact extends Table implements IContact {
 
     let valid = !!this.surname && !!this.givenname
     for (const address of this.addresses) {
-      const innerValid = address.validate()
-      if (valid) valid = innerValid
+      if (valid) valid = address.validate()
     }
     for (const email of this.emails) {
-      const innerValid = email.validate()
-      if (valid) valid = innerValid
+      if (valid) valid = email.validate()
     }
     for (const phonenumber of this.phonenumbers) {
-      const innerValid = phonenumber.validate()
-      if (valid) valid = innerValid
+      if (valid) valid = phonenumber.validate()
     }
     for (const sm of this.social_medias) {
-      const innerValid = sm.validate()
-      if (valid) valid = innerValid
+      if (valid) valid = sm.validate()
+    }
+    for (const cwl of this.companiesWithLocation) {
+      if (valid) valid = cwl.validate()
     }
     return valid
   }
@@ -428,6 +427,8 @@ export default class Contact extends Table implements IContact {
       return p.type.uniquename === 'business'
     })
 
+    console.log(this.addresses)
+
     return `
     <div class="container">
       <div class="flex">
@@ -557,6 +558,9 @@ export default class Contact extends Table implements IContact {
                 ? `
                 <h4>Adressen</h4>
                 ${this.addresses
+                  .filter((address) => {
+                    return !!address
+                  })
                   .map((address) => {
                     return `<p>${address.toString(
                       '<br />'
@@ -573,10 +577,21 @@ export default class Contact extends Table implements IContact {
         <div class="flex-item">
           <div class="container">
             ${
-              this.companiesWithLocation && this.companiesWithLocation.length
+              this.companiesWithLocation &&
+              this.companiesWithLocation.length &&
+              this.companiesWithLocation.filter((companyWithLocation) => {
+                return (
+                  companyWithLocation.company && companyWithLocation.address
+                )
+              }).length
                 ? `
                 <h4>Firmen</h4>
                 ${this.companiesWithLocation
+                  .filter((companyWithLocation) => {
+                    return (
+                      companyWithLocation.company && companyWithLocation.address
+                    )
+                  })
                   .map((companyWithLocation) => {
                     return `<p>${companyWithLocation.company.toString()}<a class="iconlink" data-navigate="crm/detail/company/${
                       companyWithLocation.company.id
@@ -604,6 +619,9 @@ export default class Contact extends Table implements IContact {
                 ? `
                 <h4>Mobilnummern</h4>
                 ${mobilePhones
+                  .filter((p) => {
+                    return !!p
+                  })
                   .map((p) => {
                     return `<p><a href="tel:${
                       p.number
@@ -617,6 +635,9 @@ export default class Contact extends Table implements IContact {
                 ? `
                 <h4>Geschäftsnummern</h4>
                 ${businessPhones
+                  .filter((p) => {
+                    return !!p
+                  })
                   .map((p) => {
                     return `<p><a href="tel:${
                       p.number
@@ -630,6 +651,9 @@ export default class Contact extends Table implements IContact {
                 ? `
                 <h4>Privatnummern</h4>
                 ${homePhones
+                  .filter((p) => {
+                    return !!p
+                  })
                   .map((p) => {
                     return `<p><a href="tel:${
                       p.number
@@ -646,9 +670,11 @@ export default class Contact extends Table implements IContact {
               businessEmail &&
               businessEmail.length &&
               businessEmail.filter((email) => {
-                return new RegExp(
-                  /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}/g
-                ).test(email.address)
+                return (
+                  new RegExp(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}/g).test(
+                    email.address
+                  ) && email.address
+                )
               }).length
                 ? `
                 <h4>Geschäftliche E-Mail Adressen</h4>
@@ -663,9 +689,11 @@ export default class Contact extends Table implements IContact {
               privateEmail &&
               privateEmail.length &&
               privateEmail.filter((email) => {
-                return new RegExp(
-                  /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}/g
-                ).test(email.address)
+                return (
+                  new RegExp(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}/g).test(
+                    email.address
+                  ) && email.address
+                )
               }).length
                 ? `
                 <h4>Private E-Mail-Adressen</h4>

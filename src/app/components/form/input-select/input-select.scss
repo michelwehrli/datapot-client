@@ -2,6 +2,18 @@ dp-select {
   display: flex;
   width: 100%;
 
+  &.required {
+    select {
+      border-left: solid 3px var(--accent-medium);
+    }
+
+    &.error {
+      select {
+        border-left: solid 3px var(--negative);
+      }
+    }
+  }
+
   select {
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;

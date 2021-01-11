@@ -57,9 +57,9 @@ export default class Address extends Table implements IAddress {
     this.fieldStreet.classList.toggle('error', !this.street)
     return (
       !!this.street &&
-      (this.zip ? this.zip.validate() : true) &&
-      (this.county ? this.county.validate() : true) &&
-      (this.country ? this.country.validate() : true)
+      (this.zip && this.zip.validate ? this.zip.validate() : true) &&
+      (this.county && this.county.validate ? this.county.validate() : true) &&
+      (this.country && this.country.validate ? this.country.validate() : true)
     )
   }
 

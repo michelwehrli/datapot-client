@@ -81,16 +81,13 @@ export default class Company extends Table implements ICompany {
     this.fieldName.classList.toggle('error', !this.name)
     let valid = !!this.name
     for (const address of this.addresses) {
-      const innerValid = address.validate()
-      if (valid) valid = innerValid
+      if (valid) valid = address.validate()
     }
     for (const email of this.emails) {
-      const innerValid = email.validate()
-      if (valid) valid = innerValid
+      if (valid) valid = email.validate()
     }
     for (const phonenumber of this.phonenumbers) {
-      const innerValid = phonenumber.validate()
-      if (valid) valid = innerValid
+      if (valid) valid = phonenumber.validate()
     }
     return valid
   }
@@ -236,6 +233,9 @@ export default class Company extends Table implements ICompany {
                 ? `
                 <h4>Adressen</h4>
                 ${this.addresses
+                  .filter((address) => {
+                    return !!address
+                  })
                   .map((address) => {
                     return `<p>${address.toString(
                       '<br />'
@@ -260,6 +260,9 @@ export default class Company extends Table implements ICompany {
                 ? `
                 <h4>Mobilnummern</h4>
                 ${mobilePhones
+                  .filter((p) => {
+                    return !!p
+                  })
                   .map((p) => {
                     return `<p><a href="tel:${
                       p.number
@@ -273,6 +276,9 @@ export default class Company extends Table implements ICompany {
                 ? `
                 <h4>Nummern</h4>
                 ${phones
+                  .filter((p) => {
+                    return !!p
+                  })
                   .map((p) => {
                     return `<p><a href="tel:${
                       p.number
@@ -290,6 +296,9 @@ export default class Company extends Table implements ICompany {
                 ? `
                 <h4>E-Mail Adressen</h4>
                 ${this.emails
+                  .filter((p) => {
+                    return !!p
+                  })
                   .map((e) => {
                     return `<p><a href="mailto:${e.address}"><i class="linkicon far fa-envelope"></i>${e.address}</a></p>`
                   })

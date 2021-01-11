@@ -31,7 +31,9 @@ export default class CompanyWithLocation
   }
 
   public validate(): boolean {
-    return true
+    this.addressSelector.classList.toggle('error', !this.address)
+    this.companySelector.classList.toggle('error', !this.company)
+    return !!this.address && !!this.company
   }
 
   private addressSelector: InputSelectComponent
@@ -41,7 +43,8 @@ export default class CompanyWithLocation
     this.addressSelector = new InputSelectComponent(
       (value: Address) => (this.address = value),
       await CompanyWithLocation.getAddressSelectMap(this.company),
-      this.address ? this.address.id : undefined
+      this.address ? this.address.id : undefined,
+      true
     )
 
     this.companySelector = new InputSelectComponent(
@@ -53,7 +56,7 @@ export default class CompanyWithLocation
       },
       await Company.getSelectMap(),
       this.company ? this.company.id : undefined,
-      undefined,
+      true,
       () => {
         const modal = new ModalComponent(
           new EditContent(true, ['company'], async (value: Company) => {
