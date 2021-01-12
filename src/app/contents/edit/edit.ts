@@ -28,12 +28,7 @@ export default class EditContent extends BaseComponent {
 
   private __hash: string
 
-  constructor(
-    isInModal = false,
-    p?: string[],
-    onSave?: (value: any) => void,
-    id?: string | number
-  ) {
+  constructor(isInModal = false, p?: string[], onSave?: (value: any) => void) {
     super(tmpl)
 
     let params: any[] = Router.getParams()
@@ -44,13 +39,14 @@ export default class EditContent extends BaseComponent {
       Router.navigate('crm/404')
       return
     }
-    this.table = params[0]
+    if (params[0]) {
+      this.table = params[0]
+    }
     if (params[1]) {
       this.id = params[1]
     }
-    if (id) {
-      this.id = id
-    }
+
+    console.log('id: ', this.id, ' table: ', this.table)
 
     const datamodel = DataService.getDatamodel(this.table)
 

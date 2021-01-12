@@ -6,19 +6,33 @@ function getModal(
   key: string,
   select: InputSelectComponent,
   type: any,
-  value: any
+  value: any,
+  objKey: string,
+  identifier: string
 ): ModalComponent {
   const modal = new ModalComponent(
-    new EditContent(
-      true,
-      [key],
-      async (value) => {
-        select.update(await type.getSelectMap('data', key), value)
-        this[key] = value
-        modal.close()
-      },
-      value
-    ),
+    new EditContent(true, [key, value], async (val) => {
+      select.update(
+        await type.getSelectMap('data', key),
+        val ? val[identifier] : undefined
+      )
+      this[objKey ? objKey : key] = val
+      modal.close()
+      modal.setContent(
+        new EditContent(
+          true,
+          [key, val ? val[identifier] : undefined],
+          async (val2) => {
+            select.update(
+              await type.getSelectMap('data', key),
+              val2[identifier]
+            )
+            this[objKey ? objKey : key] = val2
+            modal.close()
+          }
+        )
+      )
+    }),
     undefined,
     undefined,
     undefined,
@@ -32,21 +46,44 @@ export async function getSelect(
   key: string,
   value: any,
   type: any,
-  identifier: string
+  identifier: string,
+  objKey: string
 ): Promise<InputSelectComponent> {
   let sel: InputSelectComponent = undefined
 
-  let openModal: ModalComponent = getModal(key, sel, type, value)
+  const openModal: ModalComponent = getModal.call(
+    this,
+    key,
+    sel,
+    type,
+    value,
+    objKey,
+    identifier
+  )
   sel = new InputSelectComponent(
     (val) => {
-      this[key] = val
+      this[objKey ? objKey : key] = val
       sel.toggleViewButton(!!val)
-      openModal = getModal(key, sel, type, val[identifier])
+      openModal.setContent(
+        new EditContent(
+          true,
+          [key, val ? val[identifier] : undefined],
+          async (val2) => {
+            sel.update(
+              await type.getSelectMap('data', key),
+              val2 ? val2[identifier] : undefined
+            )
+            this[objKey ? objKey : key] = val2
+            openModal.close()
+          }
+        )
+      )
     },
     await type.getSelectMap('data', key),
     value,
     undefined,
-    () => openModal.open(),
+    () =>
+      getModal.call(this, key, sel, type, undefined, objKey, identifier).open(),
     undefined,
     () => openModal.open()
   )

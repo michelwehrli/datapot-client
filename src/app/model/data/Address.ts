@@ -1,11 +1,9 @@
-import InputSelectComponent from '~/components/form/input-select/input-select'
 import InputTextComponent, {
   EInputType,
 } from '~/components/form/input-text/input-text'
-import ModalComponent from '~/components/modal/modal'
-import EditContent from '~/contents/edit/edit'
 import IAddress from '~/interfaces/data/IAddress'
 import DataService from '~/services/DataService'
+import { getSelect } from '~/services/Globals'
 import Table from '../extend/Table'
 import Country from './Country'
 import County from './County'
@@ -76,68 +74,28 @@ export default class Address extends Table implements IAddress {
       true
     )
 
-    const zipSelect = new InputSelectComponent(
-      (value: Zip) => (this.zip = value),
-      await Zip.getSelectMap(),
+    const zipSelect = await getSelect.call(
+      this,
+      'zip',
       this.zip ? this.zip.id : undefined,
-      undefined,
-      () => {
-        const modal = new ModalComponent(
-          new EditContent(true, ['zip'], async (value: Zip) => {
-            zipSelect.update(await Zip.getSelectMap(), value.id)
-            this.zip = value
-            modal.close()
-          }),
-          undefined,
-          undefined,
-          undefined,
-          true
-        )
-      }
+      Zip,
+      'uniquename'
     )
-    const countySelect = new InputSelectComponent(
-      (value: County) => (this.county = value),
-      await County.getSelectMap('data', 'county'),
-      this.zip ? this.zip.id : undefined,
-      undefined,
-      () => {
-        const modal = new ModalComponent(
-          new EditContent(true, ['county'], async (value: County) => {
-            countySelect.update(
-              await County.getSelectMap('data', 'county'),
-              value.uniquename
-            )
-            this.county = value
-            modal.close()
-          }),
-          undefined,
-          undefined,
-          undefined,
-          true
-        )
-      }
+
+    const countySelect = await getSelect.call(
+      this,
+      'county',
+      this.county ? this.county.uniquename : undefined,
+      County,
+      'uniquename'
     )
-    const countrySelect = new InputSelectComponent(
-      (value: Country) => (this.country = value),
-      await Country.getSelectMap('data', 'country'),
-      this.zip ? this.zip.id : undefined,
-      undefined,
-      () => {
-        const modal = new ModalComponent(
-          new EditContent(true, ['country'], async (value: Country) => {
-            countrySelect.update(
-              await Country.getSelectMap('data', 'country'),
-              value.uniquename
-            )
-            this.country = value
-            modal.close()
-          }),
-          undefined,
-          undefined,
-          undefined,
-          true
-        )
-      }
+
+    const countrySelect = await getSelect.call(
+      this,
+      'country',
+      this.country ? this.country.uniquename : undefined,
+      Country,
+      'uniquename'
     )
 
     return {

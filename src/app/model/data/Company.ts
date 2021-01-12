@@ -135,14 +135,16 @@ export default class Company extends Table implements ICompany {
       true
     )
 
-    this.rwstatusSelect = await getSelect(
+    this.rwstatusSelect = await getSelect.call(
+      this,
       'rwstatus',
       this.rwstatus ? this.rwstatus.uniquename : undefined,
       RWStatus,
       'uniquename'
     )
 
-    this.relationshipSelect = await getSelect(
+    this.relationshipSelect = await getSelect.call(
+      this,
       'relationship',
       this.relationship ? this.relationship.uniquename : undefined,
       Relationship,

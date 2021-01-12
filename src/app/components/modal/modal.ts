@@ -10,9 +10,10 @@ export default class ModalComponent extends BaseComponent {
   i: HTMLElement = this.querySelector('i')
   span: HTMLSpanElement = this.querySelector('span')
   closeButton: ButtonComponent = this.querySelector('dp-button')
+  childComponent: any
 
   constructor(
-    private childComponent: any,
+    childComponent: any,
     title?: string,
     icon?: string,
     isSmall?: boolean,
@@ -20,6 +21,8 @@ export default class ModalComponent extends BaseComponent {
     initiallyClosed = false
   ) {
     super(tmpl)
+
+    this.childComponent = childComponent
 
     if (title) {
       this.span.innerText = title
@@ -44,6 +47,12 @@ export default class ModalComponent extends BaseComponent {
     }
   }
 
+  public setContent(childComponent: any): void {
+    this.childComponent = childComponent
+    this.closeButton.removeEventListener('button-click', () => this.close())
+    this.content.innerHTML = ''
+  }
+
   public open(): void {
     this.closeButton.addEventListener('button-click', () => this.close())
     this.modalContainer.appendChild(this)
@@ -51,6 +60,8 @@ export default class ModalComponent extends BaseComponent {
   }
 
   public close(): void {
-    this.modalContainer.removeChild(this)
+    this.closeButton.removeEventListener('button-click', () => this.close())
+    this.modalContainer.innerHTML = ''
+    this.content.innerHTML = ''
   }
 }

@@ -2,11 +2,9 @@ import InputSelectComponent from '~/components/form/input-select/input-select'
 import InputTextComponent, {
   EInputType,
 } from '~/components/form/input-text/input-text'
-import ModalComponent from '~/components/modal/modal'
-import EditContent from '~/contents/edit/edit'
 import IPhonenumber from '~/interfaces/data/IPhonenumber'
+import { getSelect } from '~/services/Globals'
 import Table from '../extend/Table'
-import EmailType from './EmailType'
 import PhonenumberLine from './PhonenumberLine'
 import PhonenumberType from './PhonenumberType'
 
@@ -57,59 +55,23 @@ export default class Phonenumber extends Table implements IPhonenumber {
       undefined,
       true
     )
-    this.fieldType = new InputSelectComponent(
-      (value: PhonenumberType) => {
-        this.type = value
-      },
-      await PhonenumberType.getSelectMap('data', 'phonenumber_type'),
+
+    this.fieldType = await getSelect.call(
+      this,
+      'phonenumber_type',
       this.type ? this.type.uniquename : undefined,
-      true,
-      () => {
-        const modal = new ModalComponent(
-          new EditContent(
-            true,
-            ['phonenumber_type'],
-            async (value: PhonenumberType) => {
-              this.fieldType.update(
-                await PhonenumberType.getSelectMap('data', 'phonenumber_type'),
-                value.uniquename
-              )
-              this.type = value
-              modal.close()
-            }
-          ),
-          undefined,
-          undefined,
-          undefined,
-          true
-        )
-      }
+      PhonenumberType,
+      'uniquename',
+      'type'
     )
-    this.fieldLine = new InputSelectComponent(
-      (value: PhonenumberLine) => (this.line = value),
-      await PhonenumberLine.getSelectMap('data', 'phonenumber_line'),
+
+    this.fieldLine = await getSelect.call(
+      this,
+      'phonenumber_line',
       this.line ? this.line.uniquename : undefined,
-      true,
-      () => {
-        const modal = new ModalComponent(
-          new EditContent(
-            true,
-            ['phonenumber_line'],
-            async (value: PhonenumberLine) => {
-              this.fieldLine.update(
-                await PhonenumberLine.getSelectMap('data', 'phonenumber_line'),
-                value.uniquename
-              )
-              this.type = value
-              modal.close()
-            }
-          ),
-          undefined,
-          undefined,
-          undefined,
-          true
-        )
-      }
+      PhonenumberLine,
+      'uniquename',
+      'line'
     )
 
     return {
