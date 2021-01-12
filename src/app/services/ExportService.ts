@@ -99,7 +99,6 @@ class ExportObject {
             true,
             true
           )
-          console.log(result)
           if (result && result.data) {
             if (result.data.url) {
               window.open(result.data.url)

@@ -17,6 +17,7 @@ import IEmail from '~/interfaces/data/IEmail'
 import IPhonenumber from '~/interfaces/data/IPhonenumber'
 import ISocialmedia from '~/interfaces/data/ISocialmedia'
 import DataService from '~/services/DataService'
+import { getSelect } from '~/services/Globals'
 import Table from '../extend/Table'
 import Address from './Address'
 import Category from './Category'
@@ -180,72 +181,30 @@ export default class Contact extends Table implements IContact {
       true
     )
 
-    const genderSelect = new InputSelectComponent(
-      (value: Gender) => (this.gender = value),
-      await Gender.getSelectMap('data', 'gender'),
+    const genderSelect = await getSelect.call(
+      this,
+      'gender',
       this.gender ? this.gender.uniquename : undefined,
-      undefined,
-      () => {
-        const modal = new ModalComponent(
-          new EditContent(true, ['gender'], async (value: Gender) => {
-            genderSelect.update(
-              await Gender.getSelectMap('data', 'gender'),
-              value.uniquename
-            )
-            this.gender = value
-            modal.close()
-          }),
-          undefined,
-          undefined,
-          undefined,
-          true
-        )
-      }
+      Gender,
+      'uniquename'
     )
-    const salutationSelect = new InputSelectComponent(
-      (value: Salutation) => (this.salutation = value),
-      await Salutation.getSelectMap('data', 'salutation'),
+
+    const salutationSelect = await getSelect.call(
+      this,
+      'salutation',
       this.salutation ? this.salutation.uniquename : undefined,
-      undefined,
-      () => {
-        const modal = new ModalComponent(
-          new EditContent(true, ['salutation'], async (value: Salutation) => {
-            salutationSelect.update(
-              await Salutation.getSelectMap('data', 'salutation'),
-              value.uniquename
-            )
-            this.salutation = value
-            modal.close()
-          }),
-          undefined,
-          undefined,
-          undefined,
-          true
-        )
-      }
+      Salutation,
+      'uniquename'
     )
-    const titleSelect = new InputSelectComponent(
-      (value: Title) => (this.title = value),
-      await Title.getSelectMap('data', 'title'),
+
+    const titleSelect = await getSelect.call(
+      this,
+      'title',
       this.title ? this.title.uniquename : undefined,
-      undefined,
-      () => {
-        const modal = new ModalComponent(
-          new EditContent(true, ['title'], async (value: Title) => {
-            titleSelect.update(
-              await Title.getSelectMap('data', 'title'),
-              value.uniquename
-            )
-            this.title = value
-            modal.close()
-          }),
-          undefined,
-          undefined,
-          undefined,
-          true
-        )
-      }
+      Title,
+      'uniquename'
     )
+
     const partnerSelect = new InputSelectComponent(
       (value: Contact) => (this.partner = value),
       await Contact.getSelectMap(),
@@ -265,53 +224,21 @@ export default class Contact extends Table implements IContact {
         )
       }
     )
-    const rwstatusSelect = new InputSelectComponent(
-      (value: RWStatus) => (this.rwstatus = value),
-      await RWStatus.getSelectMap('data', 'rwstatus'),
+
+    const rwstatusSelect = await getSelect.call(
+      this,
+      'rwstatus',
       this.rwstatus ? this.rwstatus.uniquename : undefined,
-      undefined,
-      () => {
-        const modal = new ModalComponent(
-          new EditContent(true, ['rwstatus'], async (value: RWStatus) => {
-            rwstatusSelect.update(
-              await RWStatus.getSelectMap('data', 'rwstatus'),
-              value.uniquename
-            )
-            this.rwstatus = value
-            modal.close()
-          }),
-          undefined,
-          undefined,
-          undefined,
-          true
-        )
-      }
+      RWStatus,
+      'uniquename'
     )
-    const relationshipSelect = new InputSelectComponent(
-      (value: Relationship) => (this.relationship = value),
-      await Relationship.getSelectMap('data', 'relationship'),
+
+    const relationshipSelect = await getSelect.call(
+      this,
+      'relationship',
       this.relationship ? this.relationship.uniquename : undefined,
-      undefined,
-      () => {
-        const modal = new ModalComponent(
-          new EditContent(
-            true,
-            ['relationship'],
-            async (value: Relationship) => {
-              relationshipSelect.update(
-                await Relationship.getSelectMap('data', 'relationship'),
-                value.uniquename
-              )
-              this.relationship = value
-              modal.close()
-            }
-          ),
-          undefined,
-          undefined,
-          undefined,
-          true
-        )
-      }
+      Relationship,
+      'uniquename'
     )
 
     return {
@@ -426,8 +353,6 @@ export default class Contact extends Table implements IContact {
     const businessEmail = this.emails.filter((p) => {
       return p.type.uniquename === 'business'
     })
-
-    console.log(this.addresses)
 
     return `
     <div class="container">
@@ -571,6 +496,28 @@ export default class Contact extends Table implements IContact {
                   .join('<br />')}
                 `
                 : '<h4 class="none">Adressen</h4><p class="none">Keine Adressen</p>'
+            }
+            <h4>Kategorisierung</h4>
+            ${`<p class="text-flex${
+              !this.rwstatus ? ' none' : ''
+            }"><span>RW-Status</span><span>${
+              this.rwstatus ? this.rwstatus.label : '-'
+            }</span></p>`}
+            ${`<p class="text-flex${
+              !this.relationship ? ' none' : ''
+            }"><span>Beziehung</span><span>${
+              this.relationship ? this.relationship.label : '-'
+            }</span></p>`}
+            ${
+              this.categories
+                ? this.categories
+                    .map((category, i) => {
+                      return `<p class="text-flex"><span>${
+                        !i ? 'Kategorien' : ''
+                      }</span><span>${category}</span></p>`
+                    })
+                    .join('')
+                : ''
             }
           </div>
         </div>

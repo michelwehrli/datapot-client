@@ -28,10 +28,14 @@ export default class KeyValue extends Table implements IKeyValue {
     if (this.fieldUniquename) {
       this.fieldUniquename.classList.toggle('error', !this.uniquename)
     }
-    return !!this.uniquename
+    if (this.fieldLabel) {
+      this.fieldLabel.classList.toggle('error', !this.label)
+    }
+    return !!this.uniquename && !!this.label
   }
 
-  private fieldUniquename: InputTextComponent
+  public fieldUniquename: InputTextComponent
+  public fieldLabel: InputTextComponent
 
   public async getField(): Promise<any> {
     this.fieldUniquename = new InputTextComponent(
@@ -41,15 +45,17 @@ export default class KeyValue extends Table implements IKeyValue {
       undefined,
       true
     )
+    this.fieldLabel = new InputTextComponent(
+      (value: string) => (this.label = value),
+      EInputType.TEXT,
+      this.label,
+      undefined,
+      true
+    )
+
     return {
       uniquename: this.fieldUniquename,
-      label: new InputTextComponent(
-        (value: string) => (this.label = value),
-        EInputType.TEXT,
-        this.label,
-        undefined,
-        true
-      ),
+      label: this.fieldLabel,
     }
   }
 
@@ -57,7 +63,7 @@ export default class KeyValue extends Table implements IKeyValue {
     db: string,
     table: string
   ): Promise<Map<string, string>> {
-    const values = (await DataService.getData(`${db}/${table}`)) as any[]
+    const values = (await DataService.getData(`${db}/${table}`)) as T[]
     const ret: Map<string, string> = new Map()
     if (values && values.length) {
       for (const raw of values as IKeyValue[]) {

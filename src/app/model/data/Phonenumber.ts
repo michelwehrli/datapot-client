@@ -59,7 +59,6 @@ export default class Phonenumber extends Table implements IPhonenumber {
     )
     this.fieldType = new InputSelectComponent(
       (value: PhonenumberType) => {
-        console.log(value)
         this.type = value
       },
       await PhonenumberType.getSelectMap('data', 'phonenumber_type'),

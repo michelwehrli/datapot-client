@@ -5,6 +5,7 @@
   "version": "2.4.3",
   "scripts": {
     "build": "webpack --env NODE_ENV=production",
+    "build:watch": "webpack --watch --env NODE_ENV=production",
     "start": "webpack serve --env NODE_ENV=development",
     "lint": "npm run lint:scripts && npm run lint:styles && npm run lint:editor",
     "lint:scripts": "eslint --fix ./src --ext .ts src",

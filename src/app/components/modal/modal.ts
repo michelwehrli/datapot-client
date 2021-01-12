@@ -12,11 +12,12 @@ export default class ModalComponent extends BaseComponent {
   closeButton: ButtonComponent = this.querySelector('dp-button')
 
   constructor(
-    childComponent: any,
+    private childComponent: any,
     title?: string,
     icon?: string,
     isSmall?: boolean,
-    isBig?: boolean
+    isBig?: boolean,
+    initiallyClosed = false
   ) {
     super(tmpl)
 
@@ -38,12 +39,18 @@ export default class ModalComponent extends BaseComponent {
       this.i.classList.add('hidden')
     }
 
-    this.closeButton.addEventListener('button-click', () => this.close())
-    this.modalContainer.appendChild(this)
-    this.content.appendChild(childComponent)
+    if (!initiallyClosed) {
+      this.open()
+    }
   }
 
-  close() {
+  public open(): void {
+    this.closeButton.addEventListener('button-click', () => this.close())
+    this.modalContainer.appendChild(this)
+    this.content.appendChild(this.childComponent)
+  }
+
+  public close(): void {
     this.modalContainer.removeChild(this)
   }
 }

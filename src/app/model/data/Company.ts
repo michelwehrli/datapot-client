@@ -6,15 +6,20 @@ import InputTextComponent, {
 import InputTextareaComponent from '~/components/form/input-textarea/input-textarea'
 import InputMultipleComponent from '~/components/form/multiple/multiple'
 import IAddress from '~/interfaces/data/IAddress'
+import ICategory from '~/interfaces/data/ICategory'
 import ICompany from '~/interfaces/data/ICompany'
 import IEmail from '~/interfaces/data/IEmail'
 import IPhonenumber from '~/interfaces/data/IPhonenumber'
 import DataService from '~/services/DataService'
+import { getSelect } from '~/services/Globals'
 import Table from '../extend/Table'
 import Address from './Address'
+import Category from './Category'
 import Contact from './Contact'
 import Email from './Email'
 import Phonenumber from './Phonenumber'
+import Relationship from './Relationship'
+import RWStatus from './RWStatus'
 
 export default class Company extends Table implements ICompany {
   id: number
@@ -25,6 +30,9 @@ export default class Company extends Table implements ICompany {
   contact_person: Contact
   websites?: string[]
   remarks?: string
+  rwstatus?: RWStatus
+  relationship?: Relationship
+  categories: Category[]
 
   constructor(data: ICompany = {}) {
     super(data as any)
@@ -54,6 +62,17 @@ export default class Company extends Table implements ICompany {
     this.websites = data.websites ? data.websites : []
 
     this.remarks = data.remarks
+
+    this.rwstatus = data.rwstatus ? new RWStatus(data.rwstatus) : undefined
+    this.relationship = data.relationship
+      ? new Relationship(data.relationship)
+      : undefined
+    this.categories = []
+    if (data.categories) {
+      data.categories.forEach((category: ICategory) => {
+        this.categories.push(new Category(category))
+      })
+    }
   }
 
   public getId(): number {
@@ -79,6 +98,7 @@ export default class Company extends Table implements ICompany {
 
   public validate(): boolean {
     this.fieldName.classList.toggle('error', !this.name)
+
     let valid = !!this.name
     for (const address of this.addresses) {
       if (valid) valid = address.validate()
@@ -89,10 +109,16 @@ export default class Company extends Table implements ICompany {
     for (const phonenumber of this.phonenumbers) {
       if (valid) valid = phonenumber.validate()
     }
+    for (const category of this.categories) {
+      if (valid) valid = category.validate()
+    }
     return valid
   }
 
   private fieldName: InputTextComponent
+  private rwstatusSelect: InputSelectComponent
+  private relationshipSelect: InputSelectComponent
+  private categoriesInput: InputMultipleComponent
 
   public async getField(
     isInitial?: boolean,
@@ -107,6 +133,26 @@ export default class Company extends Table implements ICompany {
       this.name,
       undefined,
       true
+    )
+
+    this.rwstatusSelect = await getSelect(
+      'rwstatus',
+      this.rwstatus ? this.rwstatus.uniquename : undefined,
+      RWStatus,
+      'uniquename'
+    )
+
+    this.relationshipSelect = await getSelect(
+      'relationship',
+      this.relationship ? this.relationship.uniquename : undefined,
+      Relationship,
+      'uniquename'
+    )
+
+    this.categoriesInput = new InputMultipleComponent(
+      (value: Category[]) => (this.categories = value),
+      this.categories,
+      () => new Category()
     )
 
     return {
@@ -150,6 +196,10 @@ export default class Company extends Table implements ICompany {
           null,
           6
         ),
+        __heading_3: new FormHeadingComponent('Klassifizierung'),
+        rwstatus: this.rwstatusSelect,
+        relationship: this.relationshipSelect,
+        categories: this.categoriesInput,
       }),
       ...(!isInitial && {
         company: new InputSelectComponent(

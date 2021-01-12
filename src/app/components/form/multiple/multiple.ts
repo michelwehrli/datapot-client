@@ -42,8 +42,8 @@ export default class InputMultipleComponent extends BaseComponent {
     this.construct()
   }
 
-  private rem(value: any) {
-    this.values.splice(this.values.indexOf(value), 1)
+  private rem(index: number) {
+    this.values.splice(index, 1)
     this.change(this.values)
     this.construct()
     if (!this.values.length) {
@@ -68,14 +68,22 @@ export default class InputMultipleComponent extends BaseComponent {
       let field
       if (value.getField) {
         field = await value.getField(undefined, (newValue: any) => {
-          this.values[index] = newValue
-          this.change(this.values)
+          if (newValue) {
+            this.values[index] = newValue
+            this.change(this.values)
+          } else {
+            this.rem(index)
+          }
         })
       } else {
         field = new InputTextComponent(
           (newValue: any) => {
-            this.values[index] = newValue
-            this.change(this.values)
+            if (newValue) {
+              this.values[index] = newValue
+              this.change(this.values)
+            } else {
+              this.rem(index)
+            }
           },
           EInputType.TEXT,
           value
@@ -89,7 +97,7 @@ export default class InputMultipleComponent extends BaseComponent {
       } else {
         item = new InputMultipleItemComponent(field)
       }
-      item.addEventListener('remove', () => this.rem(value))
+      item.addEventListener('remove', () => this.rem(index))
       this.container.appendChild(item)
     })
   }

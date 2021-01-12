@@ -4,7 +4,8 @@ import tmpl from './input-select.html'
 
 export default class InputSelectComponent extends BaseComponent {
   select: HTMLSelectElement = this.querySelector('select')
-  button: ButtonComponent = this.querySelector('dp-button')
+  addButton: ButtonComponent = this.querySelector('dp-button.add')
+  viewButton: ButtonComponent = this.querySelector('dp-button.view')
 
   private lookup: Map<any, any> = new Map()
 
@@ -18,7 +19,8 @@ export default class InputSelectComponent extends BaseComponent {
     value?: string | number,
     required?: boolean,
     addButtonFunction?: () => void,
-    disabled = false
+    disabled = false,
+    viewFunction?: () => void
   ) {
     super(tmpl)
 
@@ -40,13 +42,18 @@ export default class InputSelectComponent extends BaseComponent {
     this.populate(values, value)
 
     if (addButtonFunction) {
-      this.button.classList.add('visible')
-      this.button.addEventListener('button-click', () => addButtonFunction())
+      this.addButton.classList.add('visible')
+      this.addButton.addEventListener('button-click', () => addButtonFunction())
+      this.viewButton.addEventListener('button-click', () => viewFunction())
     }
 
     if (disabled) {
       this.select.disabled = true
     }
+  }
+
+  public toggleViewButton(visible = false): void {
+    this.viewButton.classList.toggle('visible', visible)
   }
 
   public update(
