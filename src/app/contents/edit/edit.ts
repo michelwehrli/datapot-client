@@ -46,8 +46,6 @@ export default class EditContent extends BaseComponent {
       this.id = params[1]
     }
 
-    console.log('id: ', this.id, ' table: ', this.table)
-
     const datamodel = DataService.getDatamodel(this.table)
 
     this.db = datamodel.__meta.db
@@ -175,6 +173,8 @@ export default class EditContent extends BaseComponent {
           } else {
             onSave(result.obj)
           }
+        } else if (onSave) {
+          onSave(result.obj)
         }
       }
     })

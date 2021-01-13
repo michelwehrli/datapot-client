@@ -79,7 +79,7 @@ export default class Address extends Table implements IAddress {
       'zip',
       this.zip ? this.zip.id : undefined,
       Zip,
-      'uniquename'
+      'id'
     )
 
     const countySelect = await getSelect.call(

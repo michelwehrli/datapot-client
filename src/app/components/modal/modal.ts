@@ -49,7 +49,6 @@ export default class ModalComponent extends BaseComponent {
 
   public setContent(childComponent: any): void {
     this.childComponent = childComponent
-    this.closeButton.removeEventListener('button-click', () => this.close())
     this.content.innerHTML = ''
   }
 

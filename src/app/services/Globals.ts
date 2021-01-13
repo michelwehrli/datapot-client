@@ -4,31 +4,32 @@ import EditContent from '~/contents/edit/edit'
 
 function getModal(
   key: string,
-  select: InputSelectComponent,
+  getSel: () => InputSelectComponent,
   type: any,
   value: any,
   objKey: string,
-  identifier: string
+  identifier: string,
+  modalToUse?: ModalComponent
 ): ModalComponent {
   const modal = new ModalComponent(
     new EditContent(true, [key, value], async (val) => {
-      select.update(
-        await type.getSelectMap('data', key),
-        val ? val[identifier] : undefined
+      getSel().update(
+        await type.getSelectMap('data', objKey ? objKey : key),
+        val[identifier]
       )
       this[objKey ? objKey : key] = val
       modal.close()
-      modal.setContent(
+      ;(modalToUse ? modalToUse : modal).setContent(
         new EditContent(
           true,
           [key, val ? val[identifier] : undefined],
           async (val2) => {
-            select.update(
+            getSel().update(
               await type.getSelectMap('data', key),
               val2[identifier]
             )
             this[objKey ? objKey : key] = val2
-            modal.close()
+            ;(modalToUse ? modalToUse : modal).close()
           }
         )
       )
@@ -38,6 +39,10 @@ function getModal(
     undefined,
     true,
     true
+  )
+  modal.setAttribute(
+    'mid',
+    Math.floor(Math.random() * Math.floor(100000)).toString()
   )
   return modal
 }
@@ -54,7 +59,9 @@ export async function getSelect(
   const openModal: ModalComponent = getModal.call(
     this,
     key,
-    sel,
+    (): InputSelectComponent => {
+      return sel
+    },
     type,
     value,
     objKey,
@@ -83,7 +90,9 @@ export async function getSelect(
     value,
     undefined,
     () =>
-      getModal.call(this, key, sel, type, undefined, objKey, identifier).open(),
+      getModal
+        .call(this, key, sel, type, undefined, objKey, identifier, openModal)
+        .open(),
     undefined,
     () => openModal.open()
   )
