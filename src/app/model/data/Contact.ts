@@ -412,7 +412,6 @@ export default class Contact extends Table implements IContact {
                   }"><i class="fa fa-external-link-alt"></i></a>`
                 : '-'
             }</span></p>`}
-
             ${
               this.websites && this.websites.length
                 ? `<h4>Websites</h4>
@@ -450,7 +449,11 @@ export default class Contact extends Table implements IContact {
               `
                 : '<h4 class="none">Bemerkungen</h4><p class="none remark"></p>'
             }
-            <h4>Kategorisierung</h4>
+            ${
+              !!this.rwstatus || !!this.relationship || !!this.categories.length
+                ? '<h4>Kategorisierung</h4>'
+                : '<h4 class="none">Kategorisierung</h4>'
+            }
             ${`<p class="text-flex${
               !this.rwstatus ? ' none' : ''
             }"><span>RW-Status</span><span>${
@@ -496,28 +499,6 @@ export default class Contact extends Table implements IContact {
                   .join('<br />')}
                 `
                 : '<h4 class="none">Adressen</h4><p class="none">Keine Adressen</p>'
-            }
-            <h4>Kategorisierung</h4>
-            ${`<p class="text-flex${
-              !this.rwstatus ? ' none' : ''
-            }"><span>RW-Status</span><span>${
-              this.rwstatus ? this.rwstatus.label : '-'
-            }</span></p>`}
-            ${`<p class="text-flex${
-              !this.relationship ? ' none' : ''
-            }"><span>Beziehung</span><span>${
-              this.relationship ? this.relationship.label : '-'
-            }</span></p>`}
-            ${
-              this.categories
-                ? this.categories
-                    .map((category, i) => {
-                      return `<p class="text-flex"><span>${
-                        !i ? 'Kategorien' : ''
-                      }</span><span>${category}</span></p>`
-                    })
-                    .join('')
-                : ''
             }
           </div>
         </div>

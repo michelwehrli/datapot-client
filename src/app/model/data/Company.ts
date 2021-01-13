@@ -10,6 +10,7 @@ import ICategory from '~/interfaces/data/ICategory'
 import ICompany from '~/interfaces/data/ICompany'
 import IEmail from '~/interfaces/data/IEmail'
 import IPhonenumber from '~/interfaces/data/IPhonenumber'
+import ISocialmedia from '~/interfaces/data/ISocialmedia'
 import DataService from '~/services/DataService'
 import { getSelect } from '~/services/Globals'
 import Table from '../extend/Table'
@@ -20,6 +21,7 @@ import Email from './Email'
 import Phonenumber from './Phonenumber'
 import Relationship from './Relationship'
 import RWStatus from './RWStatus'
+import Socialmedia from './Socialmedia'
 
 export default class Company extends Table implements ICompany {
   id: number
@@ -29,6 +31,7 @@ export default class Company extends Table implements ICompany {
   phonenumbers: Phonenumber[]
   contact_person: Contact
   websites?: string[]
+  social_medias: Socialmedia[]
   remarks?: string
   rwstatus?: RWStatus
   relationship?: Relationship
@@ -60,6 +63,13 @@ export default class Company extends Table implements ICompany {
       ? new Contact(data.contact_person)
       : undefined
     this.websites = data.websites ? data.websites : []
+
+    this.social_medias = []
+    if (data.social_medias) {
+      data.social_medias.forEach((socialmedia: ISocialmedia) => {
+        this.social_medias.push(new Socialmedia(socialmedia))
+      })
+    }
 
     this.remarks = data.remarks
 
@@ -108,6 +118,9 @@ export default class Company extends Table implements ICompany {
     }
     for (const phonenumber of this.phonenumbers) {
       if (valid) valid = phonenumber.validate()
+    }
+    for (const sm of this.social_medias) {
+      if (valid) valid = sm.validate()
     }
     for (const category of this.categories) {
       if (valid) valid = category.validate()
@@ -187,6 +200,12 @@ export default class Company extends Table implements ICompany {
           true
         ),
         __heading_2: new FormHeadingComponent('Weiteres'),
+        social_medias: new InputMultipleComponent(
+          (value: Socialmedia[]) => (this.social_medias = value),
+          this.social_medias,
+          () => new Socialmedia(),
+          true
+        ),
         websites: new InputMultipleComponent(
           (value: string[]) => (this.websites = value),
           this.websites,
@@ -228,82 +247,116 @@ export default class Company extends Table implements ICompany {
 
     return `
     <div class="container">
-      <div class="flex">
+    <div class="flex">
+      <div class="flex-item">
+        <h4>Informationen</h4>   
+        ${`<p class="text-flex${
+          !this.name ? ' none' : ''
+        }"><span>Name</span><span>${this.name ? this.name : '-'}</span></p>`}
+        <br />
+        ${`<p class="text-flex${
+          !this.contact_person ? ' none' : ''
+        }"><span>Kontaktperson</span><span>${
+          this.contact_person
+            ? `${this.contact_person}<a class="iconlink" data-navigate="crm/detail/contact/${this.contact_person.id}"><i class="fa fa-external-link-alt"></i></a>`
+            : '-'
+        }</span></p>`}
+        ${
+          this.websites && this.websites.length
+            ? `<h4>Websites</h4>
+            ${this.websites
+              .map((w) => {
+                return `<p><a href="${w}" target="_blank" rel="noopener">${w}</a></p>`
+              })
+              .join('')}`
+            : '<h4 class="none">Websites</h4><p class="none">Keine Websites</p>'
+        }
+        </div>
         <div class="flex-item">
-          ${`<p class="text-flex${
-            !this.name ? ' none' : ''
-          }"><span>Name</span><span>${this.name ? this.name : '-'}</span></p>`}
-
-          <br />
-
-          ${`<p class="text-flex${
-            !this.contact_person ? ' none' : ''
-          }"><span>Kontaktperson</span><span>${
-            this.contact_person
-              ? `${this.contact_person}<a class="iconlink" data-navigate="crm/detail/contact/${this.contact_person.id}"><i class="fa fa-external-link-alt"></i></a>`
-              : '-'
-          }</span></p>`}
-
+          <h4></h4>   
           ${
-            this.websites && this.websites.length
-              ? `<h4>Websites</h4>
-              ${this.websites
-                .map((w) => {
-                  return `<p><a href="${w}" target="_blank" rel="noopener">${w}</a></p>`
-                })
-                .join('')}`
-              : '<h4 class="none">Websites</h4><p class="none">Keine Websites</p>'
+            this.remarks
+              ? `
+            <h4>Bemerkungen</h4>
+            <p class="remark">${this.remarks.split('\n').join('<br />')}</p>
+            `
+              : '<h4 class="none">Bemerkungen</h4><p class="none remark"></p>'
           }
-            ${
-              employees && employees.length
-                ? `<h4>Angestellte</h4><div class="employee-wrap">
-                ${employees
-                  .map((employee) => {
-                    return `<p>${
-                      employee.givenname ? employee.givenname : ''
-                    } ${
-                      employee.surname ? employee.surname : ''
-                    }<a class="iconlink" data-navigate="crm/detail/contact/${
-                      employee.id
-                    }"><i class="fa fa-external-link-alt"></i></a></p>`
+          ${
+            !!this.rwstatus || !!this.relationship || !!this.categories.length
+              ? '<h4>Kategorisierung</h4>'
+              : '<h4 class="none">Kategorisierung</h4>'
+          }
+          ${`<p class="text-flex${
+            !this.rwstatus ? ' none' : ''
+          }"><span>RW-Status</span><span>${
+            this.rwstatus ? this.rwstatus.label : '-'
+          }</span></p>`}
+          ${`<p class="text-flex${
+            !this.relationship ? ' none' : ''
+          }"><span>Beziehung</span><span>${
+            this.relationship ? this.relationship.label : '-'
+          }</span></p>`}
+          ${
+            this.categories
+              ? this.categories
+                  .map((category, i) => {
+                    return `<p class="text-flex"><span>${
+                      !i ? 'Kategorien' : ''
+                    }</span><span>${category}</span></p>`
                   })
-                  .join('')}</div>`
-                : '<h4 class="none">Angestellte</h4><p class="none">Keine Angestellte erfasst</p>'
-            }
-          </div>
-          <div class="flex-item">
-            ${
-              this.remarks
-                ? `
-              <h4>Bemerkungen</h4>
-              <p class="remark">${this.remarks.split('\n').join('<br />')}</p>
-              `
-                : '<h4 class="none">Bemerkungen</h4><p class="none remark"></p>'
-            }
-            ${
-              this.addresses && this.addresses.length
-                ? `
-                <h4>Adressen</h4>
-                ${this.addresses
-                  .filter((address) => {
-                    return !!address
-                  })
-                  .map((address) => {
-                    return `<p>${address.toString(
-                      '<br />'
-                    )}<a href="https://www.google.com/maps?q=${
-                      this.name
-                    }, ${address.toString(
-                      ', '
-                    )}" target="_blank" rel="noopener" class="map"><i class="fa fa-map-marked-alt"></i></a></p>`
-                  })
-                  .join('<br />')}
-                `
-                : '<h4 class="none">Adressen</h4><p class="none">Keine Adressen</p>'
-            }
-          </div>
+                  .join('')
+              : ''
+          }
         </div>
       </div>
+    </div>
+    <div class="flex">
+      <div class="flex-item">
+        <div class="container">
+          ${
+            this.addresses && this.addresses.length
+              ? `
+              <h4>Adressen</h4>
+              ${this.addresses
+                .filter((address) => {
+                  return !!address
+                })
+                .map((address) => {
+                  return `<p>${address.toString(
+                    '<br />'
+                  )}<a href="https://www.google.com/maps?q=${
+                    this.name
+                  }, ${address.toString(
+                    ', '
+                  )}" target="_blank" rel="noopener" class="map"><i class="fa fa-map-marked-alt"></i></a></p>`
+                })
+                .join('<br />')}
+              `
+              : '<h4 class="none">Adressen</h4><p class="none">Keine Adressen</p>'
+          }
+        </div>
+      </div>
+      <div class="flex-item">
+        <div class="container">
+          ${
+            employees && employees.length
+              ? `<h4>Angestellte</h4><div class="employee-wrap">
+              ${employees
+                .map((employee) => {
+                  return `<p>${employee.givenname ? employee.givenname : ''} ${
+                    employee.surname ? employee.surname : ''
+                  }<a class="iconlink" data-navigate="crm/detail/contact/${
+                    employee.id
+                  }"><i class="fa fa-external-link-alt"></i></a></p>`
+                })
+                .join('')}</div>`
+              : '<h4 class="none">Angestellte</h4><p class="none">Keine Angestellte erfasst</p>'
+          }
+        </div>
+      </div>
+    </div>
+    </div>
       <div class="flex">
         <div class="flex-item">
           <div class="container">
@@ -356,6 +409,26 @@ export default class Company extends Table implements ICompany {
                   })
                   .join('')}`
                 : '<h4 class="none">Geschäftliche E-Mail Adressen</h4><p class="none">Keine E-Mail-Adressen</p>'
+            }
+          </div>
+        </div>
+        <div class="flex-item">
+          <div class="container">
+            ${
+              this.social_medias &&
+              this.social_medias.length &&
+              this.social_medias.filter((sm) => {
+                return new RegExp(/(https?:\/\/[^\s]+)/g).test(sm.url)
+              }).length
+                ? `
+                <h4>Soziale Medien</h4>
+                ${this.social_medias
+                  .map((sm) => {
+                    return `<p><a href="${sm.url}" target="_blank" rel="noopener">${sm.type.label}</a></p>`
+                  })
+                  .join('')}
+                <br />`
+                : '<h4 class="none">Soziale Medien</h4><p class="none">Kein Profile</p>'
             }
           </div>
         </div>
