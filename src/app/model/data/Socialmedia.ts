@@ -16,7 +16,6 @@ export default class Socialmedia extends Table implements ISocialmedia {
     super(data as any)
     this.id = data.id ? data.id : undefined
     this.url = data.url ? data.url : undefined
-    console.log(data)
     this.type = data.type ? new SocialmediaType(data.type) : undefined
   }
 
