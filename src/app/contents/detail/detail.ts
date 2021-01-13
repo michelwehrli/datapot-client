@@ -5,6 +5,7 @@ import ContentHeaderComponent from '~/components/content-header/content-header'
 import ModalComponent from '~/components/modal/modal'
 import { ETypeMatch } from '~/enums/ETypeMatch'
 import DataService from '~/services/DataService'
+import HttpService from '~/services/HttpService'
 import { Router } from '~/services/Router'
 import TitleService from '~/services/TitleService'
 import { EToastType, ToastService } from '~/services/ToastService'
@@ -69,6 +70,7 @@ export default class DetailContent extends BaseComponent {
               title: 'Ja, löschen',
               color: 'negative',
               click: async () => {
+                HttpService.clearCache()
                 modal.close()
                 await this.trash()
               },

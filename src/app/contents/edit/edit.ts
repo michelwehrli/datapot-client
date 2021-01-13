@@ -139,6 +139,7 @@ export default class EditContent extends BaseComponent {
                 title: 'Ja, löschen',
                 color: 'negative',
                 click: async () => {
+                  HttpService.clearCache()
                   modal.close()
                   await this.trash()
                 },
