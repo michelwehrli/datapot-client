@@ -6,9 +6,9 @@ import ToastComponent from '~/components/toast/toast'
 import HttpService from './HttpService'
 import { EToastType, ToastService } from './ToastService'
 
-export default class ExportService {
+export default class TasksService {
   private static isInited = false
-  private static configs: IExportObject[] = [
+  private static configs: ITaskObject[] = [
     {
       name: 'office-365-export',
       title: 'Office 365',
@@ -20,9 +20,17 @@ export default class ExportService {
       title: 'Kontakte herunterladen',
       description:
         'Alle Kontakte als CSV-Datei herunterladen. Die Daten haben die selbe Struktur wie das Ursprungs-Excel-File.',
+      buttonText: 'Herunterladen',
+    },
+    {
+      name: 'ftp-backup',
+      title: 'Datenbank sichern',
+      description: 'Die Datenbank auf den remote FTP-Server sichern.',
+      isAsync: true,
+      noProgressBar: true,
     },
   ]
-  private static exports: ExportObject[] = []
+  private static tasks: TaskObject[] = []
 
   public static init(): void {
     if (this.isInited) {
@@ -31,19 +39,19 @@ export default class ExportService {
     this.isInited = true
 
     this.configs.forEach((config) => {
-      this.exports.push(new ExportObject(config))
+      this.tasks.push(new TaskObject(config))
     })
   }
 
   public static setTbody(tbodyE: HTMLElement): void {
-    this.exports.forEach((e) => {
+    this.tasks.forEach((e) => {
       e.setTbody(tbodyE)
     })
   }
 }
 
-class ExportObject {
-  downloadButton: ButtonComponent = new ButtonComponent('Herunterladen')
+class TaskObject {
+  performButton: ButtonComponent
   asyncButton: ButtonComponent = new ButtonComponent()
   progressE: HTMLProgressElement
   progressTextE: HTMLSpanElement
@@ -51,11 +59,12 @@ class ExportObject {
   aborted: boolean
   loggedin: boolean
   pollingTimeout: NodeJS.Timer
-  exportToast: ToastComponent
+  taskToast: ToastComponent
 
   tbodyE: HTMLElement
 
-  constructor(private config: IExportObject) {
+  constructor(private config: ITaskObject) {
+    this.performButton = new ButtonComponent(config.buttonText)
     this.init()
   }
 
@@ -80,7 +89,9 @@ class ExportObject {
           )
           this.poll()
 
-          this.asyncButton.setAttribute('disabled', 'false')
+          if (!this.config.noProgressBar) {
+            this.asyncButton.setAttribute('disabled', 'false')
+          }
           if (result && result.data) {
             if (result.data.redirectTo) {
               window.location.href = result.data.redirectTo
@@ -92,8 +103,8 @@ class ExportObject {
         })
       }
     } else {
-      if (this.downloadButton) {
-        this.downloadButton.addEventListener('button-click', async () => {
+      if (this.performButton) {
+        this.performButton.addEventListener('button-click', async () => {
           const result = await HttpService.get(
             `task/${this.config.name}/open`,
             true,
@@ -111,12 +122,16 @@ class ExportObject {
 
   private switchButton() {
     if (this.running) {
-      this.asyncButton.setAttribute('text', 'Stop')
+      this.asyncButton.setAttribute(
+        'text',
+        this.config.noProgressBar ? 'Bitte warten...' : 'Stop'
+      )
       this.asyncButton.setAttribute('classes', 'negative')
     } else if (!this.loggedin) {
       this.asyncButton.setAttribute('text', 'Bei Microsoft anmelden')
       this.asyncButton.setAttribute('classes', 'neutral')
     } else {
+      this.asyncButton.setAttribute('disabled', 'false')
       this.asyncButton.setAttribute('text', 'Start')
       this.asyncButton.setAttribute('classes', 'positive')
     }
@@ -155,8 +170,8 @@ class ExportObject {
     if (this.running) {
       this.pollingTimeout = setTimeout(() => this.poll(), 500)
 
-      if (!this.exportToast) {
-        this.exportToast = ToastService.add(
+      if (!this.taskToast) {
+        this.taskToast = ToastService.add(
           `Export "${this.config.title}" läuft...${
             currentStatus.data.statusText
               ? '\n' + currentStatus.data.statusText
@@ -165,7 +180,7 @@ class ExportObject {
           EToastType.INFO
         )
       } else {
-        this.exportToast.setText(
+        this.taskToast.setText(
           `Export "${this.config.title}" läuft...${
             currentStatus.data.statusText
               ? '\n' + currentStatus.data.statusText
@@ -174,21 +189,21 @@ class ExportObject {
         )
       }
     } else {
-      if (this.exportToast) {
-        ToastService.remove(this.exportToast)
-        this.exportToast = undefined
+      if (this.taskToast) {
+        ToastService.remove(this.taskToast)
+        this.taskToast = undefined
       }
 
       if (wasRunning && this.aborted) {
         ToastService.add(
-          `Du hast den Export "${this.config.title}" abgebrochen und es konnten nicht alle Aufgaben abgeschlossen werden. Ein kompletter Import bereinigt die Daten.`,
+          `Du hast den Task "${this.config.title}" abgebrochen und es konnten nicht alle Aufgaben abgeschlossen werden. Ein kompletter Import bereinigt die Daten.`,
           EToastType.NEGATIVE,
           8000
         )
       } else if (wasRunning) {
         const modal = new ModalComponent(
           new ConfirmationComponent(
-            `Der Export "${this.config.title}" wurde erfolgreich abgeschlossen. Hier die Zusammenfassung:\n\nUnverändert: ${currentStatus.data.metrics.skipped}\nHinzugefügt: ${currentStatus.data.metrics.added}\nAktualisiert: ${currentStatus.data.metrics.updated}\nEntfernt: ${currentStatus.data.metrics.deleted}\nFehler: ${currentStatus.data.metrics.errored}\n\nKontakte im Datapot: ${currentStatus.data.metrics.serverCount}\nKontakte auf Office 365: ${currentStatus.data.metrics.o365Count}`,
+            currentStatus.data.metrics.replace('[[title]]', this.config.title),
             [
               {
                 title: 'Okay',
@@ -230,10 +245,12 @@ class ExportObject {
       divE.appendChild(this.progressE)
       this.progressTextE = document.createElement('span')
       divE.appendChild(this.progressTextE)
-      tdProgressE.appendChild(divE)
+      if (!this.config.noProgressBar) {
+        tdProgressE.appendChild(divE)
+      }
       tdFunctionsE.appendChild(this.asyncButton)
     } else {
-      tdFunctionsE.appendChild(this.downloadButton)
+      tdFunctionsE.appendChild(this.performButton)
     }
     const trE = document.createElement('tr')
     trE.appendChild(tdNameE)
@@ -243,9 +260,11 @@ class ExportObject {
   }
 }
 
-export interface IExportObject {
+export interface ITaskObject {
   name: string
   title: string
   description: string
   isAsync?: boolean
+  buttonText?: string
+  noProgressBar?: boolean
 }

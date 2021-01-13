@@ -13,7 +13,7 @@ import SubmitButtonComponent from './components/form/submit-button/submit-button
 import DetailContent from './contents/detail/detail'
 import EditContent from './contents/edit/edit'
 import ListContent from './contents/list/list'
-import ExportContent from './contents/export/export'
+import TaskContent from './contents/tasks/tasks'
 import CrmModule from './modules/crm/crm'
 import LoginModule from './modules/login/login'
 import { Router } from './services/Router'
@@ -46,7 +46,7 @@ import '../styles/app.scss'
   customElements.define('dp-content-detail', DetailContent)
   customElements.define('dp-content-edit', EditContent)
   customElements.define('dp-content-list', ListContent)
-  customElements.define('dp-content-export', ExportContent)
+  customElements.define('dp-content-task', TaskContent)
   customElements.define('dp-404', NotFoundContent)
 
   /* COMPONENTS */
@@ -92,7 +92,7 @@ import '../styles/app.scss'
   Router.add('crm/detail', 'CrmModule', 'DetailContent')
   Router.add('crm/edit', 'CrmModule', 'EditContent')
   Router.add('crm/list', 'CrmModule', 'ListContent')
-  Router.add('crm/export', 'CrmModule', 'ExportContent')
+  Router.add('crm/tasks', 'CrmModule', 'TaskContent')
   Router.add('crm/404', 'CrmModule', 'NotFoundContent')
 
   /* ROUTING */

@@ -28,6 +28,8 @@ export default class NavigationItemComponent extends BaseComponent {
     }
     if (meta.isMain) {
       this.button.classList.add('big')
+    } else {
+      this.classList.add('indended')
     }
   }
 

@@ -1,11 +1,11 @@
 import BaseComponent from '~/baseComponent'
 import ContentHeaderComponent from '~/components/content-header/content-header'
-import ExportService from '~/services/ExportService'
+import ExportService from '~/services/TaskService'
 import TitleService from '~/services/TitleService'
 
-import tmpl from './export.html'
+import tmpl from './tasks.html'
 
-export default class ExportContent extends BaseComponent {
+export default class TasksContent extends BaseComponent {
   contentHeader: ContentHeaderComponent = this.querySelector(
     'dp-content-header'
   )
@@ -14,9 +14,9 @@ export default class ExportContent extends BaseComponent {
   constructor() {
     super(tmpl)
 
-    this.contentHeader.setAttribute('title', 'Export')
-    this.contentHeader.setAttribute('icon', 'fa fa-file-export')
-    TitleService.setTitle('Export')
+    this.contentHeader.setAttribute('title', 'Tasks')
+    this.contentHeader.setAttribute('icon', 'fa fa-cog')
+    TitleService.setTitle('Tasks')
 
     ExportService.setTbody(this.tbodyE)
   }

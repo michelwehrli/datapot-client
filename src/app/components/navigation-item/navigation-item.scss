@@ -6,9 +6,13 @@ dp-navigation-item {
     margin-bottom: 0;
   }
 
+  &.indended {
+    padding-left: 10px;
+  }
+
   button {
     display: block;
-    padding: 6px 12px;
+    padding: 4px 12px;
     border-radius: 4px;
     width: 100%;
     text-align: left;

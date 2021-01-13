@@ -3,11 +3,11 @@ import NavigationComponent from '~/components/navigation/navigation'
 import NotFoundContent from '~/contents/404/404'
 import DetailContent from '~/contents/detail/detail'
 import EditContent from '~/contents/edit/edit'
-import ExportContent from '~/contents/export/export'
+import TaskContent from '~/contents/tasks/tasks'
 import ListContent from '~/contents/list/list'
 import DataService from '~/services/DataService'
 import DesignService from '~/services/DesignService'
-import ExportService from '~/services/ExportService'
+import TaskService from '~/services/TaskService'
 import HttpService from '~/services/HttpService'
 import { Router } from '~/services/Router'
 import SessionService from '~/services/SessionService'
@@ -24,7 +24,7 @@ export default class CrmModule extends BaseComponent {
   public async init(): Promise<void> {
     await DataService.init()
     await SessionService.init()
-    ExportService.init()
+    TaskService.init()
 
     // build cache
     HttpService.get('data/contact', false, true)
@@ -65,8 +65,8 @@ export default class CrmModule extends BaseComponent {
         case 'DetailContent':
           this.contentContainer.appendChild(new DetailContent())
           break
-        case 'ExportContent':
-          this.contentContainer.appendChild(new ExportContent())
+        case 'TaskContent':
+          this.contentContainer.appendChild(new TaskContent())
           break
         case 'NotFoundContent':
           this.contentContainer.appendChild(new NotFoundContent())
