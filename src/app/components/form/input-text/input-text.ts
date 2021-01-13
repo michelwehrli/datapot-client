@@ -67,7 +67,11 @@ export default class InputTextComponent extends BaseComponent {
     }
   }
 
-  getValue() {
+  public focus(): void {
+    setTimeout(() => this.input.focus(), 0)
+  }
+
+  getValue(): string {
     return this.input.value
   }
 }

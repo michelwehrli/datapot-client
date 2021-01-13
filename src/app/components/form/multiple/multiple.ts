@@ -13,6 +13,7 @@ export default class InputMultipleComponent extends BaseComponent {
   values: any[]
   initializer: () => any
   isHorizontal: boolean
+  initialSelect: HTMLElement
 
   constructor(
     change: (value: any[]) => void,
@@ -75,6 +76,9 @@ export default class InputMultipleComponent extends BaseComponent {
             this.rem(index)
           }
         })
+        if (!this.initialSelect) {
+          this.initialSelect = Object.values(field)[0] as HTMLElement
+        }
       } else {
         field = new InputTextComponent(
           (newValue: any) => {
@@ -88,7 +92,15 @@ export default class InputMultipleComponent extends BaseComponent {
           EInputType.TEXT,
           value
         )
+        if (!this.initialSelect) {
+          this.initialSelect = field
+        }
       }
+
+      if (this.initialSelect) {
+        this.initialSelect.focus()
+      }
+
       let item
       if (this.isHorizontal) {
         item = new InputMultipleItemComponent(

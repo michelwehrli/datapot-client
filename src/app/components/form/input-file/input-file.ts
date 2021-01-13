@@ -46,4 +46,8 @@ export default class InputFileComponent extends BaseComponent {
       })
     })
   }
+
+  public focus(): void {
+    this.input.focus()
+  }
 }

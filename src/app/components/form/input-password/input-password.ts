@@ -23,6 +23,10 @@ export default class InputPasswordComponent extends BaseComponent {
     }
   }
 
+  public focus(): void {
+    this.password.focus()
+  }
+
   private validateAndRaise() {
     this.confirm.classList.toggle(
       'error',

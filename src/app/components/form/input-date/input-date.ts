@@ -53,6 +53,10 @@ export default class InputDateComponent extends BaseComponent {
     }
   }
 
+  public focus(): void {
+    this.input.focus()
+  }
+
   attributeChangedCallback(
     attrName: string,
     _oldValue: string,

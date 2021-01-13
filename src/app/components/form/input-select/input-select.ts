@@ -63,6 +63,10 @@ export default class InputSelectComponent extends BaseComponent {
     this.populate(values, value)
   }
 
+  public focus(): void {
+    this.select.focus()
+  }
+
   attributeChangedCallback(
     attrName: string,
     _oldValue: string,

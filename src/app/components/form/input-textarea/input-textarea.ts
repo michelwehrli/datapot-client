@@ -47,6 +47,10 @@ export default class InputTextareaComponent extends BaseComponent {
     }
   }
 
+  public focus(): void {
+    this.textarea.focus()
+  }
+
   getValue(): string {
     return this.textarea.value
   }

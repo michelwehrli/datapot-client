@@ -1,6 +1,6 @@
 import BaseComponent from '~/baseComponent'
 import tmpl from './input-document-selector.html'
-import Document from '../../../model/Document'
+import Document from '../../../model/system/Document'
 import ButtonComponent from '~/components/button/button'
 import DocumentSelectorComponent from '~/components/document-selector/document-selector'
 import ModalComponent from '~/components/modal/modal'
@@ -54,5 +54,9 @@ export default class InputDocumentSelectorComponent extends BaseComponent {
       this.button.setAttribute('text', `Auswahl: ${this.doc.name}`)
       this.img.src = this.doc.previewUrl
     }
+  }
+
+  public focus(): void {
+    this.button.focus()
   }
 }
