@@ -11,7 +11,7 @@ export default class TasksService {
   private static configs: ITaskObject[] = [
     {
       name: 'office-365-export',
-      title: 'Office 365',
+      title: 'Office 365 Export',
       description: 'Alle Kontakt- und Firmendaten ins Office 365 exportieren.',
       isAsync: true,
     },
@@ -172,7 +172,7 @@ class TaskObject {
 
       if (!this.taskToast) {
         this.taskToast = ToastService.add(
-          `Export "${this.config.title}" läuft...${
+          `Task "${this.config.title}" läuft...${
             currentStatus.data.statusText
               ? '\n' + currentStatus.data.statusText
               : ''
@@ -181,7 +181,7 @@ class TaskObject {
         )
       } else {
         this.taskToast.setText(
-          `Export "${this.config.title}" läuft...${
+          `Task "${this.config.title}" läuft...${
             currentStatus.data.statusText
               ? '\n' + currentStatus.data.statusText
               : ''
