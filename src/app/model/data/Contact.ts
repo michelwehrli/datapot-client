@@ -598,11 +598,7 @@ export default class Contact extends Table implements IContact {
               businessEmail &&
               businessEmail.length &&
               businessEmail.filter((email) => {
-                return (
-                  new RegExp(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}/g).test(
-                    email.address
-                  ) && email.address
-                )
+                return email.address && email.address.indexOf('@') > -1
               }).length
                 ? `
                 <h4>Geschäftliche E-Mail Adressen</h4>
@@ -617,11 +613,7 @@ export default class Contact extends Table implements IContact {
               privateEmail &&
               privateEmail.length &&
               privateEmail.filter((email) => {
-                return (
-                  new RegExp(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}/g).test(
-                    email.address
-                  ) && email.address
-                )
+                return email.address && email.address.indexOf('@') > -1
               }).length
                 ? `
                 <h4>Private E-Mail-Adressen</h4>
