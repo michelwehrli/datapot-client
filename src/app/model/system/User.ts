@@ -7,10 +7,13 @@ import InputSelectComponent from '~/components/form/input-select/input-select'
 import InputTextComponent, {
   EInputType,
 } from '~/components/form/input-text/input-text'
+import ModalComponent from '~/components/modal/modal'
+import EditContent from '~/contents/edit/edit'
 import IDesign from '~/interfaces/system/IDesign'
 import IDocument from '~/interfaces/system/IDocument'
 import IUser from '~/interfaces/system/IUser'
 import { DataService, DesignService, ObjectFactory } from '~/internal'
+
 import { Table } from '../extend/Table'
 import { Design } from './Design'
 import { Document } from './Document'
@@ -106,7 +109,7 @@ export class User extends Table implements IUser {
       this.design ? this.design.uniquename : undefined,
       undefined,
       () => {
-        /*const modal = new ModalComponent(
+        const modal = new ModalComponent(
           new EditContent(true, ['design'], async (value: Design) => {
             designComponent.update(
               await Design.getSelectMap('system', 'design'),
@@ -119,7 +122,7 @@ export class User extends Table implements IUser {
           undefined,
           undefined,
           true
-        )*/
+        )
       }
     )
 

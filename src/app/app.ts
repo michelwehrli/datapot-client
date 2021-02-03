@@ -28,45 +28,12 @@ import ToastComponent from './components/toast/toast'
 import NotFoundContent from './contents/404/404'
 import DetailContent from './contents/detail/detail'
 import EditContent from './contents/edit/edit'
+import EmailReviewerContent from './contents/email-reviewer/email-reviewer'
 import ListContent from './contents/list/list'
 import TaskContent from './contents/tasks/tasks'
+import { Router, SessionService, ToastService } from './internal'
 import CrmModule from './modules/crm/crm'
 import LoginModule from './modules/login/login'
-
-import {
-  Address,
-  Category,
-  CompanyWithLocation,
-  CompetenceField,
-  Complexity,
-  Contact,
-  Country,
-  County,
-  Design,
-  Email,
-  EmailType,
-  Gender,
-  Industry,
-  KeyValue,
-  Phonenumber,
-  PhonenumberLine,
-  PhonenumberType,
-  Projectreference,
-  Relationship,
-  ResponsibleArea,
-  Role,
-  Router,
-  RWStatus,
-  Salutation,
-  SessionService,
-  Socialmedia,
-  SocialmediaType,
-  Table,
-  Title,
-  ToastService,
-  User,
-  Zip,
-} from './internal'
 
 import '../styles/app.scss'
 ;(async () => {
@@ -79,6 +46,7 @@ import '../styles/app.scss'
   customElements.define('dp-content-edit', EditContent)
   customElements.define('dp-content-list', ListContent)
   customElements.define('dp-content-task', TaskContent)
+  customElements.define('dp-content-email-reviewer', EmailReviewerContent)
   customElements.define('dp-404', NotFoundContent)
 
   /* COMPONENTS */
@@ -125,6 +93,7 @@ import '../styles/app.scss'
   Router.add('crm/edit', 'CrmModule', 'EditContent')
   Router.add('crm/list', 'CrmModule', 'ListContent')
   Router.add('crm/tasks', 'CrmModule', 'TaskContent')
+  Router.add('crm/email-reviewer', 'CrmModule', 'EmailReviewerContent')
   Router.add('crm/404', 'CrmModule', 'NotFoundContent')
 
   /* ROUTING */

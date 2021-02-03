@@ -1,5 +1,6 @@
 import InputSelectComponent from '~/components/form/input-select/input-select'
 import ModalComponent from '~/components/modal/modal'
+import EditContent from '~/contents/edit/edit'
 
 function getModal(
   key: string,
@@ -10,7 +11,7 @@ function getModal(
   identifier: string,
   modalToUse?: ModalComponent
 ): ModalComponent {
-  /*const modal = new ModalComponent(
+  const modal = new ModalComponent(
     new EditContent(true, [key, value], async (val) => {
       getSel().update(
         await type.getSelectMap('data', objKey ? objKey : key),
@@ -43,8 +44,7 @@ function getModal(
     'mid',
     Math.floor(Math.random() * Math.floor(100000)).toString()
   )
-  return modal*/
-  return null
+  return modal
 }
 
 export async function getSelect(
@@ -52,7 +52,9 @@ export async function getSelect(
   value: any,
   type: any,
   identifier: string,
-  objKey: string
+  objKey: string,
+  changeCallback?: (val: any) => void,
+  required = false
 ): Promise<InputSelectComponent> {
   let sel: InputSelectComponent = undefined
 
@@ -71,7 +73,7 @@ export async function getSelect(
     (val) => {
       this[objKey ? objKey : key] = val
       sel.toggleViewButton(!!val)
-      /*openModal.setContent(
+      openModal.setContent(
         new EditContent(
           true,
           [key, val ? val[identifier] : undefined],
@@ -84,11 +86,14 @@ export async function getSelect(
             openModal.close()
           }
         )
-      )*/
+      )
+      if (typeof changeCallback === 'function') {
+        changeCallback(val)
+      }
     },
     await type.getSelectMap('data', key),
     value,
-    undefined,
+    required,
     () =>
       getModal
         .call(this, key, sel, type, undefined, objKey, identifier, openModal)

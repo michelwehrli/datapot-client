@@ -102,7 +102,7 @@ export default class DetailContent extends BaseComponent {
       `${this.db}/${this.table}/${this.identifier}`
     )
 
-    const obj = ObjectFactory.createFromName(datamodel.__meta.name, [data])
+    const obj = ObjectFactory.createFromName(datamodel.__meta.name, data)
 
     if (obj.getDetail) {
       this.content.innerHTML = await obj.getDetail()

@@ -26,6 +26,7 @@ import { ResponsibleArea } from '~/model/projectreference/ResponsibleArea'
 import { Role } from '~/model/projectreference/Role'
 import { Design } from '~/model/system/Design'
 import { User } from '~/model/system/User'
+import { Document } from '~/model/system/Document'
 
 export class ObjectFactory {
   private static typeMap = {
@@ -97,13 +98,10 @@ export class ObjectFactory {
   }
 
   public static create<T>(name: string, ...args: any[]): T {
-    if (!this.realTypeMap[name]) {
-      console.log(name)
-    }
     return new this.realTypeMap[name](...args)
   }
 
-  public static createFromName(name: string, args: any[]): any {
+  public static createFromName<T>(name: string, ...args: any[]): T {
     return new this.typeMap[name](...args)
   }
 }

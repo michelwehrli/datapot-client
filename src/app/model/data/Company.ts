@@ -252,37 +252,7 @@ export class Company extends Table implements ICompany {
       }
     })
 
-    //const employees: Contact[] = await this.getEmployees()
-
-    /*
-      ${`<p class="text-flex${
-        !this.contact_person ? ' none' : ''
-      }"><span>Kontaktperson</span><span>${
-        this.contact_person
-          ? `${this.contact_person}<a class="iconlink" data-navigate="crm/detail/contact/${this.contact_person.id}"><i class="fa fa-external-link-alt"></i></a>`
-          : '-'
-      }</span></p>`}
-
-      <div class="flex-item">
-        <div class="container">
-          ${
-            employees && employees.length
-              ? `<h4>Angestellte</h4><div class="employee-wrap">
-              ${employees
-                .map((employee) => {
-                  return `<p>${employee.givenname ? employee.givenname : ''} ${
-                    employee.surname ? employee.surname : ''
-                  }<a class="iconlink" data-navigate="crm/detail/contact/${
-                    employee.id
-                  }"><i class="fa fa-external-link-alt"></i></a></p>`
-                })
-                .join('')}</div>`
-              : '<h4 class="none">Angestellte</h4><p class="none">Keine Angestellte erfasst</p>'
-          }
-        </div>
-      </div>
-
-    */
+    const employees: Contact[] = await this.getEmployees()
 
     return `
     <div class="container">
@@ -293,6 +263,13 @@ export class Company extends Table implements ICompany {
           !this.name ? ' none' : ''
         }"><span>Name</span><span>${this.name ? this.name : '-'}</span></p>`}
         <br />
+        ${`<p class="text-flex${
+          !this.contact_person ? ' none' : ''
+        }"><span>Kontaktperson</span><span>${
+          this.contact_person
+            ? `${this.contact_person}<a class="iconlink" data-navigate="crm/detail/contact/${this.contact_person.id}"><i class="fa fa-external-link-alt"></i></a>`
+            : '-'
+        }</span></p>`}
         ${
           this.websites &&
           this.websites.filter((w) => {
@@ -369,6 +346,25 @@ export class Company extends Table implements ICompany {
                 .join('<br />')}
               `
               : '<h4 class="none">Adressen</h4><p class="none">Keine Adressen</p>'
+          }
+        </div>
+      </div>
+
+      <div class="flex-item">
+        <div class="container">
+          ${
+            employees && employees.length
+              ? `<h4>Angestellte</h4><div class="employee-wrap">
+              ${employees
+                .map((employee) => {
+                  return `<p>${employee.givenname ? employee.givenname : ''} ${
+                    employee.surname ? employee.surname : ''
+                  }<a class="iconlink" data-navigate="crm/detail/contact/${
+                    employee.id
+                  }"><i class="fa fa-external-link-alt"></i></a></p>`
+                })
+                .join('')}</div>`
+              : '<h4 class="none">Angestellte</h4><p class="none">Keine Angestellte erfasst</p>'
           }
         </div>
       </div>

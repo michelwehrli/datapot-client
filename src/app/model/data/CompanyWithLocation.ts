@@ -1,8 +1,10 @@
 import HorizontalWrapperComponent from '~/components/form/horizontal-wrapper/horizontal-wrapper'
 import InputSelectComponent from '~/components/form/input-select/input-select'
+import ModalComponent from '~/components/modal/modal'
+import EditContent from '~/contents/edit/edit'
 import IAddress from '~/interfaces/data/IAddress'
 import ICompanyWithLocation from '~/interfaces/data/ICompanyWithLocation'
-import { ObjectFactory } from '~/internal'
+import { getSelect, ObjectFactory } from '~/internal'
 
 import { Table } from '../extend/Table'
 import { Address } from './Address'
@@ -49,34 +51,20 @@ export class CompanyWithLocation extends Table implements ICompanyWithLocation {
       true
     )
 
-    this.companySelector = new InputSelectComponent(
-      async (value: Company) => {
-        this.addressSelector.setValues(
-          await CompanyWithLocation.getAddressSelectMap(value)
-        )
-        this.company = value
-      },
-      await Company.getSelectMap(),
+    this.companySelector = await getSelect.call(
+      this,
+      'company',
       this.company ? this.company.id : undefined,
-      true,
-      () => {
-        /*const modal = new ModalComponent(
-          new EditContent(true, ['company'], async (value: Company) => {
-            this.addressSelector.update(
-              await CompanyWithLocation.getAddressSelectMap(value),
-              value.addresses[value.addresses.length - 1].id
-            )
-            this.address = value.addresses[value.addresses.length - 1]
-            this.companySelector.update(await Company.getSelectMap(), value.id)
-            this.company = value
-            modal.close()
-          }),
-          undefined,
-          undefined,
-          undefined,
-          true
-        )*/
-      }
+      Company,
+      'id',
+      undefined,
+      async (company: Company) => {
+        this.addressSelector.setValues(
+          await CompanyWithLocation.getAddressSelectMap(company)
+        )
+        this.company = company
+      },
+      true
     )
 
     return {

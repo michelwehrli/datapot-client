@@ -206,7 +206,7 @@ export default class EditContent extends BaseComponent {
       Router.navigate('crm/404', 'crm')
     }
     cb(Object.keys(data).length > 0)
-    this.obj = ObjectFactory.createFromName(table, [data])
+    this.obj = ObjectFactory.createFromName(table, data)
     const fields = await this.obj.getField(true)
     for (const key in fields) {
       const field = fields[key]
@@ -240,7 +240,7 @@ export default class EditContent extends BaseComponent {
           `${this.db}/${this.table}`,
           this.cleanObj(this.obj)
         )
-        obj = ObjectFactory.createFromName(this.table, [result.data])
+        obj = ObjectFactory.createFromName(this.table, result.data)
       } else {
         result = await DataService.patchData(
           `${this.db}/${this.table}/${this.id}`,

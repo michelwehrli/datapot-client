@@ -14,6 +14,7 @@ import {
   SessionService,
   TaskService,
 } from '~/internal'
+import EmailReviewerContent from '~/contents/email-reviewer/email-reviewer'
 
 export default class CrmModule extends BaseComponent {
   contentContainer: HTMLDivElement
@@ -69,6 +70,9 @@ export default class CrmModule extends BaseComponent {
           break
         case 'TaskContent':
           this.contentContainer.appendChild(new TaskContent())
+          break
+        case 'EmailReviewerContent':
+          this.contentContainer.appendChild(new EmailReviewerContent())
           break
         case 'NotFoundContent':
           this.contentContainer.appendChild(new NotFoundContent())

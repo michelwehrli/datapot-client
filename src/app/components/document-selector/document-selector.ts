@@ -19,7 +19,6 @@ export default class DocumentSelectorComponent extends BaseComponent {
   }
 
   private async init() {
-    return
     const docDatas = (await DataService.getData(
       'system/document'
     )) as IDocument[]

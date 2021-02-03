@@ -67,7 +67,7 @@ export class KeyValue extends Table implements IKeyValue {
     const ret: Map<string, string> = new Map()
     if (values && values.length) {
       for (const raw of values as IKeyValue[]) {
-        const entry = ObjectFactory.createFromName(table, [raw])
+        const entry = ObjectFactory.createFromName(table, raw)
         ret[entry.uniquename] = { realValue: entry, value: entry.label }
       }
     }

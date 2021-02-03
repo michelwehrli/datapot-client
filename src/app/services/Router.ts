@@ -1,14 +1,10 @@
-/* eslint-disable @typescript-eslint/ban-types */
-
 export class Router {
   private static routes: Map<string, string> = new Map()
   private static routesReverse: Map<string, string> = new Map()
   private static history: string[] = []
   private static currentRoute: string[]
   private static currentParams: string[]
-  private static listeners: Map<string, Map<string, Function>> = new Map()
-
-  private static previousContainer: string
+  private static listeners: Map<string, Map<string, () => void>> = new Map()
 
   public static init(): void {
     const protocol: string = window.location.protocol
@@ -59,7 +55,6 @@ export class Router {
       window.open(route)
       return
     }
-    this.previousContainer = container
     this.parseRoute(route)
     if (!dontPush) {
       history.pushState({ route: route, container: container }, null, route)
@@ -80,7 +75,7 @@ export class Router {
     return this.history.length > 0
   }
 
-  public static on(type: string, where: string, fn: Function): void {
+  public static on(type: string, where: string, fn: () => void): void {
     if (!this.listeners[type]) {
       this.listeners[type] = new Map()
     }

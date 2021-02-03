@@ -6,6 +6,8 @@ import InputTextComponent, {
 } from '~/components/form/input-text/input-text'
 import InputTextareaComponent from '~/components/form/input-textarea/input-textarea'
 import InputMultipleComponent from '~/components/form/multiple/multiple'
+import ModalComponent from '~/components/modal/modal'
+import EditContent from '~/contents/edit/edit'
 import IAddress from '~/interfaces/data/IAddress'
 import ICategory from '~/interfaces/data/ICategory'
 import ICompany from '~/interfaces/data/ICompany'
@@ -226,7 +228,7 @@ export class Contact extends Table implements IContact {
       this.partner ? this.partner.id : undefined,
       undefined,
       () => {
-        /*const modal = new ModalComponent(
+        const modal = new ModalComponent(
           new EditContent(true, ['contact'], async (value: Contact) => {
             partnerSelect.update(await Contact.getSelectMap(), value.id)
             this.partner = value
@@ -236,7 +238,7 @@ export class Contact extends Table implements IContact {
           undefined,
           undefined,
           true
-        )*/
+        )
       }
     )
 
