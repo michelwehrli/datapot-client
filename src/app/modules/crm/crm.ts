@@ -5,13 +5,15 @@ import DetailContent from '~/contents/detail/detail'
 import EditContent from '~/contents/edit/edit'
 import TaskContent from '~/contents/tasks/tasks'
 import ListContent from '~/contents/list/list'
-import DataService from '~/services/DataService'
-import DesignService from '~/services/DesignService'
-import TaskService from '~/services/TaskService'
-import HttpService from '~/services/HttpService'
-import { Router } from '~/services/Router'
-import SessionService from '~/services/SessionService'
 import tmpl from './crm.html'
+import {
+  DataService,
+  DesignService,
+  HttpService,
+  Router,
+  SessionService,
+  TaskService,
+} from '~/internal'
 
 export default class CrmModule extends BaseComponent {
   contentContainer: HTMLDivElement

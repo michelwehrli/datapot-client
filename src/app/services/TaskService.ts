@@ -2,11 +2,9 @@ import ButtonComponent from '~/components/button/button'
 import ConfirmationComponent from '~/components/confirmation/confirmation'
 import ModalComponent from '~/components/modal/modal'
 import ToastComponent from '~/components/toast/toast'
+import { EToastType, HttpService, ToastService } from '~/internal'
 
-import HttpService from './HttpService'
-import { EToastType, ToastService } from './ToastService'
-
-export default class TasksService {
+export class TaskService {
   private static isInited = false
   private static configs: ITaskObject[] = [
     {
@@ -260,7 +258,7 @@ class TaskObject {
   }
 }
 
-export interface ITaskObject {
+interface ITaskObject {
   name: string
   title: string
   description: string

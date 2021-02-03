@@ -3,12 +3,13 @@ import InputTextComponent, {
   EInputType,
 } from '~/components/form/input-text/input-text'
 import IPhonenumber from '~/interfaces/data/IPhonenumber'
-import { getSelect } from '~/services/Globals'
-import Table from '../extend/Table'
-import PhonenumberLine from './PhonenumberLine'
-import PhonenumberType from './PhonenumberType'
+import { getSelect, ObjectFactory } from '~/internal'
 
-export default class Phonenumber extends Table implements IPhonenumber {
+import { Table } from '../extend/Table'
+import { PhonenumberLine } from './PhonenumberLine'
+import { PhonenumberType } from './PhonenumberType'
+
+export class Phonenumber extends Table implements IPhonenumber {
   id: number
   number: string
   type: PhonenumberType
@@ -18,8 +19,12 @@ export default class Phonenumber extends Table implements IPhonenumber {
     super(data as any)
     this.id = data.id ? data.id : undefined
     this.number = data.number ? data.number : undefined
-    this.type = data.type ? new PhonenumberType(data.type) : undefined
-    this.line = data.line ? new PhonenumberLine(data.line) : undefined
+    this.type = data.type
+      ? ObjectFactory.create<PhonenumberType>('PhonenumberType', data.type)
+      : undefined
+    this.line = data.line
+      ? ObjectFactory.create<PhonenumberLine>('PhonenumberLine', data.line)
+      : undefined
   }
 
   public getId(): number {

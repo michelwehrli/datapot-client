@@ -1,8 +1,8 @@
-import Address from '~/model/data/Address'
-import Company from '~/model/data/Company'
+import IAddress from './IAddress'
+import ICompany from './ICompany'
 
 export default abstract class ICompanyWithLocation {
   abstract id?: number
-  abstract company?: Company
-  abstract address?: Address
+  abstract company?: ICompany
+  abstract address?: IAddress
 }

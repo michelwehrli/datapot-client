@@ -11,19 +11,20 @@ import ICompany from '~/interfaces/data/ICompany'
 import IEmail from '~/interfaces/data/IEmail'
 import IPhonenumber from '~/interfaces/data/IPhonenumber'
 import ISocialmedia from '~/interfaces/data/ISocialmedia'
-import DataService from '~/services/DataService'
-import { getSelect } from '~/services/Globals'
-import Table from '../extend/Table'
-import Address from './Address'
-import Category from './Category'
-import Contact from './Contact'
-import Email from './Email'
-import Phonenumber from './Phonenumber'
-import Relationship from './Relationship'
-import RWStatus from './RWStatus'
-import Socialmedia from './Socialmedia'
+import { DataService, getSelect } from '~/internal'
+import { ObjectFactory } from '~/services/ObjectFactory'
 
-export default class Company extends Table implements ICompany {
+import { Table } from '../extend/Table'
+import { Address } from './Address'
+import { Category } from './Category'
+import { Contact } from './Contact'
+import { Email } from './Email'
+import { Phonenumber } from './Phonenumber'
+import { Relationship } from './Relationship'
+import { RWStatus } from './RWStatus'
+import { Socialmedia } from './Socialmedia'
+
+export class Company extends Table implements ICompany {
   id: number
   name: string
   addresses: Address[]
@@ -44,43 +45,51 @@ export default class Company extends Table implements ICompany {
     this.addresses = []
     if (data.addresses) {
       data.addresses.forEach((address: IAddress) => {
-        this.addresses.push(new Address(address))
+        this.addresses.push(ObjectFactory.create<Address>('Address', address))
       })
     }
     this.emails = []
     if (data.emails) {
       data.emails.forEach((email: IEmail) => {
-        this.emails.push(new Email(email))
+        this.emails.push(ObjectFactory.create<Email>('Email', email))
       })
     }
     this.phonenumbers = []
     if (data.phonenumbers) {
       data.phonenumbers.forEach((phonenumber: IPhonenumber) => {
-        this.phonenumbers.push(new Phonenumber(phonenumber))
+        this.phonenumbers.push(
+          ObjectFactory.create<Phonenumber>('Phonenumber', phonenumber)
+        )
       })
     }
     this.contact_person = data.contact_person
-      ? new Contact(data.contact_person)
+      ? ObjectFactory.create<Contact>('Contact', data.contact_person)
       : undefined
     this.websites = data.websites ? data.websites : []
 
     this.social_medias = []
     if (data.social_medias) {
       data.social_medias.forEach((socialmedia: ISocialmedia) => {
-        this.social_medias.push(new Socialmedia(socialmedia))
+        this.social_medias.push(
+          ObjectFactory.create<Socialmedia>('Socialmedia', socialmedia)
+        )
       })
     }
 
     this.remarks = data.remarks
 
-    this.rwstatus = data.rwstatus ? new RWStatus(data.rwstatus) : undefined
+    this.rwstatus = data.rwstatus
+      ? ObjectFactory.create<RWStatus>('RWStatus', data.rwstatus)
+      : undefined
     this.relationship = data.relationship
-      ? new Relationship(data.relationship)
+      ? ObjectFactory.create<Relationship>('Relationship', data.relationship)
       : undefined
     this.categories = []
     if (data.categories) {
       data.categories.forEach((category: ICategory) => {
-        this.categories.push(new Category(category))
+        this.categories.push(
+          ObjectFactory.create<Category>('Category', category)
+        )
       })
     }
   }
@@ -102,7 +111,7 @@ export default class Company extends Table implements ICompany {
       return
     }
     return contactsRaw.map((cr) => {
-      return new Contact(cr)
+      return ObjectFactory.create<Contact>('Contact', cr)
     })
   }
 
@@ -167,7 +176,7 @@ export default class Company extends Table implements ICompany {
     this.categoriesInput = new InputMultipleComponent(
       (value: Category[]) => (this.categories = value),
       this.categories,
-      () => new Category()
+      () => ObjectFactory.create<Category>('Category')
     )
 
     return {
@@ -177,7 +186,7 @@ export default class Company extends Table implements ICompany {
         addresses: new InputMultipleComponent(
           (value: Address[]) => (this.addresses = value),
           this.addresses,
-          () => new Address()
+          () => ObjectFactory.create<Address>('Address')
         ),
         contact_person: new InputSelectComponent(
           (value: Contact) => (this.contact_person = value),
@@ -190,20 +199,20 @@ export default class Company extends Table implements ICompany {
         emails: new InputMultipleComponent(
           (value: Email[]) => (this.emails = value),
           this.emails,
-          () => new Email(),
+          () => ObjectFactory.create<Email>('Email'),
           true
         ),
         phonenumbers: new InputMultipleComponent(
           (value: Phonenumber[]) => (this.phonenumbers = value),
           this.phonenumbers,
-          () => new Phonenumber(),
+          () => ObjectFactory.create<Phonenumber>('Phonenumber'),
           true
         ),
         __heading_2: new FormHeadingComponent('Weiteres'),
         social_medias: new InputMultipleComponent(
           (value: Socialmedia[]) => (this.social_medias = value),
           this.social_medias,
-          () => new Socialmedia(),
+          () => ObjectFactory.create<Socialmedia>('Socialmedia'),
           true
         ),
         websites: new InputMultipleComponent(
@@ -243,7 +252,37 @@ export default class Company extends Table implements ICompany {
       }
     })
 
-    const employees: Contact[] = await this.getEmployees()
+    //const employees: Contact[] = await this.getEmployees()
+
+    /*
+      ${`<p class="text-flex${
+        !this.contact_person ? ' none' : ''
+      }"><span>Kontaktperson</span><span>${
+        this.contact_person
+          ? `${this.contact_person}<a class="iconlink" data-navigate="crm/detail/contact/${this.contact_person.id}"><i class="fa fa-external-link-alt"></i></a>`
+          : '-'
+      }</span></p>`}
+
+      <div class="flex-item">
+        <div class="container">
+          ${
+            employees && employees.length
+              ? `<h4>Angestellte</h4><div class="employee-wrap">
+              ${employees
+                .map((employee) => {
+                  return `<p>${employee.givenname ? employee.givenname : ''} ${
+                    employee.surname ? employee.surname : ''
+                  }<a class="iconlink" data-navigate="crm/detail/contact/${
+                    employee.id
+                  }"><i class="fa fa-external-link-alt"></i></a></p>`
+                })
+                .join('')}</div>`
+              : '<h4 class="none">Angestellte</h4><p class="none">Keine Angestellte erfasst</p>'
+          }
+        </div>
+      </div>
+
+    */
 
     return `
     <div class="container">
@@ -254,15 +293,11 @@ export default class Company extends Table implements ICompany {
           !this.name ? ' none' : ''
         }"><span>Name</span><span>${this.name ? this.name : '-'}</span></p>`}
         <br />
-        ${`<p class="text-flex${
-          !this.contact_person ? ' none' : ''
-        }"><span>Kontaktperson</span><span>${
-          this.contact_person
-            ? `${this.contact_person}<a class="iconlink" data-navigate="crm/detail/contact/${this.contact_person.id}"><i class="fa fa-external-link-alt"></i></a>`
-            : '-'
-        }</span></p>`}
         ${
-          this.websites && this.websites.length
+          this.websites &&
+          this.websites.filter((w) => {
+            return new RegExp(/(https?:\/\/[^\s]+)/g).test(w)
+          }).length
             ? `<h4>Websites</h4>
             ${this.websites
               .map((w) => {
@@ -334,24 +369,6 @@ export default class Company extends Table implements ICompany {
                 .join('<br />')}
               `
               : '<h4 class="none">Adressen</h4><p class="none">Keine Adressen</p>'
-          }
-        </div>
-      </div>
-      <div class="flex-item">
-        <div class="container">
-          ${
-            employees && employees.length
-              ? `<h4>Angestellte</h4><div class="employee-wrap">
-              ${employees
-                .map((employee) => {
-                  return `<p>${employee.givenname ? employee.givenname : ''} ${
-                    employee.surname ? employee.surname : ''
-                  }<a class="iconlink" data-navigate="crm/detail/contact/${
-                    employee.id
-                  }"><i class="fa fa-external-link-alt"></i></a></p>`
-                })
-                .join('')}</div>`
-              : '<h4 class="none">Angestellte</h4><p class="none">Keine Angestellte erfasst</p>'
           }
         </div>
       </div>
@@ -440,7 +457,7 @@ export default class Company extends Table implements ICompany {
     const companies = (await DataService.getData('data/company')) as Company[]
     const ret: Map<string, any> = new Map()
     for (const raw of companies as ICompany[]) {
-      const entry = new Company(raw)
+      const entry = ObjectFactory.create<Company>('Company', raw)
       ret[entry.id] = { realValue: entry, value: entry.toString() }
     }
     return ret

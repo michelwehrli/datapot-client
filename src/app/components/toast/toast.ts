@@ -1,5 +1,5 @@
 import BaseComponent from '~/baseComponent'
-import { EToastType } from '~/services/ToastService'
+import { EToastType } from '~/internal'
 import tmpl from './toast.html'
 
 export default class ToastComponent extends BaseComponent {

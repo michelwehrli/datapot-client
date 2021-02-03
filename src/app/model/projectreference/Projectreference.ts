@@ -1,32 +1,27 @@
-import ICompany from '~/interfaces/data/ICompany'
-import IContact from '~/interfaces/data/IContact'
-import ICompetenceField from '~/interfaces/projectreference/ICompetenceField'
-import IComplexity from '~/interfaces/projectreference/IComplexity'
-import IIndustry from '~/interfaces/projectreference/IIndustry'
-import IProjectreference from '~/interfaces/projectreference/IProjectreference'
-import IResponsibleArea from '~/interfaces/projectreference/IResponsibleArea'
-import IRole from '~/interfaces/projectreference/IRole'
-import IDocument from '~/interfaces/system/IDocument'
-import Company from '../data/Company'
-import Contact from '../data/Contact'
-import Document from '../system/Document'
-import Table from '../extend/Table'
-import CompetenceField from './CompetenceField'
-import Complexity from './Complexity'
-import Industry from './Industry'
-import ResponsibleArea from './ResponsibleArea'
-import Role from './Role'
+import InputDateComponent from '~/components/form/input-date/input-date'
+import InputDocumentSelectorComponent from '~/components/form/input-document-selector/input-document-selector'
+import InputSelectComponent from '~/components/form/input-select/input-select'
 import InputTextComponent, {
   EInputType,
 } from '~/components/form/input-text/input-text'
 import InputMultipleComponent from '~/components/form/multiple/multiple'
-import InputSelectComponent from '~/components/form/input-select/input-select'
-import InputDateComponent from '~/components/form/input-date/input-date'
-import InputDocumentSelectorComponent from '~/components/form/input-document-selector/input-document-selector'
+import ICompetenceField from '~/interfaces/projectreference/ICompetenceField'
+import IIndustry from '~/interfaces/projectreference/IIndustry'
+import IProjectreference from '~/interfaces/projectreference/IProjectreference'
+import IDocument from '~/interfaces/system/IDocument'
+import { ObjectFactory } from '~/internal'
 
-export default class Projectreference
-  extends Table
-  implements IProjectreference {
+import { Company } from '../data/Company'
+import { Contact } from '../data/Contact'
+import { Table } from '../extend/Table'
+import { Document } from '../system/Document'
+import { CompetenceField } from './CompetenceField'
+import { Complexity } from './Complexity'
+import { Industry } from './Industry'
+import { ResponsibleArea } from './ResponsibleArea'
+import { Role } from './Role'
+
+export class Projectreference extends Table implements IProjectreference {
   id?: number
   projectname?: string
   uniquename?: string
@@ -34,27 +29,27 @@ export default class Projectreference
   teaser?: string
   keywords?: string[]
   targets?: string[]
-  client?: ICompany
-  reference_person?: IContact
+  client?: Company
+  reference_person?: Contact
   start_date?: number
   end_date?: number
   function?: string
-  roles?: IRole[]
+  roles?: Role[]
   load?: string
-  complexity?: IComplexity
+  complexity?: Complexity
   strategic?: string
   novelty?: string
   complexity_string?: string
   risk?: string
   potential?: string
   budget?: string
-  industries?: IIndustry[]
-  responsible_areas?: IResponsibleArea[]
+  industries?: Industry[]
+  responsible_areas?: ResponsibleArea[]
   responsible_areas_text?: string
-  competence_fields?: ICompetenceField[]
-  attachements?: IDocument[]
-  main_image?: IDocument
-  images?: IDocument[]
+  competence_fields?: CompetenceField[]
+  attachements?: Document[]
+  main_image?: Document
+  images?: Document[]
 
   constructor(data: IProjectreference = {}) {
     super(data as any)
@@ -65,22 +60,24 @@ export default class Projectreference
     this.teaser = data.teaser ? data.teaser : undefined
     this.keywords = data.keywords ? data.keywords : undefined
     this.targets = data.targets ? data.targets : undefined
-    this.client = data.client ? new Company(data.client) : undefined
+    this.client = data.client
+      ? ObjectFactory.create<Company>('Company', data.client)
+      : undefined
     this.reference_person = data.reference_person
-      ? new Contact(data.reference_person)
+      ? ObjectFactory.create<Contact>('Contact', data.reference_person)
       : undefined
     this.start_date = data.start_date ? data.start_date : undefined
     this.end_date = data.end_date ? data.end_date : undefined
     this.function = data.function ? data.function : undefined
     this.roles = []
     if (data.roles) {
-      data.roles.forEach((companyWithLocation: IRole) => {
-        this.roles.push(new Role(companyWithLocation))
+      data.roles.forEach((companyWithLocation: Role) => {
+        this.roles.push(ObjectFactory.create<Role>('Role', companyWithLocation))
       })
     }
     this.load = data.load ? data.load : undefined
     this.complexity = data.complexity
-      ? new Complexity(data.complexity)
+      ? ObjectFactory.create<Complexity>('Complexity', data.complexity)
       : undefined
     this.strategic = data.strategic ? data.strategic : undefined
     this.novelty = data.novelty ? data.novelty : undefined
@@ -93,13 +90,20 @@ export default class Projectreference
     this.industries = []
     if (data.industries) {
       data.industries.forEach((industry: IIndustry) => {
-        this.industries.push(new Industry(industry))
+        this.industries.push(
+          ObjectFactory.create<Industry>('Industry', industry)
+        )
       })
     }
     this.responsible_areas = []
     if (data.responsible_areas) {
-      data.responsible_areas.forEach((responsible_area: IResponsibleArea) => {
-        this.responsible_areas.push(new ResponsibleArea(responsible_area))
+      data.responsible_areas.forEach((responsible_area: ResponsibleArea) => {
+        this.responsible_areas.push(
+          ObjectFactory.create<ResponsibleArea>(
+            'ResponsibleArea',
+            responsible_area
+          )
+        )
       })
     }
     this.responsible_areas_text = data.responsible_areas_text
@@ -108,22 +112,29 @@ export default class Projectreference
     this.competence_fields = []
     if (data.competence_fields) {
       data.competence_fields.forEach((competence_field: ICompetenceField) => {
-        this.competence_fields.push(new CompetenceField(competence_field))
+        this.competence_fields.push(
+          ObjectFactory.create<CompetenceField>(
+            'CompetenceField',
+            competence_field
+          )
+        )
       })
     }
     this.attachements = []
     if (data.attachements) {
       data.attachements.forEach((attachement: IDocument) => {
-        this.attachements.push(new Document(attachement))
+        this.attachements.push(
+          ObjectFactory.create<Document>('Document', attachement)
+        )
       })
     }
     this.main_image = data.main_image
-      ? new Document(data.main_image)
+      ? ObjectFactory.create<Document>('Document', data.main_image)
       : undefined
     this.images = []
     if (data.images) {
       data.images.forEach((image: IDocument) => {
-        this.images.push(new Document(image))
+        this.images.push(ObjectFactory.create<Document>('Document', image))
       })
     }
   }
@@ -205,7 +216,7 @@ export default class Projectreference
       roles: new InputMultipleComponent(
         (value: Role[]) => (this.roles = value),
         this.roles,
-        () => new Role(),
+        () => ObjectFactory.create<Role>('Role'),
         true
       ),
       load: new InputTextComponent(
@@ -251,13 +262,13 @@ export default class Projectreference
       industries: new InputMultipleComponent(
         (value: Industry[]) => (this.industries = value),
         this.industries,
-        () => new Industry(),
+        () => ObjectFactory.create<Industry>('Industry'),
         true
       ),
       responsible_areas: new InputMultipleComponent(
         (value: ResponsibleArea[]) => (this.responsible_areas = value),
         this.responsible_areas,
-        () => new ResponsibleArea(),
+        () => ObjectFactory.create<ResponsibleArea>('ResponsibleArea'),
         true
       ),
       responsible_areas_text: new InputTextComponent(
@@ -268,23 +279,22 @@ export default class Projectreference
       competence_fields: new InputMultipleComponent(
         (value: CompetenceField[]) => (this.competence_fields = value),
         this.competence_fields,
-        () => new CompetenceField(),
+        () => ObjectFactory.create<CompetenceField>('CompetenceField'),
         true
       ),
       attachements: new InputMultipleComponent(
         (value: Document[]) => (this.attachements = value),
         this.attachements,
-        () => new Document(),
+        () => ObjectFactory.create<Document>('Document'),
         true
       ),
-      main_image: new InputDocumentSelectorComponent(
-        (value: Document) => (this.main_image = value),
-        this.main_image
-      ),
+      main_image: new InputDocumentSelectorComponent((value: Document) => {
+        return (this.main_image = value)
+      }, this.main_image),
       images: new InputMultipleComponent(
         (value: Document[]) => (this.images = value),
         this.images,
-        () => new Document(),
+        () => ObjectFactory.create<Document>('Document'),
         true
       ),
     }

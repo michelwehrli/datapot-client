@@ -1,6 +1,5 @@
 import BaseComponent from '~/baseComponent'
-import DesignService from '~/services/DesignService'
-import SessionService from '~/services/SessionService'
+import { DesignService, SessionService } from '~/internal'
 import tmpl from './design-toggler.html'
 
 export default class DesignTogglerComponent extends BaseComponent {

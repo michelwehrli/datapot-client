@@ -1,7 +1,5 @@
 import BaseComponent from '~/baseComponent'
-import DataService from '~/services/DataService'
-import { Router } from '~/services/Router'
-import SessionService from '~/services/SessionService'
+import { DataService, Router, SessionService } from '~/internal'
 import ButtonComponent from '../button/button'
 import DesignTogglerComponent from '../design-toggler/design-toggler'
 import NavigationGroupComponent from '../navigation-group/navigation-group'
@@ -121,7 +119,7 @@ export default class NavigationComponent extends BaseComponent {
         const groupComponent = new NavigationGroupComponent(group.__meta.title)
         this.items.appendChild(groupComponent)
 
-        let items: [] = processedDatamodel[group.__meta.number]
+        let items: [] = processedDatamodel[group.__meta.number] || []
         if (group.__meta.additionalItems) {
           items = items.concat(group.__meta.additionalItems) as []
         }

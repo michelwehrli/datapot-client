@@ -2,10 +2,10 @@ import InputTextComponent, {
   EInputType,
 } from '~/components/form/input-text/input-text'
 import IZip from '~/interfaces/data/IZip'
-import DataService from '~/services/DataService'
-import Table from '../extend/Table'
+import { DataService, ObjectFactory } from '~/internal'
+import { Table } from '../extend/Table'
 
-export default class Zip extends Table implements IZip {
+export class Zip extends Table implements IZip {
   id: number
   zip: string
   location: string
@@ -67,7 +67,7 @@ export default class Zip extends Table implements IZip {
     const values = await DataService.getData('data/zip')
     const ret: Map<number, string> = new Map()
     for (const raw of values as IZip[]) {
-      const zip = new Zip(raw)
+      const zip = ObjectFactory.create<Zip>('Zip', raw)
       ret[zip.id] = { realValue: zip, value: `${zip.zip} ${zip.location}` }
     }
     return ret

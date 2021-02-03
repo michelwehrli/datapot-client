@@ -1,6 +1,5 @@
 import InputSelectComponent from '~/components/form/input-select/input-select'
 import ModalComponent from '~/components/modal/modal'
-import EditContent from '~/contents/edit/edit'
 
 function getModal(
   key: string,
@@ -11,7 +10,7 @@ function getModal(
   identifier: string,
   modalToUse?: ModalComponent
 ): ModalComponent {
-  const modal = new ModalComponent(
+  /*const modal = new ModalComponent(
     new EditContent(true, [key, value], async (val) => {
       getSel().update(
         await type.getSelectMap('data', objKey ? objKey : key),
@@ -44,7 +43,8 @@ function getModal(
     'mid',
     Math.floor(Math.random() * Math.floor(100000)).toString()
   )
-  return modal
+  return modal*/
+  return null
 }
 
 export async function getSelect(
@@ -71,7 +71,7 @@ export async function getSelect(
     (val) => {
       this[objKey ? objKey : key] = val
       sel.toggleViewButton(!!val)
-      openModal.setContent(
+      /*openModal.setContent(
         new EditContent(
           true,
           [key, val ? val[identifier] : undefined],
@@ -84,7 +84,7 @@ export async function getSelect(
             openModal.close()
           }
         )
-      )
+      )*/
     },
     await type.getSelectMap('data', key),
     value,

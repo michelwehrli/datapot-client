@@ -1,17 +1,21 @@
-import md5 from 'md5'
 import BaseComponent from '~/baseComponent'
 import ButtonComponent from '~/components/button/button'
 import ConfirmationComponent from '~/components/confirmation/confirmation'
 import ContentHeaderComponent from '~/components/content-header/content-header'
 import FieldComponent from '~/components/form/field/field'
 import ModalComponent from '~/components/modal/modal'
-import { ETypeMatch } from '~/enums/ETypeMatch'
-import DataService from '~/services/DataService'
-import HttpService from '~/services/HttpService'
-import { Router } from '~/services/Router'
-import SessionService from '~/services/SessionService'
-import TitleService from '~/services/TitleService'
-import { EToastType, ToastService } from '~/services/ToastService'
+import {
+  DataService,
+  EToastType,
+  HttpService,
+  ObjectFactory,
+  Router,
+  SessionService,
+  TitleService,
+  ToastService,
+} from '~/internal'
+import md5 from 'md5'
+
 import tmpl from './edit.html'
 
 export default class EditContent extends BaseComponent {
@@ -202,8 +206,7 @@ export default class EditContent extends BaseComponent {
       Router.navigate('crm/404', 'crm')
     }
     cb(Object.keys(data).length > 0)
-    const type = ETypeMatch[table]
-    this.obj = new type(data)
+    this.obj = ObjectFactory.createFromName(table, [data])
     const fields = await this.obj.getField(true)
     for (const key in fields) {
       const field = fields[key]
@@ -237,7 +240,7 @@ export default class EditContent extends BaseComponent {
           `${this.db}/${this.table}`,
           this.cleanObj(this.obj)
         )
-        obj = new ETypeMatch[this.table](result.data)
+        obj = ObjectFactory.createFromName(this.table, [result.data])
       } else {
         result = await DataService.patchData(
           `${this.db}/${this.table}/${this.id}`,

@@ -7,26 +7,25 @@ import InputSelectComponent from '~/components/form/input-select/input-select'
 import InputTextComponent, {
   EInputType,
 } from '~/components/form/input-text/input-text'
-import ModalComponent from '~/components/modal/modal'
-import EditContent from '~/contents/edit/edit'
+import IDesign from '~/interfaces/system/IDesign'
+import IDocument from '~/interfaces/system/IDocument'
 import IUser from '~/interfaces/system/IUser'
-import DataService from '~/services/DataService'
-import DesignService from '~/services/DesignService'
-import Table from '../extend/Table'
-import Design from './Design'
-import Document from './Document'
+import { DataService, DesignService, ObjectFactory } from '~/internal'
+import { Table } from '../extend/Table'
+import { Design } from './Design'
+import { Document } from './Document'
 
-export default class User extends Table implements IUser {
+export class User extends Table implements IUser {
   id: number
   issuperuser: boolean
   username: string
   givenname: string
   surname: string
   email: string
-  image: Document
+  image: IDocument
   password: string
   configuration: string
-  design: Design
+  design: IDesign
   color: string
 
   constructor(data: IUser = {}) {
@@ -37,10 +36,14 @@ export default class User extends Table implements IUser {
     this.givenname = data.givenname ? data.givenname : undefined
     this.surname = data.surname ? data.surname : undefined
     this.email = data.email ? data.email : undefined
-    this.image = data.image ? new Document(data.image) : undefined
+    this.image = data.image
+      ? ObjectFactory.create<Document>('Document', data.image)
+      : undefined
     this.password = data.password ? data.password : undefined
     this.configuration = data.configuration ? data.configuration : undefined
-    this.design = data.design ? new Design(data.design) : undefined
+    this.design = data.design
+      ? ObjectFactory.create<Design>('Design', data.design)
+      : undefined
     this.color = data.color ? data.color : undefined
   }
 
@@ -103,7 +106,7 @@ export default class User extends Table implements IUser {
       this.design ? this.design.uniquename : undefined,
       undefined,
       () => {
-        const modal = new ModalComponent(
+        /*const modal = new ModalComponent(
           new EditContent(true, ['design'], async (value: Design) => {
             designComponent.update(
               await Design.getSelectMap('system', 'design'),
@@ -116,7 +119,7 @@ export default class User extends Table implements IUser {
           undefined,
           undefined,
           true
-        )
+        )*/
       }
     )
 

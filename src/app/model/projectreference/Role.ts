@@ -4,10 +4,11 @@ import InputTextComponent, {
 } from '~/components/form/input-text/input-text'
 import IKeyValue from '~/interfaces/extend/IKeyValue'
 import IRole from '~/interfaces/projectreference/IRole'
-import DataService from '~/services/DataService'
-import KeyValue from '../extend/KeyValue'
+import { DataService, ObjectFactory } from '~/internal'
 
-export default class Role extends KeyValue {
+import { KeyValue } from '../extend/KeyValue'
+
+export class Role extends KeyValue {
   constructor(data: IKeyValue = {}) {
     super(data as any)
   }
@@ -45,7 +46,7 @@ export default class Role extends KeyValue {
     const values = await DataService.getData('data/role')
     const ret: Map<string, string> = new Map()
     for (const raw of values as IRole[]) {
-      const entry = new Role(raw)
+      const entry = ObjectFactory.create<Role>('Role', raw)
       ret[entry.uniquename] = { realValue: entry, value: entry.label }
     }
     return ret

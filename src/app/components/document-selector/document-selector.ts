@@ -1,7 +1,9 @@
 import BaseComponent from '~/baseComponent'
 import IDocument from '~/interfaces/system/IDocument'
-import Document from '~/model/system/Document'
-import DataService from '~/services/DataService'
+import { DataService } from '~/internal'
+import { ObjectFactory } from '~/services/ObjectFactory'
+
+import { Document } from '../../model/system/Document'
 import tmpl from './document-selector.html'
 
 export default class DocumentSelectorComponent extends BaseComponent {
@@ -17,11 +19,12 @@ export default class DocumentSelectorComponent extends BaseComponent {
   }
 
   private async init() {
+    return
     const docDatas = (await DataService.getData(
       'system/document'
     )) as IDocument[]
     for (const docData of docDatas) {
-      const doc: Document = new Document(docData)
+      const doc: Document = ObjectFactory.create<Document>('Document', docData)
       this.documentsWrap.appendChild(this.createDocumentEntry(doc))
     }
   }

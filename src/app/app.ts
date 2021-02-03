@@ -1,40 +1,72 @@
 import ButtonComponent from './components/button/button'
+import ConfirmationComponent from './components/confirmation/confirmation'
 import ContentHeaderComponent from './components/content-header/content-header'
+import DatepickerComponent from './components/datepicker/datepicker'
+import DesignTogglerComponent from './components/design-toggler/design-toggler'
+import DocumentSelectorComponent from './components/document-selector/document-selector'
 import FooterComponent from './components/footer/footer'
 import FieldComponent from './components/form/field/field'
+import FormHeadingComponent from './components/form/form-heading/form-heading'
+import HorizontalWrapperComponent from './components/form/horizontal-wrapper/horizontal-wrapper'
 import InputCheckboxComponent from './components/form/input-checkbox/input-checkbox'
+import InputDateComponent from './components/form/input-date/input-date'
+import InputDocumentSelectorComponent from './components/form/input-document-selector/input-document-selector'
+import InputFileComponent from './components/form/input-file/input-file'
+import InputPasswordComponent from './components/form/input-password/input-password'
 import InputSelectComponent from './components/form/input-select/input-select'
 import InputTextComponent from './components/form/input-text/input-text'
+import InputTextareaComponent from './components/form/input-textarea/input-textarea'
+import InputMultipleComponent from './components/form/multiple/multiple'
+import InputMultipleItemComponent from './components/form/multiple/multiple-item/multiple-item'
+import SubmitButtonComponent from './components/form/submit-button/submit-button'
 import ListComponent from './components/list/list'
+import ModalComponent from './components/modal/modal'
 import NavigationGroupComponent from './components/navigation-group/navigation-group'
 import NavigationItemComponent from './components/navigation-item/navigation-item'
 import NavigationComponent from './components/navigation/navigation'
-import SubmitButtonComponent from './components/form/submit-button/submit-button'
+import ToastComponent from './components/toast/toast'
+import NotFoundContent from './contents/404/404'
 import DetailContent from './contents/detail/detail'
 import EditContent from './contents/edit/edit'
 import ListContent from './contents/list/list'
 import TaskContent from './contents/tasks/tasks'
 import CrmModule from './modules/crm/crm'
 import LoginModule from './modules/login/login'
-import { Router } from './services/Router'
-import DatepickerComponent from './components/datepicker/datepicker'
-import InputDateComponent from './components/form/input-date/input-date'
-import InputMultipleComponent from './components/form/multiple/multiple'
-import InputMultipleItemComponent from './components/form/multiple/multiple-item/multiple-item'
-import InputTextareaComponent from './components/form/input-textarea/input-textarea'
-import HorizontalWrapperComponent from './components/form/horizontal-wrapper/horizontal-wrapper'
-import FormHeadingComponent from './components/form/form-heading/form-heading'
-import ToastComponent from './components/toast/toast'
-import { ToastService } from './services/ToastService'
-import NotFoundContent from './contents/404/404'
-import InputPasswordComponent from './components/form/input-password/input-password'
-import SessionService from './services/SessionService'
-import InputFileComponent from './components/form/input-file/input-file'
-import InputDocumentSelectorComponent from './components/form/input-document-selector/input-document-selector'
-import ModalComponent from './components/modal/modal'
-import DocumentSelectorComponent from './components/document-selector/document-selector'
-import ConfirmationComponent from './components/confirmation/confirmation'
-import DesignTogglerComponent from './components/design-toggler/design-toggler'
+
+import {
+  Address,
+  Category,
+  CompanyWithLocation,
+  CompetenceField,
+  Complexity,
+  Contact,
+  Country,
+  County,
+  Design,
+  Email,
+  EmailType,
+  Gender,
+  Industry,
+  KeyValue,
+  Phonenumber,
+  PhonenumberLine,
+  PhonenumberType,
+  Projectreference,
+  Relationship,
+  ResponsibleArea,
+  Role,
+  Router,
+  RWStatus,
+  Salutation,
+  SessionService,
+  Socialmedia,
+  SocialmediaType,
+  Table,
+  Title,
+  ToastService,
+  User,
+  Zip,
+} from './internal'
 
 import '../styles/app.scss'
 ;(async () => {

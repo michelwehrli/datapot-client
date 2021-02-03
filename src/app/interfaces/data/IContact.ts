@@ -1,36 +1,35 @@
-import Address from '~/model/data/Address'
-import Category from '~/model/data/Category'
-import CompanyWithLocation from '~/model/data/CompanyWithLocation'
-import Contact from '~/model/data/Contact'
-import Email from '~/model/data/Email'
-import Gender from '~/model/data/Gender'
-import Phonenumber from '~/model/data/Phonenumber'
-import Relationship from '~/model/data/Relationship'
-import RWStatus from '~/model/data/RWStatus'
-import Salutation from '~/model/data/Salutation'
-import Socialmedia from '~/model/data/Socialmedia'
-import Title from '~/model/data/Title'
+import IAddress from './IAddress'
+import ICategory from './ICategory'
+import ICompanyWithLocation from './ICompanyWithLocation'
+import IEmail from './IEmail'
+import IGender from './IGender'
+import IPhonenumber from './IPhonenumber'
+import IRelationship from './IRelationship'
+import IRWStatus from './IRWStatus'
+import ISalutation from './ISalutation'
+import ISocialmedia from './ISocialmedia'
+import ITitle from './ITitle'
 
 export default abstract class IContact {
   abstract id?: number
-  abstract gender?: Gender
-  abstract salutation?: Salutation
-  abstract title?: Title
+  abstract gender?: IGender
+  abstract salutation?: ISalutation
+  abstract title?: ITitle
   abstract givenname?: string
   abstract additional_names?: string[]
   abstract surname?: string
-  abstract addresses?: Address[]
-  abstract companiesWithLocation?: CompanyWithLocation[]
+  abstract addresses?: IAddress[]
+  abstract companiesWithLocation?: ICompanyWithLocation[]
   abstract department?: string
   abstract positions?: string[]
-  abstract phonenumbers?: Phonenumber[]
-  abstract emails?: Email[]
+  abstract phonenumbers?: IPhonenumber[]
+  abstract emails?: IEmail[]
   abstract birthdate?: number
-  abstract partner?: Contact
+  abstract partner?: IContact
   abstract websites?: string[]
-  abstract social_medias?: Socialmedia[]
+  abstract social_medias?: ISocialmedia[]
   abstract remarks?: string
-  abstract rwstatus?: RWStatus
-  abstract relationship?: Relationship
-  abstract categories?: Category[]
+  abstract rwstatus?: IRWStatus
+  abstract relationship?: IRelationship
+  abstract categories?: ICategory[]
 }

@@ -1,16 +1,14 @@
 import HorizontalWrapperComponent from '~/components/form/horizontal-wrapper/horizontal-wrapper'
 import InputSelectComponent from '~/components/form/input-select/input-select'
-import ModalComponent from '~/components/modal/modal'
-import EditContent from '~/contents/edit/edit'
 import IAddress from '~/interfaces/data/IAddress'
 import ICompanyWithLocation from '~/interfaces/data/ICompanyWithLocation'
-import Table from '../extend/Table'
-import Address from './Address'
-import Company from './Company'
+import { ObjectFactory } from '~/internal'
 
-export default class CompanyWithLocation
-  extends Table
-  implements ICompanyWithLocation {
+import { Table } from '../extend/Table'
+import { Address } from './Address'
+import { Company } from './Company'
+
+export class CompanyWithLocation extends Table implements ICompanyWithLocation {
   id?: number
   company?: Company
   address?: Address
@@ -18,8 +16,12 @@ export default class CompanyWithLocation
   constructor(data: ICompanyWithLocation = {}) {
     super(data as any)
     this.id = data.id ? data.id : undefined
-    this.company = data.company ? new Company(data.company) : undefined
-    this.address = data.address ? new Address(data.address) : undefined
+    this.company = data.company
+      ? ObjectFactory.create<Company>('Company', data.company)
+      : undefined
+    this.address = data.address
+      ? ObjectFactory.create<Address>('Address', data.address)
+      : undefined
   }
 
   public getId(): number {
@@ -58,7 +60,7 @@ export default class CompanyWithLocation
       this.company ? this.company.id : undefined,
       true,
       () => {
-        const modal = new ModalComponent(
+        /*const modal = new ModalComponent(
           new EditContent(true, ['company'], async (value: Company) => {
             this.addressSelector.update(
               await CompanyWithLocation.getAddressSelectMap(value),
@@ -73,7 +75,7 @@ export default class CompanyWithLocation
           undefined,
           undefined,
           true
-        )
+        )*/
       }
     )
 
@@ -93,7 +95,7 @@ export default class CompanyWithLocation
     const ret: Map<string, any> = new Map()
     if (company) {
       for (const raw of company.addresses as IAddress[]) {
-        const entry = new Address(raw)
+        const entry = ObjectFactory.create<Address>('Address', raw)
         ret[entry.id] = { realValue: entry, value: entry.toString() }
       }
     }

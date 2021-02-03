@@ -4,10 +4,11 @@ import InputTextComponent, {
 } from '~/components/form/input-text/input-text'
 import IKeyValue from '~/interfaces/extend/IKeyValue'
 import IIndustry from '~/interfaces/projectreference/IIndustry'
-import DataService from '~/services/DataService'
-import KeyValue from '../extend/KeyValue'
+import { DataService, ObjectFactory } from '~/internal'
 
-export default class Industry extends KeyValue {
+import { KeyValue } from '../extend/KeyValue'
+
+export class Industry extends KeyValue {
   constructor(data: IKeyValue = {}) {
     super(data as any)
   }
@@ -45,7 +46,7 @@ export default class Industry extends KeyValue {
     const values = await DataService.getData('data/industry')
     const ret: Map<string, string> = new Map()
     for (const raw of values as IIndustry[]) {
-      const entry = new Industry(raw)
+      const entry = ObjectFactory.create<Industry>('Industry', raw)
       ret[entry.uniquename] = { realValue: entry, value: entry.label }
     }
     return ret

@@ -4,11 +4,15 @@ import FieldComponent from '~/components/form/field/field'
 import InputTextComponent, {
   EInputType,
 } from '~/components/form/input-text/input-text'
-import DataService, { ILoginResult } from '~/services/DataService'
-import DesignService from '~/services/DesignService'
-import { Router } from '~/services/Router'
-import SessionService from '~/services/SessionService'
-import { EToastType, ToastService } from '~/services/ToastService'
+import {
+  DataService,
+  DesignService,
+  EToastType,
+  ILoginResult,
+  Router,
+  SessionService,
+  ToastService,
+} from '~/internal'
 import tmpl from './login.html'
 
 export default class LoginModule extends BaseComponent {

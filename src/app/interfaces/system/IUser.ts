@@ -1,5 +1,5 @@
-import Design from '~/model/Design'
-import Document from '~/model/Document'
+import IDesign from './IDesign'
+import IDocument from './IDocument'
 
 export default abstract class IUser {
   abstract id?: number
@@ -8,9 +8,9 @@ export default abstract class IUser {
   abstract givenname?: string
   abstract surname?: string
   abstract email?: string
-  abstract image?: Document
+  abstract image?: IDocument
   abstract password?: string
   abstract configuration?: string
-  abstract design?: Design
+  abstract design?: IDesign
   abstract color?: string
 }

@@ -1,9 +1,9 @@
-import PhonenumberLine from '~/model/data/PhonenumberLine'
-import PhonenumberType from '~/model/data/PhonenumberType'
+import IPhonenumberLine from './IPhonenumberLine'
+import IPhonenumberType from './IPhonenumberType'
 
 export default abstract class IPhonenumber {
   abstract id?: number
   abstract number?: string
-  abstract type?: PhonenumberType
-  abstract line?: PhonenumberLine
+  abstract type?: IPhonenumberType
+  abstract line?: IPhonenumberLine
 }

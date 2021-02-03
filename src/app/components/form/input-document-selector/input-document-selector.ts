@@ -1,23 +1,24 @@
 import BaseComponent from '~/baseComponent'
 import tmpl from './input-document-selector.html'
-import Document from '../../../model/system/Document'
+import { Document } from '../../../internal'
 import ButtonComponent from '~/components/button/button'
-import DocumentSelectorComponent from '~/components/document-selector/document-selector'
 import ModalComponent from '~/components/modal/modal'
+import IDocument from '~/interfaces/system/IDocument'
 
 export default class InputDocumentSelectorComponent extends BaseComponent {
   button: ButtonComponent = this.querySelector('dp-button')
   img: HTMLImageElement = this.querySelector('img')
   preview: ButtonComponent = this.querySelector('.js-preview')
   clear: ButtonComponent = this.querySelector('.js-clear')
-  doc: Document
+  doc: IDocument
 
-  constructor(changed: (value: Document) => Document, value: Document) {
+  constructor(changed: (value: Document) => IDocument, value: IDocument) {
     super(tmpl)
 
     this.doc = value
 
     this.button.addEventListener('button-click', () => {
+      return
       const modal = new ModalComponent(
         new DocumentSelectorComponent((value: Document) => {
           modal.close()

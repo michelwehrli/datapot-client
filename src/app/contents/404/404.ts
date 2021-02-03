@@ -1,6 +1,6 @@
 import BaseComponent from '~/baseComponent'
 import ButtonComponent from '~/components/button/button'
-import { Router } from '~/services/Router'
+import { Router } from '~/internal'
 import tmpl from './404.html'
 
 export default class NotFoundContent extends BaseComponent {

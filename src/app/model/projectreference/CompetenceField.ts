@@ -4,10 +4,10 @@ import InputTextComponent, {
 } from '~/components/form/input-text/input-text'
 import IKeyValue from '~/interfaces/extend/IKeyValue'
 import ICompetenceField from '~/interfaces/projectreference/ICompetenceField'
-import DataService from '~/services/DataService'
-import KeyValue from '../extend/KeyValue'
+import { DataService, ObjectFactory } from '~/internal'
+import { KeyValue } from '../extend/KeyValue'
 
-export default class CompetenceField extends KeyValue {
+export class CompetenceField extends KeyValue {
   constructor(data: IKeyValue = {}) {
     super(data as any)
   }
@@ -45,7 +45,10 @@ export default class CompetenceField extends KeyValue {
     const values = await DataService.getData('data/competence_field')
     const ret: Map<string, string> = new Map()
     for (const raw of values as ICompetenceField[]) {
-      const entry = new CompetenceField(raw)
+      const entry = ObjectFactory.create<CompetenceField>(
+        'CompetenceField',
+        raw
+      )
       ret[entry.uniquename] = { realValue: entry, value: entry.label }
     }
     return ret

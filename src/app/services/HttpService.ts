@@ -1,4 +1,4 @@
-export default class HttpService {
+export class HttpService {
   private static datamodelBase = 'https://new-core.datapot.ch/api/123/datamodel'
   private static dataBase = 'https://new-core.datapot.ch/api/123/data/'
   private static defaultBase = 'https://new-core.datapot.ch/api/123/'

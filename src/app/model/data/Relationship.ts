@@ -1,7 +1,7 @@
 import IKeyValue from '~/interfaces/extend/IKeyValue'
-import KeyValue from '../extend/KeyValue'
+import { KeyValue } from '../extend/KeyValue'
 
-export default class Relationship extends KeyValue {
+export class Relationship extends KeyValue {
   constructor(data: IKeyValue = {}) {
     super(data as any)
   }

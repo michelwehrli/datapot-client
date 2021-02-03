@@ -4,10 +4,11 @@ import InputTextComponent, {
 } from '~/components/form/input-text/input-text'
 import IKeyValue from '~/interfaces/extend/IKeyValue'
 import IResponsibleArea from '~/interfaces/projectreference/IResponsibleArea'
-import DataService from '~/services/DataService'
-import KeyValue from '../extend/KeyValue'
+import { DataService, ObjectFactory } from '~/internal'
 
-export default class ResponsibleArea extends KeyValue {
+import { KeyValue } from '../extend/KeyValue'
+
+export class ResponsibleArea extends KeyValue {
   constructor(data: IKeyValue = {}) {
     super(data as any)
   }
@@ -45,7 +46,10 @@ export default class ResponsibleArea extends KeyValue {
     const values = await DataService.getData('data/responsible_area')
     const ret: Map<string, string> = new Map()
     for (const raw of values as IResponsibleArea[]) {
-      const entry = new ResponsibleArea(raw)
+      const entry = ObjectFactory.create<ResponsibleArea>(
+        'ResponsibleArea',
+        raw
+      )
       ret[entry.uniquename] = { realValue: entry, value: entry.label }
     }
     return ret

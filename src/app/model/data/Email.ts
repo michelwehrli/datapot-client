@@ -3,11 +3,12 @@ import InputTextComponent, {
   EInputType,
 } from '~/components/form/input-text/input-text'
 import IEmail from '~/interfaces/data/IEmail'
-import { getSelect } from '~/services/Globals'
-import Table from '../extend/Table'
-import EmailType from './EmailType'
+import { getSelect, ObjectFactory } from '~/internal'
 
-export default class Email extends Table implements IEmail {
+import { Table } from '../extend/Table'
+import { EmailType } from './EmailType'
+
+export class Email extends Table implements IEmail {
   id: number
   address: string
   type: EmailType
@@ -16,7 +17,9 @@ export default class Email extends Table implements IEmail {
     super(data as any)
     this.id = data.id ? data.id : undefined
     this.address = data.address ? data.address : undefined
-    this.type = data.type ? new EmailType(data.type) : undefined
+    this.type = data.type
+      ? ObjectFactory.create<EmailType>('EmailType', data.type)
+      : undefined
   }
 
   public getId(): number {

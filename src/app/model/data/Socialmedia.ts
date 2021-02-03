@@ -3,11 +3,11 @@ import InputTextComponent, {
   EInputType,
 } from '~/components/form/input-text/input-text'
 import ISocialmedia from '~/interfaces/data/ISocialmedia'
-import { getSelect } from '~/services/Globals'
-import Table from '../extend/Table'
-import SocialmediaType from './SocialmediaType'
+import { getSelect, ObjectFactory } from '~/internal'
+import { Table } from '../extend/Table'
+import { SocialmediaType } from './SocialmediaType'
 
-export default class Socialmedia extends Table implements ISocialmedia {
+export class Socialmedia extends Table implements ISocialmedia {
   id: number
   url: string
   type: SocialmediaType
@@ -16,7 +16,9 @@ export default class Socialmedia extends Table implements ISocialmedia {
     super(data as any)
     this.id = data.id ? data.id : undefined
     this.url = data.url ? data.url : undefined
-    this.type = data.type ? new SocialmediaType(data.type) : undefined
+    this.type = data.type
+      ? ObjectFactory.create<SocialmediaType>('SocialmediaType', data.type)
+      : undefined
   }
 
   public getId(): number {

@@ -5,9 +5,9 @@ import InputTextComponent, {
   EInputType,
 } from '~/components/form/input-text/input-text'
 import IDocument from '~/interfaces/system/IDocument'
-import Table from '../extend/Table'
+import { Table } from '../extend/Table'
 
-export default class Document extends Table implements IDocument {
+export class Document extends Table implements IDocument {
   id: number
   name?: string
   document?: string
@@ -42,7 +42,7 @@ export default class Document extends Table implements IDocument {
 
   public async getField(
     isInitial?: boolean,
-    changed?: (value: Document) => void
+    changed?: (value: Document) => Document
   ): Promise<any> {
     this.fieldName = new InputTextComponent(
       (value: string) => (this.name = value),

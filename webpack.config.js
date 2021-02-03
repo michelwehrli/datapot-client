@@ -1,16 +1,15 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
+const MiniCSSExtractPlugin = require('mini-css-extract-plugin')
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
+
 const path = require('path')
-const rules = require('require.all')('./tasks/rules')
-const plugins = require('require.all')('./tasks/plugins')
 const fs = require('fs')
 
 module.exports = (env) => {
-  const environment = env.NODE_ENV
-
-  rules((name, rule) => rule(environment))
-  plugins((name, rule) => rule(environment))
-
   return {
-    mode: environment,
+    mode: env.NODE_ENV,
     entry: {
       app: [path.resolve(__dirname, 'src/app/app.ts')],
     },
@@ -18,9 +17,106 @@ module.exports = (env) => {
       filename: '[name].js',
     },
     module: {
-      rules: [...rules.files, ...rules.scripts, ...rules.styles],
+      rules: [
+        {
+          test: /\.(png|jpg|gif)$/,
+          use: [
+            {
+              loader: 'file-loader',
+              options: {
+                name: '[name].[ext]?[hash]',
+                publicPath: './dist',
+                outputPath: 'images',
+              },
+            },
+          ],
+        },
+        {
+          test: /\.(woff(2)?|ttf|eot|svg)$/,
+          use: [
+            {
+              loader: 'file-loader',
+              options: {
+                outputPath: 'fonts',
+              },
+            },
+          ],
+        },
+        {
+          test: /\.(css)$/,
+          use: [
+            {
+              loader: 'file-loader',
+              options: {
+                outputPath: 'css',
+              },
+            },
+          ],
+        },
+        {
+          test: /\.html$/i,
+          loader: 'html-loader',
+        },
+        {
+          test: /\.ts$/,
+          exclude: /node_modules/,
+          use: [
+            {
+              loader: 'babel-loader',
+              options: {
+                presets: ['@babel/preset-env'],
+                plugins: ['@babel/plugin-transform-runtime'],
+              },
+            },
+            {
+              loader: 'ts-loader',
+              options: {
+                transpileOnly: true, // For hot reloading,
+                experimentalWatchApi: true,
+              },
+            },
+          ],
+        },
+        {
+          test: /\.scss$/,
+          exclude: /node_modules/,
+          use: [
+            {
+              loader: 'style-loader', // Creates style nodes from JS strings
+              options: {
+                insert: 'head',
+                injectType: 'singletonStyleTag',
+              },
+            },
+            {
+              loader: 'css-loader', // Translates CSS into CommonJS
+            },
+            {
+              loader: 'postcss-loader', // More CSS Plugins
+              options: {
+                postcssOptions: {
+                  plugins: [require('autoprefixer')],
+                },
+              },
+            },
+            {
+              loader: 'sass-loader', // Compiles Sass to CSS, using Node Sass by default
+            },
+          ],
+        },
+      ],
     },
-    plugins: [plugins.html, plugins.images, plugins.extractStyles],
+    plugins: [
+      new HtmlWebpackPlugin({
+        hash: true,
+        filename: 'index.html',
+        template: './src/index.html',
+      }),
+      new CopyWebpackPlugin({
+        patterns: [{ from: './src/assets/images', to: 'images' }],
+      }),
+      new MiniCSSExtractPlugin(),
+    ],
     devServer: {
       open: true,
       port: 4000,
@@ -36,8 +132,16 @@ module.exports = (env) => {
       contentBase: './dist',
       compress: true,
     },
+    devtool: 'source-map',
     optimization: {
-      minimizer: [plugins.uglify],
+      minimizer: [
+        new UglifyJSPlugin({
+          uglifyOptions: {
+            keep_classnames: true,
+            keep_fnames: true,
+          },
+        }),
+      ],
       splitChunks: {
         cacheGroups: {
           vendor: {

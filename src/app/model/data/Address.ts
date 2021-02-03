@@ -2,14 +2,14 @@ import InputTextComponent, {
   EInputType,
 } from '~/components/form/input-text/input-text'
 import IAddress from '~/interfaces/data/IAddress'
-import DataService from '~/services/DataService'
-import { getSelect } from '~/services/Globals'
-import Table from '../extend/Table'
-import Country from './Country'
-import County from './County'
-import Zip from './Zip'
+import { DataService, getSelect } from '~/internal'
+import { ObjectFactory } from '~/services/ObjectFactory'
+import { Table } from '../extend/Table'
+import { Country } from './Country'
+import { County } from './County'
+import { Zip } from './Zip'
 
-export default class Address extends Table implements IAddress {
+export class Address extends Table implements IAddress {
   id: number
   street: string
   pobox?: string
@@ -22,9 +22,13 @@ export default class Address extends Table implements IAddress {
     this.id = data.id ? data.id : undefined
     this.street = data.street ? data.street : undefined
     this.pobox = data.pobox ? data.pobox : undefined
-    this.zip = data.zip ? new Zip(data.zip) : undefined
-    this.county = data.county ? new County(data.county) : undefined
-    this.country = data.country ? new Country(data.country) : undefined
+    this.zip = data.zip ? ObjectFactory.create<Zip>('Zip', data.zip) : undefined
+    this.county = data.county
+      ? ObjectFactory.create<County>('County', data.county)
+      : undefined
+    this.country = data.country
+      ? ObjectFactory.create<Country>('Country', data.country)
+      : undefined
   }
 
   getId(): number {
@@ -116,7 +120,7 @@ export default class Address extends Table implements IAddress {
     const entries = (await DataService.getData('data/address')) as Address[]
     const ret: Map<string, any> = new Map()
     for (const raw of entries as IAddress[]) {
-      const entry = new Address(raw)
+      const entry = ObjectFactory.create<Address>('Address', raw)
       ret[entry.id] = {
         realValue: entry,
         value: entry.toString(),

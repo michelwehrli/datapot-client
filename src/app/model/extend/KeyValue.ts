@@ -1,12 +1,12 @@
 import InputTextComponent, {
   EInputType,
 } from '~/components/form/input-text/input-text'
-import { ETypeMatch } from '~/enums/ETypeMatch'
 import IKeyValue from '~/interfaces/extend/IKeyValue'
-import DataService from '~/services/DataService'
-import Table from './Table'
+import { DataService } from '~/internal'
+import { ObjectFactory } from '~/services/ObjectFactory'
+import { Table } from './Table'
 
-export default class KeyValue extends Table implements IKeyValue {
+export class KeyValue extends Table implements IKeyValue {
   uniquename: string
   label: string
 
@@ -67,7 +67,7 @@ export default class KeyValue extends Table implements IKeyValue {
     const ret: Map<string, string> = new Map()
     if (values && values.length) {
       for (const raw of values as IKeyValue[]) {
-        const entry = new ETypeMatch[table](raw)
+        const entry = ObjectFactory.createFromName(table, [raw])
         ret[entry.uniquename] = { realValue: entry, value: entry.label }
       }
     }

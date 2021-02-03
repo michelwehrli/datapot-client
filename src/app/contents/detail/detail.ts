@@ -3,12 +3,15 @@ import ButtonComponent from '~/components/button/button'
 import ConfirmationComponent from '~/components/confirmation/confirmation'
 import ContentHeaderComponent from '~/components/content-header/content-header'
 import ModalComponent from '~/components/modal/modal'
-import { ETypeMatch } from '~/enums/ETypeMatch'
-import DataService from '~/services/DataService'
-import HttpService from '~/services/HttpService'
-import { Router } from '~/services/Router'
-import TitleService from '~/services/TitleService'
-import { EToastType, ToastService } from '~/services/ToastService'
+import {
+  DataService,
+  EToastType,
+  HttpService,
+  ObjectFactory,
+  Router,
+  TitleService,
+  ToastService,
+} from '~/internal'
 
 import tmpl from './detail.html'
 
@@ -99,7 +102,7 @@ export default class DetailContent extends BaseComponent {
       `${this.db}/${this.table}/${this.identifier}`
     )
 
-    const obj = new ETypeMatch[datamodel.__meta.name](data)
+    const obj = ObjectFactory.createFromName(datamodel.__meta.name, [data])
 
     if (obj.getDetail) {
       this.content.innerHTML = await obj.getDetail()

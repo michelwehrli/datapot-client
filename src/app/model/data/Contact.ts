@@ -6,8 +6,6 @@ import InputTextComponent, {
 } from '~/components/form/input-text/input-text'
 import InputTextareaComponent from '~/components/form/input-textarea/input-textarea'
 import InputMultipleComponent from '~/components/form/multiple/multiple'
-import ModalComponent from '~/components/modal/modal'
-import EditContent from '~/contents/edit/edit'
 import IAddress from '~/interfaces/data/IAddress'
 import ICategory from '~/interfaces/data/ICategory'
 import ICompany from '~/interfaces/data/ICompany'
@@ -16,22 +14,22 @@ import IContact from '~/interfaces/data/IContact'
 import IEmail from '~/interfaces/data/IEmail'
 import IPhonenumber from '~/interfaces/data/IPhonenumber'
 import ISocialmedia from '~/interfaces/data/ISocialmedia'
-import DataService from '~/services/DataService'
-import { getSelect } from '~/services/Globals'
-import Table from '../extend/Table'
-import Address from './Address'
-import Category from './Category'
-import CompanyWithLocation from './CompanyWithLocation'
-import Email from './Email'
-import Gender from './Gender'
-import Phonenumber from './Phonenumber'
-import Relationship from './Relationship'
-import RWStatus from './RWStatus'
-import Salutation from './Salutation'
-import Socialmedia from './Socialmedia'
-import Title from './Title'
+import { DataService, getSelect, ObjectFactory } from '~/internal'
 
-export default class Contact extends Table implements IContact {
+import { Table } from '../extend/Table'
+import { Address } from './Address'
+import { Category } from './Category'
+import { CompanyWithLocation } from './CompanyWithLocation'
+import { Email } from './Email'
+import { Gender } from './Gender'
+import { Phonenumber } from './Phonenumber'
+import { Relationship } from './Relationship'
+import { RWStatus } from './RWStatus'
+import { Salutation } from './Salutation'
+import { Socialmedia } from './Socialmedia'
+import { Title } from './Title'
+
+export class Contact extends Table implements IContact {
   id: number
   givenname?: string
   surname?: string
@@ -59,16 +57,20 @@ export default class Contact extends Table implements IContact {
     this.id = data.id ? data.id : undefined
     this.givenname = data.givenname ? data.givenname : undefined
     this.surname = data.surname ? data.surname : undefined
-    this.gender = data.gender ? new Gender(data.gender) : undefined
-    this.salutation = data.salutation
-      ? new Salutation(data.salutation)
+    this.gender = data.gender
+      ? ObjectFactory.create<Gender>('Gender', data.gender)
       : undefined
-    this.title = data.title ? new Title(data.title) : undefined
+    this.salutation = data.salutation
+      ? ObjectFactory.create<Salutation>('Salutation', data.salutation)
+      : undefined
+    this.title = data.title
+      ? ObjectFactory.create<Title>('Title', data.title)
+      : undefined
     this.additional_names = data.additional_names ? data.additional_names : []
     this.addresses = []
     if (data.addresses) {
       data.addresses.forEach((address: IAddress) => {
-        this.addresses.push(new Address(address))
+        this.addresses.push(ObjectFactory.create<Address>('Address', address))
       })
     }
     this.companiesWithLocation = []
@@ -76,7 +78,10 @@ export default class Contact extends Table implements IContact {
       data.companiesWithLocation.forEach(
         (companyWithLocation: ICompanyWithLocation) => {
           this.companiesWithLocation.push(
-            new CompanyWithLocation(companyWithLocation)
+            ObjectFactory.create<CompanyWithLocation>(
+              'CompanyWithLocation',
+              companyWithLocation
+            )
           )
         }
       )
@@ -86,33 +91,43 @@ export default class Contact extends Table implements IContact {
     this.phonenumbers = []
     if (data.phonenumbers) {
       data.phonenumbers.forEach((phonenumber: IPhonenumber) => {
-        this.phonenumbers.push(new Phonenumber(phonenumber))
+        this.phonenumbers.push(
+          ObjectFactory.create<Phonenumber>('Phonenumber', phonenumber)
+        )
       })
     }
     this.emails = []
     if (data.emails) {
       data.emails.forEach((email: IEmail) => {
-        this.emails.push(new Email(email))
+        this.emails.push(ObjectFactory.create<Email>('Email', email))
       })
     }
-    this.partner = data.partner ? new Contact(data.partner) : undefined
+    this.partner = data.partner
+      ? ObjectFactory.create<Contact>('Contact', data.partner)
+      : undefined
     this.birthdate = data.birthdate ? data.birthdate : undefined
     this.websites = data.websites ? data.websites : []
     this.social_medias = []
     if (data.social_medias) {
       data.social_medias.forEach((socialmedia: ISocialmedia) => {
-        this.social_medias.push(new Socialmedia(socialmedia))
+        this.social_medias.push(
+          ObjectFactory.create<Socialmedia>('Socialmedia', socialmedia)
+        )
       })
     }
     this.remarks = data.remarks ? data.remarks : undefined
-    this.rwstatus = data.rwstatus ? new RWStatus(data.rwstatus) : undefined
+    this.rwstatus = data.rwstatus
+      ? ObjectFactory.create<RWStatus>('RWStatus', data.rwstatus)
+      : undefined
     this.relationship = data.relationship
-      ? new Relationship(data.relationship)
+      ? ObjectFactory.create<Relationship>('Relationship', data.relationship)
       : undefined
     this.categories = []
     if (data.categories) {
       data.categories.forEach((category: ICategory) => {
-        this.categories.push(new Category(category))
+        this.categories.push(
+          ObjectFactory.create<Category>('Category', category)
+        )
       })
     }
   }
@@ -211,7 +226,7 @@ export default class Contact extends Table implements IContact {
       this.partner ? this.partner.id : undefined,
       undefined,
       () => {
-        const modal = new ModalComponent(
+        /*const modal = new ModalComponent(
           new EditContent(true, ['contact'], async (value: Contact) => {
             partnerSelect.update(await Contact.getSelectMap(), value.id)
             this.partner = value
@@ -221,7 +236,7 @@ export default class Contact extends Table implements IContact {
           undefined,
           undefined,
           true
-        )
+        )*/
       }
     )
 
@@ -264,7 +279,7 @@ export default class Contact extends Table implements IContact {
           async (values: CompanyWithLocation[]) =>
             (this.companiesWithLocation = values),
           this.companiesWithLocation,
-          () => new CompanyWithLocation()
+          () => ObjectFactory.create<CompanyWithLocation>('CompanyWithLocation')
         ),
         department: new InputTextComponent(
           (value: string) => (this.department = value),
@@ -280,25 +295,25 @@ export default class Contact extends Table implements IContact {
         addresses: new InputMultipleComponent(
           (value: Address[]) => (this.addresses = value),
           this.addresses,
-          () => new Address()
+          () => ObjectFactory.create<Address>('Address')
         ),
         emails: new InputMultipleComponent(
           (value: Email[]) => (this.emails = value),
           this.emails,
-          () => new Email(),
+          () => ObjectFactory.create<Email>('Email'),
           true
         ),
         phonenumbers: new InputMultipleComponent(
           (value: Phonenumber[]) => (this.phonenumbers = value),
           this.phonenumbers,
-          () => new Phonenumber(),
+          () => ObjectFactory.create<Phonenumber>('Phonenumber'),
           true
         ),
         __heading_4: new FormHeadingComponent('Weiteres'),
         social_medias: new InputMultipleComponent(
           (value: Socialmedia[]) => (this.social_medias = value),
           this.social_medias,
-          () => new Socialmedia(),
+          () => ObjectFactory.create<Socialmedia>('Socialmedia'),
           true
         ),
         websites: new InputMultipleComponent(
@@ -318,7 +333,7 @@ export default class Contact extends Table implements IContact {
         categories: new InputMultipleComponent(
           (value: Category[]) => (this.categories = value),
           this.categories,
-          () => new Category()
+          () => ObjectFactory.create<Category>('Category')
         ),
       }),
       ...(!isInitial && {
@@ -413,7 +428,10 @@ export default class Contact extends Table implements IContact {
                 : '-'
             }</span></p>`}
             ${
-              this.websites && this.websites.length
+              this.websites &&
+              this.websites.filter((w) => {
+                return new RegExp(/(https?:\/\/[^\s]+)/g).test(w)
+              }).length
                 ? `<h4>Websites</h4>
                 ${this.websites
                   .map((w) => {
@@ -654,7 +672,7 @@ export default class Contact extends Table implements IContact {
     const contacts = (await DataService.getData('data/contact')) as Contact[]
     const ret: Map<string, any> = new Map()
     for (const raw of contacts as ICompany[]) {
-      const entry = new Contact(raw)
+      const entry = ObjectFactory.create<Contact>('Contact', raw)
       ret[entry.id] = {
         realValue: entry,
         value: entry.toString(true),

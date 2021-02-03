@@ -1,9 +1,7 @@
 import BaseComponent from '~/baseComponent'
 import ButtonComponent from '~/components/button/button'
 import ContentHeaderComponent from '~/components/content-header/content-header'
-import DataService from '~/services/DataService'
-import { Router } from '~/services/Router'
-import TitleService from '~/services/TitleService'
+import { DataService, Router, TitleService } from '~/internal'
 import tmpl from './list.html'
 
 export default class ListContent extends BaseComponent {

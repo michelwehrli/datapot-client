@@ -1,8 +1,6 @@
 import BaseComponent from '~/baseComponent'
-import { ETypeMatch } from '~/enums/ETypeMatch'
+import { DataService, ObjectFactory, Router } from '~/internal'
 import ListTemplate from '~/model/ListTemplate'
-import DataService from '~/services/DataService'
-import { Router } from '~/services/Router'
 
 import ButtonComponent from '../button/button'
 import ConfirmationComponent from '../confirmation/confirmation'
@@ -98,7 +96,7 @@ export default class ListComponent extends BaseComponent {
           return
         }
         for (const entry of data) {
-          this.data.push(new ETypeMatch[this.table](entry))
+          this.data.push(ObjectFactory.createFromName(this.table, [entry]))
         }
         this.initialCount = this.data.length
         this.init()

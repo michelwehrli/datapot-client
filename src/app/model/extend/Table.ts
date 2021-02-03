@@ -1,4 +1,4 @@
-export default class Table implements ITable {
+export class Table implements ITable {
   _creation_date: number
   _modification_date: number
 

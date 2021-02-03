@@ -1,6 +1,6 @@
 import DesignTogglerComponent from '~/components/design-toggler/design-toggler'
 
-export default class DesignService {
+export class DesignService {
   public static designStyles: Map<string, HTMLStyleElement> = new Map()
 
   public static init(

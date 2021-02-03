@@ -1,23 +1,23 @@
-import Address from '~/model/data/Address'
-import Category from '~/model/data/Category'
-import Contact from '~/model/data/Contact'
-import Email from '~/model/data/Email'
-import Phonenumber from '~/model/data/Phonenumber'
-import Relationship from '~/model/data/Relationship'
-import RWStatus from '~/model/data/RWStatus'
-import Socialmedia from '~/model/data/Socialmedia'
+import IAddress from './IAddress'
+import ICategory from './ICategory'
+import IContact from './IContact'
+import IEmail from './IEmail'
+import IPhonenumber from './IPhonenumber'
+import IRelationship from './IRelationship'
+import IRWStatus from './IRWStatus'
+import ISocialmedia from './ISocialmedia'
 
 export default abstract class ICompany {
   abstract id?: number
   abstract name?: string
-  abstract addresses?: Address[]
-  abstract emails?: Email[]
-  abstract phonenumbers?: Phonenumber[]
-  abstract contact_person?: Contact
+  abstract addresses?: IAddress[]
+  abstract emails?: IEmail[]
+  abstract phonenumbers?: IPhonenumber[]
+  abstract contact_person?: IContact
   abstract websites?: string[]
-  abstract social_medias?: Socialmedia[]
+  abstract social_medias?: ISocialmedia[]
   abstract remarks?: string
-  abstract rwstatus?: RWStatus
-  abstract relationship?: Relationship
-  abstract categories?: Category[]
+  abstract rwstatus?: IRWStatus
+  abstract relationship?: IRelationship
+  abstract categories?: ICategory[]
 }

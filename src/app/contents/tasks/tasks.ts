@@ -1,7 +1,6 @@
 import BaseComponent from '~/baseComponent'
 import ContentHeaderComponent from '~/components/content-header/content-header'
-import ExportService from '~/services/TaskService'
-import TitleService from '~/services/TitleService'
+import { TaskService, TitleService } from '~/internal'
 
 import tmpl from './tasks.html'
 
@@ -18,6 +17,6 @@ export default class TasksContent extends BaseComponent {
     this.contentHeader.setAttribute('icon', 'fa fa-cog')
     TitleService.setTitle('Tasks')
 
-    ExportService.setTbody(this.tbodyE)
+    TaskService.setTbody(this.tbodyE)
   }
 }

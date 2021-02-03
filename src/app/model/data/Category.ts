@@ -4,10 +4,10 @@ import InputTextComponent, {
 } from '~/components/form/input-text/input-text'
 import ICategory from '~/interfaces/data/ICategory'
 import IKeyValue from '~/interfaces/extend/IKeyValue'
-import DataService from '~/services/DataService'
-import KeyValue from '../extend/KeyValue'
+import { DataService, ObjectFactory } from '~/internal'
+import { KeyValue } from '../extend/KeyValue'
 
-export default class Category extends KeyValue {
+export class Category extends KeyValue {
   constructor(data: IKeyValue = {}) {
     super(data as any)
   }
@@ -66,7 +66,7 @@ export default class Category extends KeyValue {
     const values = await DataService.getData('data/category')
     const ret: Map<string, string> = new Map()
     for (const raw of values as ICategory[]) {
-      const entry = new Category(raw)
+      const entry = ObjectFactory.create<Category>('Category', raw)
       ret[entry.uniquename] = { realValue: entry, value: entry.label }
     }
     return ret

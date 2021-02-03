@@ -1,7 +1,7 @@
-import EmailType from '~/model/data/EmailType'
+import IEmailType from './IEmailType'
 
 export default abstract class IEmail {
   abstract id?: number
   abstract address?: string
-  abstract type?: EmailType
+  abstract type?: IEmailType
 }
