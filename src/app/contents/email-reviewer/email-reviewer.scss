@@ -1,5 +1,69 @@
-email-reviewer {
-  .table {
-    display: none;
+@import '../../../styles/table';
+@import '../../../styles/colors';
+
+dp-content-email-reviewer {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  .alphabet {
+    padding: 20px 20px 15px 20px;
+    display: flex;
+    flex-direction: row;
+
+    dp-button {
+      display: block;
+      flex: 1;
+      margin-right: 4px;
+
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+
+    button {
+      padding: 8px 0;
+      width: 100%;
+
+      span {
+        flex: 1;
+      }
+    }
+  }
+
+  .email-reviewer-content {
+    overflow: auto;
+    flex: 1;
+
+    table {
+      thead th {
+        z-index: 100;
+      }
+      tbody tr {
+        td {
+          min-width: auto;
+          max-width: initial;
+
+          &:first-child {
+            max-width: 180px;
+
+            p {
+              text-overflow: initial;
+              overflow: initial;
+              white-space: initial;
+            }
+          }
+
+          strong {
+            display: block;
+            margin: 12px 0 6px 0;
+
+            &:first-child {
+              margin-top: 0;
+            }
+          }
+        }
+      }
+    }
   }
 }

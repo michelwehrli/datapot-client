@@ -19,7 +19,8 @@ export default class InputMultipleComponent extends BaseComponent {
     change: (value: any[]) => void,
     values: any[] = [],
     initializer: () => any,
-    isHorizontal?: boolean
+    isHorizontal?: boolean,
+    private dontFocus = false
   ) {
     super(tmpl)
 
@@ -97,7 +98,7 @@ export default class InputMultipleComponent extends BaseComponent {
         }
       }
 
-      if (this.initialSelect) {
+      if (this.initialSelect && !this.dontFocus) {
         this.initialSelect.focus()
       }
 

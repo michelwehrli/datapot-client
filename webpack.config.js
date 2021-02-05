@@ -132,16 +132,15 @@ module.exports = (env) => {
       contentBase: './dist',
       compress: true,
     },
-    devtool: 'source-map',
     optimization: {
-      minimizer: [
+      /*minimizer: [
         new UglifyJSPlugin({
           uglifyOptions: {
             keep_classnames: true,
             keep_fnames: true,
           },
         }),
-      ],
+      ],*/
       splitChunks: {
         cacheGroups: {
           vendor: {

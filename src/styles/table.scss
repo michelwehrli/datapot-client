@@ -72,3 +72,42 @@ table {
     }
   }
 }
+
+.list-content,
+.email-reviewer-content {
+  table {
+    padding: 20px;
+    display: table;
+    position: relative;
+    background-color: var(--content-background);
+
+    th {
+      position: sticky;
+      top: 0;
+      background-color: var(--content-background);
+
+      .inner {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+
+        p {
+          flex: 1;
+          line-height: 28px;
+          margin: 0 20px 0 0;
+        }
+
+        dp-button button {
+          padding: 6px 8px;
+        }
+
+        .sort-button button {
+          color: var(--font-medium);
+        }
+        .sort-button.active button {
+          color: var(--font-base);
+        }
+      }
+    }
+  }
+}
