@@ -138,19 +138,21 @@ export class Contact extends Table implements IContact {
     return this.id
   }
 
-  public toString(reverse = false): string {
-    let ret
-    if (this.givenname && this.surname) {
-      ret = `${this.givenname} ${this.surname}`
-    } else if (this.surname) {
-      ret = this.surname
-    } else if (this.givenname) {
-      ret = this.givenname
+  public toString(reverse = false, withAddNames = false): string {
+    let ret = []
+    if (this.surname) {
+      ret.push(this.surname)
+    }
+    if (this.givenname) {
+      ret.push(this.givenname)
+    }
+    if (withAddNames && this.additional_names) {
+      ret = ret.concat(this.additional_names)
     }
     if (reverse) {
-      return ret.split(' ').reverse().join(' ')
+      ret.reverse().join(' ')
     }
-    return ret
+    return ret.join(' ')
   }
 
   public validate(): boolean {
@@ -384,21 +386,10 @@ export class Contact extends Table implements IContact {
               this.title ? this.title : '-'
             }</span></p>`}
               
-            ${`<p class="text-flex"><span>Vorname</span><span>${
-              this.givenname ? this.givenname : '-'
-            }</span></p>`}
-            
-            ${
-              this.additional_names && this.additional_names.length
-                ? `<p class="text-flex"><span></span><span>${this.additional_names.join(
-                    ' '
-                  )}</span></p>`
-                : ''
-            }
-              
-            ${`<p class="text-flex"><span>Nachname</span><span>${
-              this.surname ? this.surname : '-'
-            }</span></p>`}
+            ${`<p class="text-flex"><span>Name</span><span>${this.toString(
+              undefined,
+              true
+            )}</span></p>`}
 
             ${`<p class="text-flex"><span>Geburtstag</span><span>${
               this.birthdate
