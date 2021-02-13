@@ -1,4 +1,5 @@
 import BaseComponent from '~/baseComponent'
+
 import tmpl from './button.html'
 
 export default class ButtonComponent extends BaseComponent {
@@ -7,7 +8,7 @@ export default class ButtonComponent extends BaseComponent {
   span: HTMLSpanElement
 
   static get observedAttributes(): string[] {
-    return ['text', 'icon', 'classes', 'disabled']
+    return ['text', 'icon', 'classes', 'disabled', 'tabindex']
   }
 
   constructor(
@@ -82,6 +83,9 @@ export default class ButtonComponent extends BaseComponent {
       newValue.split(' ').forEach((className) => {
         this.button.classList.add(className)
       })
+    }
+    if (name === 'tabindex') {
+      this.button.tabIndex = parseInt(newValue)
     }
   }
 }
