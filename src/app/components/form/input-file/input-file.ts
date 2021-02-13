@@ -21,7 +21,11 @@ export default class InputFileComponent extends BaseComponent {
 
       const file: Blob = this.input.files[0]
       if (file) {
-        if (file.type === 'image/jpeg' || file.type === 'image/png') {
+        if (
+          file.type === 'image/jpeg' ||
+          file.type === 'image/png' ||
+          file.type === 'image/x-icon'
+        ) {
           const base64 = await this.toBase64(file)
           this.img.src = base64
           this.img.classList.add('visible')
