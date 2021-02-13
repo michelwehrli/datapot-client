@@ -92,12 +92,7 @@ export class Address extends Table implements IAddress {
       'zip',
       this.zip ? this.zip.id : undefined,
       Zip,
-      'id',
-      () => {
-        if (changed) {
-          changed(this)
-        }
-      }
+      'id'
     )
 
     const countySelect = await getSelect.call(
@@ -105,12 +100,7 @@ export class Address extends Table implements IAddress {
       'county',
       this.county ? this.county.uniquename : undefined,
       County,
-      'uniquename',
-      () => {
-        if (changed) {
-          changed(this)
-        }
-      }
+      'uniquename'
     )
 
     const countrySelect = await getSelect.call(
@@ -118,12 +108,7 @@ export class Address extends Table implements IAddress {
       'country',
       this.country ? this.country.uniquename : undefined,
       Country,
-      'uniquename',
-      () => {
-        if (changed) {
-          changed(this)
-        }
-      }
+      'uniquename'
     )
 
     return {

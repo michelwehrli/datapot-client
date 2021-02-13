@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 export class HttpService {
   private static datamodelBase = 'https://new-core.datapot.ch/api/123/datamodel'
   private static dataBase = 'https://new-core.datapot.ch/api/123/data/'
@@ -29,7 +30,7 @@ export class HttpService {
       return this.cache.get(url)
     }
 
-    let result = null
+    let result: Response
     try {
       result = await fetch(
         useDefaultBase ? `${this.defaultBase}${url}` : `${this.dataBase}${url}`,
@@ -56,7 +57,7 @@ export class HttpService {
     data?: any,
     useDefaultBase = false
   ): Promise<any> {
-    return (
+    return await (
       await fetch(
         useDefaultBase ? `${this.defaultBase}${url}` : `${this.dataBase}${url}`,
         {
@@ -74,7 +75,7 @@ export class HttpService {
   }
 
   public static async patch(url: string, data: any): Promise<any> {
-    return (
+    return await (
       await fetch(`${this.dataBase}${url}`, {
         mode: 'cors',
         method: 'patch',
@@ -89,7 +90,7 @@ export class HttpService {
   }
 
   public static async remove(url: string): Promise<any> {
-    return (
+    return await (
       await fetch(`${this.dataBase}${url}`, {
         mode: 'cors',
         method: 'delete',

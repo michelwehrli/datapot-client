@@ -77,7 +77,7 @@ export class CompanyWithLocation extends Table implements ICompanyWithLocation {
   public static async getAddressSelectMap(
     company: Company
   ): Promise<Address[]> {
-    let values = company.addresses
+    let values = company?.addresses || []
     const datamodel = await DataService.getDatamodel('address')
     const sortBy = datamodel?.__meta?.sort
     if (sortBy) {

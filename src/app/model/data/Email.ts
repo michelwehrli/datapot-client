@@ -63,7 +63,8 @@ export class Email extends Table implements IEmail {
       EmailType,
       'uniquename',
       'type',
-      () => {
+      (value: any) => {
+        this.type = value
         if (changed) {
           changed(this)
         }

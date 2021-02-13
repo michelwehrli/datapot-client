@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import InputSelectComponent from '~/components/form/input-select/input-select'
 import ModalComponent from '~/components/modal/modal'
 import EditContent from '~/contents/edit/edit'
@@ -13,7 +14,6 @@ function getModal(
 ): ModalComponent {
   const modal = new ModalComponent(
     new EditContent(true, [key, value], async (val) => {
-      console.log('update1', key)
       getSel().update(
         await type.getSelectMap('data', objKey ? objKey : key),
         val[identifier]
@@ -25,7 +25,6 @@ function getModal(
           true,
           [key, val ? val[identifier] : undefined],
           async (val2) => {
-            console.log('update2', key)
             getSel().update(
               await type.getSelectMap('data', key),
               val2[identifier]
@@ -41,10 +40,6 @@ function getModal(
     undefined,
     true,
     true
-  )
-  modal.setAttribute(
-    'mid',
-    Math.floor(Math.random() * Math.floor(100000)).toString()
   )
   return modal
 }
@@ -80,7 +75,6 @@ export async function getSelect(
           true,
           [key, val ? val[identifier] : undefined],
           async (val2) => {
-            console.log('update3', key)
             sel.update(
               await type.getSelectMap('data', key),
               val2 ? val2[identifier] : undefined

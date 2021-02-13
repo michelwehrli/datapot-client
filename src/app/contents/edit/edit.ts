@@ -71,9 +71,8 @@ export default class EditContent extends BaseComponent {
       rocketButton = new ButtonComponent(undefined, 'fa fa-rocket')
       trashButton = new ButtonComponent(undefined, 'fa fa-trash', 'negative')
       saveLeaveButton = new ButtonComponent(
-        'Speichern und zurück',
-        'fa fa-save',
-        'positive'
+        'Speichern & zur Liste',
+        'fa fa-save'
       )
     }
     const saveButton = new ButtonComponent(

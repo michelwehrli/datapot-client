@@ -60,7 +60,8 @@ export default class ModalComponent extends BaseComponent {
 
   public close(): void {
     this.closeButton.removeEventListener('button-click', () => this.close())
-    this.modalContainer.innerHTML = ''
-    this.content.innerHTML = ''
+    if (this.modalContainer.contains(this)) {
+      this.modalContainer.removeChild(this)
+    }
   }
 }

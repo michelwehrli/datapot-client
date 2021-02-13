@@ -70,7 +70,7 @@ export class Contact extends Table implements IContact {
       : undefined
     this.additional_names = data.additional_names ? data.additional_names : []
     this.addresses = []
-    if (data.addresses) {
+    if (data?.addresses) {
       data.addresses.forEach((address: IAddress) => {
         this.addresses.push(ObjectFactory.create<Address>('Address', address))
       })
