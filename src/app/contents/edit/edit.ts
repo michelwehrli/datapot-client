@@ -75,12 +75,18 @@ export default class EditContent extends BaseComponent {
       'fa fa-save',
       'positive'
     )
+    const saveLeaveButton = new ButtonComponent(
+      'Speichern und zurück',
+      'fa fa-save',
+      'positive'
+    )
 
     if (!isInModal) {
       this.contentHeader.addButtons(backButton)
     }
     this.contentHeader.addButtons(saveButton)
     if (!isInModal) {
+      this.contentHeader.addButtons(saveLeaveButton)
       this.contentHeader.addButtons(rocketButton, trashButton)
     }
 
@@ -181,6 +187,13 @@ export default class EditContent extends BaseComponent {
         } else if (onSave) {
           onSave(result.obj)
         }
+      }
+    })
+    saveLeaveButton.addEventListener('button-click', async (e: MouseEvent) => {
+      const result: any = await this.save()
+      if (result.success) {
+        HttpService.clearCache()
+        Router.navigate(`crm/list/${this.table}`, 'crm', e)
       }
     })
 
