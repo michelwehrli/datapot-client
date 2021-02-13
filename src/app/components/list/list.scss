@@ -7,8 +7,12 @@ dp-list {
     flex: 1;
     height: 100%;
     overflow: auto;
-    height: calc(100% - 38px);
+    height: calc(100% - 75px);
     position: relative;
+
+    table {
+      padding: 10px;
+    }
 
     .loader {
       display: none;
@@ -57,6 +61,7 @@ dp-list {
     }
   }
 
+  .list-header,
   .list-footer {
     position: relative;
     flex: 0;
@@ -65,21 +70,28 @@ dp-list {
     background-color: var(--content-header-background);
     border-top: solid 1px var(--light);
 
+    .flex {
+      flex: 1;
+    }
+
     .modal {
       position: absolute;
       border-radius: 4px;
-      bottom: 34px;
+      top: 34px;
       padding: 10px;
       box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
       display: none;
       background-color: var(--nearly-white);
       user-select: none;
+      z-index: 1;
 
       &.active {
         display: block;
       }
 
       &.fields {
+        left: 10px;
+
         dp-checkbox {
           display: block;
           margin-bottom: 4px;
@@ -91,7 +103,7 @@ dp-list {
       }
 
       &.templates {
-        margin-left: 82px;
+        left: 95px;
 
         .list {
           border-bottom: solid 1px var(--light);
@@ -172,14 +184,15 @@ dp-list {
       }
     }
 
-    > * > dp-button {
-      display: inline-block;
+    > dp-button {
+      &:first-child button {
+        margin-left: 0;
+      }
 
       button {
         padding: 4px 6px;
         font-size: 14px;
-        margin-right: 6px;
-
+        margin-left: 6px;
         .fa,
         .far {
           margin-left: 4px;
@@ -198,5 +211,9 @@ dp-list {
     .right {
       text-align: right;
     }
+  }
+
+  .list-header {
+    background-color: initial;
   }
 }

@@ -4,6 +4,7 @@ import ListTemplate from '~/model/ListTemplate'
 
 import ButtonComponent from '../button/button'
 import ConfirmationComponent from '../confirmation/confirmation'
+import ContentHeaderComponent from '../content-header/content-header'
 import InputCheckboxComponent from '../form/input-checkbox/input-checkbox'
 import InputTextComponent from '../form/input-text/input-text'
 import ModalComponent from '../modal/modal'

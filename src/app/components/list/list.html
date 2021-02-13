@@ -1,3 +1,32 @@
+<div class="list-header">
+  <dp-button
+    text="Felder"
+    icon="far fa-check-square"
+    class="fields js-fields"
+  ></dp-button>
+  <div class="modal fields js-fields-modal"></div>
+  <dp-button
+    text="Vorlagen"
+    icon="far fa-file-alt"
+    class="templates js-templates"
+  ></dp-button>
+  <div class="flex"></div>
+  <div class="modal templates js-templates-modal">
+    <div class="list js-list"></div>
+    <div class="form">
+      <dp-input-text
+        placeholder="Name"
+        class="js-template-name required"
+      ></dp-input-text>
+      <dp-button
+        icon="fa fa-save"
+        classes="positive"
+        class="js-template-button"
+      ></dp-button>
+    </div>
+  </div>
+  <dp-button text="Zurücksetzen" icon="fa fa-undo" class="js-reset"></dp-button>
+</div>
 <div class="list-content">
   <table>
     <thead>
@@ -12,40 +41,8 @@
   </div>
 </div>
 <div class="list-footer">
-  <div class="left">
-    <dp-button
-      text="Felder"
-      icon="far fa-check-square"
-      class="fields js-fields"
-    ></dp-button>
-    <div class="modal fields js-fields-modal"></div>
-    <dp-button
-      text="Vorlagen"
-      icon="far fa-file-alt"
-      class="templates js-templates"
-    ></dp-button>
-    <div class="modal templates js-templates-modal">
-      <div class="list js-list"></div>
-      <div class="form">
-        <dp-input-text
-          placeholder="Name"
-          class="js-template-name required"
-        ></dp-input-text>
-        <dp-button
-          icon="fa fa-save"
-          classes="positive"
-          class="js-template-button"
-        ></dp-button>
-      </div>
-    </div>
-  </div>
-  <div class="center">
-    <dp-button
-      text="Zurücksetzen"
-      icon="fa fa-undo"
-      class="js-reset"
-    ></dp-button>
-  </div>
+  <div class="left"></div>
+  <div class="center"></div>
   <div class="right">
     <p>
       <span>Anzahl: </span>
