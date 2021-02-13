@@ -254,7 +254,7 @@ export class Company extends Table implements ICompany {
 
     const employees: Contact[] = await this.getEmployees()
 
-    return `
+    return /*html*/ `
     <div class="container">
     <div class="flex">
       <div class="flex-item">
@@ -449,12 +449,25 @@ export class Company extends Table implements ICompany {
     `
   }
 
-  public static async getSelectMap(): Promise<Map<string, any>> {
-    const companies = (await DataService.getData('data/company')) as Company[]
-    const ret: Map<string, any> = new Map()
-    for (const raw of companies as ICompany[]) {
+  public static async getSelectMap(): Promise<any[]> {
+    let values = await DataService.getData<Company[]>('data/company')
+    const datamodel = await DataService.getDatamodel('company')
+    const sortBy = datamodel?.__meta?.sort
+    if (sortBy) {
+      values = values.sort((a, b) => {
+        if (a[sortBy] < b[sortBy]) {
+          return -1
+        }
+        if (a[sortBy] > b[sortBy]) {
+          return 1
+        }
+        return 0
+      })
+    }
+    const ret: any[] = []
+    for (const raw of values as ICompany[]) {
       const entry = ObjectFactory.create<Company>('Company', raw)
-      ret[entry.id] = { realValue: entry, value: entry.toString() }
+      ret.push({ key: entry.id, realValue: entry, value: entry.toString() })
     }
     return ret
   }

@@ -13,6 +13,7 @@ function getModal(
 ): ModalComponent {
   const modal = new ModalComponent(
     new EditContent(true, [key, value], async (val) => {
+      console.log('update1', key)
       getSel().update(
         await type.getSelectMap('data', objKey ? objKey : key),
         val[identifier]
@@ -24,6 +25,7 @@ function getModal(
           true,
           [key, val ? val[identifier] : undefined],
           async (val2) => {
+            console.log('update2', key)
             getSel().update(
               await type.getSelectMap('data', key),
               val2[identifier]
@@ -78,6 +80,7 @@ export async function getSelect(
           true,
           [key, val ? val[identifier] : undefined],
           async (val2) => {
+            console.log('update3', key)
             sel.update(
               await type.getSelectMap('data', key),
               val2 ? val2[identifier] : undefined

@@ -4,6 +4,7 @@ import InputTextComponent, {
 import IAddress from '~/interfaces/data/IAddress'
 import { DataService, getSelect } from '~/internal'
 import { ObjectFactory } from '~/services/ObjectFactory'
+
 import { Table } from '../extend/Table'
 import { Country } from './Country'
 import { County } from './County'
@@ -116,15 +117,29 @@ export class Address extends Table implements IAddress {
     }
   }
 
-  public static async getSelectMap(): Promise<Map<string, any>> {
-    const entries = (await DataService.getData('data/address')) as Address[]
-    const ret: Map<string, any> = new Map()
-    for (const raw of entries as IAddress[]) {
+  public static async getSelectMap(): Promise<any[]> {
+    let values = await DataService.getData<Address[]>('data/address')
+    const datamodel = await DataService.getDatamodel('address')
+    const sortBy = datamodel?.__meta?.sort
+    if (sortBy) {
+      values = values.sort((a, b) => {
+        if (a[sortBy] < b[sortBy]) {
+          return -1
+        }
+        if (a[sortBy] > b[sortBy]) {
+          return 1
+        }
+        return 0
+      })
+    }
+    const ret: any[] = []
+    for (const raw of values as IAddress[]) {
       const entry = ObjectFactory.create<Address>('Address', raw)
-      ret[entry.id] = {
+      ret.push({
+        key: entry.id,
         realValue: entry,
         value: entry.toString(),
-      }
+      })
     }
     return ret
   }

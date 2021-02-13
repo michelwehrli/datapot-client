@@ -42,12 +42,25 @@ export class Role extends KeyValue {
     }
   }
 
-  public static async getSelectMap(): Promise<Map<string, string>> {
-    const values = await DataService.getData('data/role')
-    const ret: Map<string, string> = new Map()
+  public static async getSelectMap(): Promise<any[]> {
+    let values = await DataService.getData<Role[]>('data/role')
+    const datamodel = await DataService.getDatamodel('role')
+    const sortBy = datamodel?.__meta?.sort
+    if (sortBy) {
+      values = values.sort((a, b) => {
+        if (a[sortBy] < b[sortBy]) {
+          return -1
+        }
+        if (a[sortBy] > b[sortBy]) {
+          return 1
+        }
+        return 0
+      })
+    }
+    const ret: any[] = []
     for (const raw of values as IRole[]) {
       const entry = ObjectFactory.create<Role>('Role', raw)
-      ret[entry.uniquename] = { realValue: entry, value: entry.label }
+      ret.push({ key: entry.uniquename, realValue: entry, value: entry.label })
     }
     return ret
   }

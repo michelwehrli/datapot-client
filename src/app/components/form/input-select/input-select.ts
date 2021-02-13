@@ -1,5 +1,6 @@
 import BaseComponent from '~/baseComponent'
 import ButtonComponent from '~/components/button/button'
+
 import tmpl from './input-select.html'
 
 export default class InputSelectComponent extends BaseComponent {
@@ -15,7 +16,7 @@ export default class InputSelectComponent extends BaseComponent {
 
   constructor(
     changed: (value) => void,
-    values?: Map<string | number, string>,
+    values?: any[],
     value?: string | number,
     required?: boolean,
     addButtonFunction?: () => void,
@@ -56,10 +57,7 @@ export default class InputSelectComponent extends BaseComponent {
     this.viewButton.classList.toggle('visible', visible)
   }
 
-  public update(
-    values: Map<string | number, string>,
-    value: string | number
-  ): void {
+  public update(values: any[], value: string | number): void {
     this.populate(values, value)
   }
 
@@ -77,7 +75,7 @@ export default class InputSelectComponent extends BaseComponent {
     }
   }
 
-  setValues(values: Map<string | number, any>, value?: string | number): void {
+  setValues(values: any[], value?: string | number): void {
     this.populate(values, value)
   }
 
@@ -85,7 +83,7 @@ export default class InputSelectComponent extends BaseComponent {
     return this.select.value
   }
 
-  private populate(values, value) {
+  private populate(values: any[], value: string | number) {
     this.select.innerHTML = ''
 
     const option: HTMLOptionElement = document.createElement('option')
@@ -93,20 +91,19 @@ export default class InputSelectComponent extends BaseComponent {
     option.value = ''
     this.select.appendChild(option)
 
-    Object.keys(values).forEach((key) => {
-      const entryValue = values[key]
+    for (const iter of values) {
       const option: HTMLOptionElement = document.createElement('option')
-      option.value = key
-      if (entryValue && entryValue.realValue) {
-        this.lookup[key] = entryValue.realValue
-        option.innerText = entryValue.value
+      option.value = iter.key
+      if (iter && iter.realValue) {
+        this.lookup[iter.key] = iter.realValue
+        option.innerText = iter.value
       } else {
-        option.innerText = entryValue
+        option.innerText = iter
       }
-      if (value == key) {
+      if (value == iter.key) {
         option.selected = true
       }
       this.select.appendChild(option)
-    })
+    }
   }
 }

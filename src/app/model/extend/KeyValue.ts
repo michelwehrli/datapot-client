@@ -4,6 +4,7 @@ import InputTextComponent, {
 import IKeyValue from '~/interfaces/extend/IKeyValue'
 import { DataService } from '~/internal'
 import { ObjectFactory } from '~/services/ObjectFactory'
+
 import { Table } from './Table'
 
 export class KeyValue extends Table implements IKeyValue {
@@ -62,13 +63,30 @@ export class KeyValue extends Table implements IKeyValue {
   public static async getSelectMap<T>(
     db: string,
     table: string
-  ): Promise<Map<string, string>> {
-    const values = (await DataService.getData(`${db}/${table}`)) as T[]
-    const ret: Map<string, string> = new Map()
+  ): Promise<any[]> {
+    let values = (await DataService.getData(`${db}/${table}`)) as T[]
+    const datamodel = await DataService.getDatamodel(table)
+    const sortBy = datamodel?.__meta?.sort
+    if (sortBy) {
+      values = values.sort((a, b) => {
+        if (a[sortBy] < b[sortBy]) {
+          return -1
+        }
+        if (a[sortBy] > b[sortBy]) {
+          return 1
+        }
+        return 0
+      })
+    }
+    const ret: any[] = []
     if (values && values.length) {
       for (const raw of values as IKeyValue[]) {
-        const entry = ObjectFactory.createFromName(table, raw)
-        ret[entry.uniquename] = { realValue: entry, value: entry.label }
+        const entry = ObjectFactory.createFromName(table, raw) as any
+        ret.push({
+          key: entry.uniquename,
+          realValue: entry,
+          value: entry.label,
+        })
       }
     }
     return ret

@@ -41,15 +41,30 @@ export class CompetenceField extends KeyValue {
     }
   }
 
-  public static async getSelectMap(): Promise<Map<string, string>> {
-    const values = await DataService.getData('data/competence_field')
-    const ret: Map<string, string> = new Map()
+  public static async getSelectMap(): Promise<any[]> {
+    let values = await DataService.getData<CompetenceField[]>(
+      'data/competence_field'
+    )
+    const datamodel = await DataService.getDatamodel('competence_field')
+    const sortBy = datamodel?.__meta?.sort
+    if (sortBy) {
+      values = values.sort((a, b) => {
+        if (a[sortBy] < b[sortBy]) {
+          return -1
+        }
+        if (a[sortBy] > b[sortBy]) {
+          return 1
+        }
+        return 0
+      })
+    }
+    const ret: any[] = []
     for (const raw of values as ICompetenceField[]) {
       const entry = ObjectFactory.create<CompetenceField>(
         'CompetenceField',
         raw
       )
-      ret[entry.uniquename] = { realValue: entry, value: entry.label }
+      ret.push({ key: entry.uniquename, realValue: entry, value: entry.label })
     }
     return ret
   }

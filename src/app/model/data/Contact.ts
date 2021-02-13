@@ -670,15 +670,29 @@ export class Contact extends Table implements IContact {
     `
   }
 
-  public static async getSelectMap(): Promise<Map<string, any>> {
-    const contacts = (await DataService.getData('data/contact')) as Contact[]
-    const ret: Map<string, any> = new Map()
-    for (const raw of contacts as ICompany[]) {
+  public static async getSelectMap(): Promise<any[]> {
+    let values = await DataService.getData<Contact[]>('data/contact')
+    const datamodel = await DataService.getDatamodel('contact')
+    const sortBy = datamodel?.__meta?.sort
+    if (sortBy) {
+      values = values.sort((a, b) => {
+        if (a[sortBy] < b[sortBy]) {
+          return -1
+        }
+        if (a[sortBy] > b[sortBy]) {
+          return 1
+        }
+        return 0
+      })
+    }
+    const ret: any[] = []
+    for (const raw of values as ICompany[]) {
       const entry = ObjectFactory.create<Contact>('Contact', raw)
-      ret[entry.id] = {
+      ret.push({
+        key: entry.id,
         realValue: entry,
         value: entry.toString(true),
-      }
+      })
     }
     return ret
   }

@@ -63,12 +63,29 @@ export class Zip extends Table implements IZip {
     }
   }
 
-  public static async getSelectMap(): Promise<Map<number, string>> {
-    const values = await DataService.getData('data/zip')
-    const ret: Map<number, string> = new Map()
+  public static async getSelectMap(): Promise<any[]> {
+    let values = await DataService.getData<Zip[]>('data/zip')
+    const datamodel = await DataService.getDatamodel('zip')
+    const sortBy = datamodel?.__meta?.sort
+    if (sortBy) {
+      values = values.sort((a, b) => {
+        if (a[sortBy] < b[sortBy]) {
+          return -1
+        }
+        if (a[sortBy] > b[sortBy]) {
+          return 1
+        }
+        return 0
+      })
+    }
+    const ret: any[] = []
     for (const raw of values as IZip[]) {
       const zip = ObjectFactory.create<Zip>('Zip', raw)
-      ret[zip.id] = { realValue: zip, value: `${zip.zip} ${zip.location}` }
+      ret.push({
+        key: zip.id,
+        realValue: zip,
+        value: `${zip.zip} ${zip.location}`,
+      })
     }
     return ret
   }

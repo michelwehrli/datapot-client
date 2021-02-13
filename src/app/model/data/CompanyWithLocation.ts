@@ -1,10 +1,7 @@
 import HorizontalWrapperComponent from '~/components/form/horizontal-wrapper/horizontal-wrapper'
 import InputSelectComponent from '~/components/form/input-select/input-select'
-import ModalComponent from '~/components/modal/modal'
-import EditContent from '~/contents/edit/edit'
-import IAddress from '~/interfaces/data/IAddress'
 import ICompanyWithLocation from '~/interfaces/data/ICompanyWithLocation'
-import { getSelect, ObjectFactory } from '~/internal'
+import { DataService, getSelect, ObjectFactory } from '~/internal'
 
 import { Table } from '../extend/Table'
 import { Address } from './Address'
@@ -79,12 +76,26 @@ export class CompanyWithLocation extends Table implements ICompanyWithLocation {
 
   public static async getAddressSelectMap(
     company: Company
-  ): Promise<Map<string, any>> {
-    const ret: Map<string, any> = new Map()
+  ): Promise<Address[]> {
+    let values = company.addresses
+    const datamodel = await DataService.getDatamodel('address')
+    const sortBy = datamodel?.__meta?.sort
+    if (sortBy) {
+      values = values.sort((a, b) => {
+        if (a[sortBy] < b[sortBy]) {
+          return -1
+        }
+        if (a[sortBy] > b[sortBy]) {
+          return 1
+        }
+        return 0
+      })
+    }
+    const ret: any[] = []
     if (company) {
-      for (const raw of company.addresses as IAddress[]) {
+      for (const raw of values) {
         const entry = ObjectFactory.create<Address>('Address', raw)
-        ret[entry.id] = { realValue: entry, value: entry.toString() }
+        ret.push({ key: entry.id, realValue: entry, value: entry.toString() })
       }
     }
     return ret
