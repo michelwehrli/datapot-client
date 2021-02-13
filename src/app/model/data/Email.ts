@@ -39,9 +39,17 @@ export class Email extends Table implements IEmail {
   private fieldAddress: InputTextComponent
   private fieldType: InputSelectComponent
 
-  public async getField(): Promise<any> {
+  public async getField(
+    isInitial?: boolean,
+    changed?: (value: Email) => void
+  ): Promise<any> {
     this.fieldAddress = new InputTextComponent(
-      (value: string) => (this.address = value),
+      (value: string) => {
+        this.address = value
+        if (changed) {
+          changed(this)
+        }
+      },
       EInputType.TEXT,
       this.address,
       undefined,
@@ -54,7 +62,12 @@ export class Email extends Table implements IEmail {
       this.type ? this.type.uniquename : undefined,
       EmailType,
       'uniquename',
-      'type'
+      'type',
+      () => {
+        if (changed) {
+          changed(this)
+        }
+      }
     )
 
     return {

@@ -1,5 +1,6 @@
 import BaseComponent from '~/baseComponent'
 import ButtonComponent from '~/components/button/button'
+
 import HorizontalWrapperComponent from '../horizontal-wrapper/horizontal-wrapper'
 import InputTextComponent, { EInputType } from '../input-text/input-text'
 import InputMultipleItemComponent from './multiple-item/multiple-item'

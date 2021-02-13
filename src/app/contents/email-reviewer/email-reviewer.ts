@@ -3,12 +3,16 @@ import ButtonComponent from '~/components/button/button'
 import ContentHeaderComponent from '~/components/content-header/content-header'
 import InputMultipleComponent from '~/components/form/multiple/multiple'
 import IContact from '~/interfaces/data/IContact'
-import { ObjectFactory, TitleService } from '~/internal'
+import {
+  EToastType,
+  ObjectFactory,
+  TitleService,
+  ToastService,
+} from '~/internal'
 import { Contact } from '~/model/data/Contact'
 import { Email } from '~/model/data/Email'
 import { DataService } from '~/services/DataSessionService'
 import { Router } from '~/services/Router'
-import { EToastType, ToastService } from '~/services/ToastService'
 
 import tmpl from './email-reviewer.html'
 
@@ -19,12 +23,52 @@ export default class EmailReviewerContent extends BaseComponent {
   alphabetE: HTMLDivElement = this.querySelector('.alphabet')
   tbodyE: HTMLElement = this.querySelector('[data-element=tbody]')
 
+  changedContacts: Contact[] = []
+
+  saveButton: ButtonComponent
+
   constructor() {
     super(tmpl)
 
     this.contentHeader.setAttribute('title', 'E-Mail Reviewer')
     this.contentHeader.setAttribute('icon', 'fa fa-binoculars')
     TitleService.setTitle('E-Mail Reviewer')
+
+    this.saveButton = new ButtonComponent(
+      'Alle speichern',
+      'fa fa-save',
+      'positive',
+      true
+    )
+    this.contentHeader.addButtons(this.saveButton)
+    this.saveButton.addEventListener('button-click', async () => {
+      const errored: Contact[] = []
+      for (const changedContact of this.changedContacts) {
+        const result = await DataService.patchData(
+          `data/contact/${changedContact.id}`,
+          this.cleanObj(changedContact)
+        )
+        if (!result?.success) {
+          errored.push(changedContact)
+        }
+      }
+
+      if (errored.length) {
+        ToastService.add(
+          `Da hat was nicht funktioniert. Bitte versuche es erneut.\nFolgende Kontakte konnten nicht gespeichert werden: \n\n${errored
+            .map((c) => {
+              return `${c.surname}${c.givenname ? ` ${c.givenname}` : ''}`
+            })
+            .join('\n')}`,
+          EToastType.NEGATIVE,
+          4000
+        )
+      } else {
+        ToastService.add('Erfolgreich gespeichert!', EToastType.POSITIVE, 2000)
+      }
+      this.changedContacts = []
+      this.saveButton.setAttribute('disabled', 'false')
+    })
 
     const currentLetter = (Router.getParams() && Router.getParams()[0]) || 'a'
 
@@ -105,11 +149,12 @@ export default class EmailReviewerContent extends BaseComponent {
     titleP.innerText = 'Privat'
     td2.appendChild(titleP)
 
-    console.log(contact.emails)
-
     td2.appendChild(
       new InputMultipleComponent(
-        (value: Email[]) => (contact.emails = value),
+        (value: Email[]) => {
+          this.pushContact(contact)
+          contact.emails = value
+        },
         contact.emails,
         () => ObjectFactory.create<Email>('Email'),
         true,
@@ -125,7 +170,10 @@ export default class EmailReviewerContent extends BaseComponent {
 
         td2.appendChild(
           new InputMultipleComponent(
-            (value: Email[]) => (cwl.company.emails = value),
+            (value: Email[]) => {
+              this.pushContact(contact)
+              cwl.company.emails = value
+            },
             cwl.company.emails,
             () => ObjectFactory.create<Email>('Email'),
             true,
@@ -135,22 +183,16 @@ export default class EmailReviewerContent extends BaseComponent {
       }
     }
 
-    const td4 = document.createElement('td')
-    const button = new ButtonComponent(undefined, 'fas fa-save', 'positive')
-    button.addEventListener('button-click', async () => {
-      const result = await DataService.patchData(
-        `data/contact/${contact.id}`,
-        this.cleanObj(contact)
-      )
-      console.log(result)
-      ToastService.add('Erfolgreich gespeichert!', EToastType.POSITIVE, 2000)
-    })
-    td4.appendChild(button)
-
     tr.appendChild(td1)
     tr.appendChild(td2)
-    tr.appendChild(td4)
     return tr
+  }
+
+  private pushContact(contact: Contact) {
+    if (this.changedContacts.indexOf(contact) === -1) {
+      this.changedContacts.push(contact)
+      this.saveButton.setAttribute('disabled', 'false')
+    }
   }
 
   private cleanObj(obj: any) {

@@ -4,7 +4,8 @@ import InputTextComponent, {
 } from '~/components/form/input-text/input-text'
 import ICategory from '~/interfaces/data/ICategory'
 import IKeyValue from '~/interfaces/extend/IKeyValue'
-import { DataService, ObjectFactory } from '~/internal'
+import { DataService, getSelect, ObjectFactory } from '~/internal'
+
 import { KeyValue } from '../extend/KeyValue'
 
 export class Category extends KeyValue {

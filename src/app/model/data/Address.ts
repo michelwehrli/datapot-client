@@ -68,11 +68,19 @@ export class Address extends Table implements IAddress {
 
   private fieldStreet: InputTextComponent
 
-  public async getField(): Promise<any> {
+  public async getField(
+    isInitial?: boolean,
+    changed?: (value: Address) => void
+  ): Promise<any> {
     const datamodel: any = DataService.getDatamodel('address')
 
     this.fieldStreet = new InputTextComponent(
-      (value: string) => (this.street = value),
+      (value: string) => {
+        if (changed) {
+          changed(this)
+        }
+        this.street = value
+      },
       EInputType.TEXT,
       this.street,
       datamodel['street'].label,
@@ -84,7 +92,12 @@ export class Address extends Table implements IAddress {
       'zip',
       this.zip ? this.zip.id : undefined,
       Zip,
-      'id'
+      'id',
+      () => {
+        if (changed) {
+          changed(this)
+        }
+      }
     )
 
     const countySelect = await getSelect.call(
@@ -92,7 +105,12 @@ export class Address extends Table implements IAddress {
       'county',
       this.county ? this.county.uniquename : undefined,
       County,
-      'uniquename'
+      'uniquename',
+      () => {
+        if (changed) {
+          changed(this)
+        }
+      }
     )
 
     const countrySelect = await getSelect.call(
@@ -100,7 +118,12 @@ export class Address extends Table implements IAddress {
       'country',
       this.country ? this.country.uniquename : undefined,
       Country,
-      'uniquename'
+      'uniquename',
+      () => {
+        if (changed) {
+          changed(this)
+        }
+      }
     )
 
     return {
