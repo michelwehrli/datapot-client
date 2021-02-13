@@ -35,7 +35,7 @@ export default class DetailContent extends BaseComponent {
       return
     } else {
       this.table = params[0]
-      this.identifier = params[1]
+      this.id = params[1]
       this.init()
     }
 
@@ -61,7 +61,7 @@ export default class DetailContent extends BaseComponent {
     })
 
     editButton.addEventListener('button-click', (e: MouseEvent) => {
-      Router.navigate(`crm/edit/${this.table}/${this.identifier}`, 'crm', e)
+      Router.navigate(`crm/edit/${this.table}/${this.id}`, 'crm', e)
     })
 
     trashButton.addEventListener('button-click', async () => {
@@ -99,10 +99,10 @@ export default class DetailContent extends BaseComponent {
     this.db = datamodel.__meta.db
 
     const data = await DataService.getData(
-      `${this.db}/${this.table}/${this.identifier}`
+      `${this.db}/${this.table}/${this.id}`
     )
 
-    const obj = ObjectFactory.createFromName(datamodel.__meta.name, data)
+    const obj = ObjectFactory.createFromName(datamodel.__meta.name, data) as any
 
     if (obj.getDetail) {
       this.content.innerHTML = await obj.getDetail()
