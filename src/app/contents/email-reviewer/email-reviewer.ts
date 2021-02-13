@@ -57,7 +57,7 @@ export default class EmailReviewerContent extends BaseComponent {
         ToastService.add(
           `Da hat was nicht funktioniert. Bitte versuche es erneut.\nFolgende Kontakte konnten nicht gespeichert werden: \n\n${errored
             .map((c) => {
-              return `${c.surname}${c.givenname ? ` ${c.givenname}` : ''}`
+              return c.toString()
             })
             .join('\n')}`,
           EToastType.NEGATIVE,

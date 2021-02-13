@@ -351,9 +351,7 @@ export class Company extends Table implements ICompany {
               ? `<h4>Angestellte</h4><div class="employee-wrap">
               ${employees
                 .map((employee) => {
-                  return `<p>${employee.givenname ? employee.givenname : ''} ${
-                    employee.surname ? employee.surname : ''
-                  }<a class="iconlink" data-navigate="crm/detail/contact/${
+                  return `<p>${employee.toString()}<a class="iconlink" data-navigate="crm/detail/contact/${
                     employee.id
                   }"><i class="fa fa-external-link-alt"></i></a></p>`
                 })
