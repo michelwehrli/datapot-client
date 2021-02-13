@@ -1,4 +1,5 @@
 import BaseComponent from '~/baseComponent'
+import ButtonComponent from '~/components/button/button'
 import DatepickerComponent from '~/components/datepicker/datepicker'
 import tmpl from './input-date.html'
 
@@ -6,6 +7,7 @@ export default class InputDateComponent extends BaseComponent {
   input: HTMLInputElement = this.querySelector('input')
   picker: DatepickerComponent = this.querySelector('dp-datepicker')
   currentDate: Date
+  button: ButtonComponent = this.querySelector('dp-button')
 
   static get observedAttributes(): string[] {
     return ['date', 'placeholder']
@@ -18,14 +20,31 @@ export default class InputDateComponent extends BaseComponent {
   ) {
     super(tmpl)
 
-    this.input.addEventListener('click', () => {
-      this.classList.toggle('active')
+    this.input.addEventListener('blur', () => {
+      const dateString = this.input.value
+      const parsedParts = dateString.split('.')
+      this.currentDate = new Date(
+        `${parsedParts[1]}.${parsedParts[0]}.${parsedParts[2]}`
+      )
+      this.classList.toggle('error', isNaN(this.currentDate.getTime()))
+      if (!isNaN(this.currentDate.getTime())) {
+        this.input.value = this.currentDate.toLocaleDateString('de-CH', {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit',
+        })
+        changed(this.currentDate.getTime())
+      }
     })
     this.addEventListener('click', (e) => {
       e.stopPropagation()
     })
     document.addEventListener('click', (e) => {
       this.classList.remove('active')
+    })
+
+    this.button.addEventListener('button-click', () => {
+      this.classList.toggle('active')
     })
 
     this.picker.addEventListener('changed', () => {
