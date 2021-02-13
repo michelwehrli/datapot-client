@@ -376,21 +376,15 @@ export class Contact extends Table implements IContact {
       <div class="flex">
         <div class="flex-item">
             <h4>Persönliche Informationen</h4>              
-            ${`<p class="text-flex${
-              !this.salutation ? ' none' : ''
-            }"><span>Anrede</span><span>${
+            ${`<p class="text-flex"><span>Anrede</span><span>${
               this.salutation ? this.salutation : '-'
             }</span></p>`}
               
-            ${`<p class="text-flex${
-              !this.title ? ' none' : ''
-            }"><span>Titel</span><span>${
+            ${`<p class="text-flex"><span>Titel</span><span>${
               this.title ? this.title : '-'
             }</span></p>`}
               
-            ${`<p class="text-flex${
-              !this.givenname ? ' none' : ''
-            }"><span>Vorname</span><span>${
+            ${`<p class="text-flex"><span>Vorname</span><span>${
               this.givenname ? this.givenname : '-'
             }</span></p>`}
             
@@ -402,15 +396,11 @@ export class Contact extends Table implements IContact {
                 : ''
             }
               
-            ${`<p class="text-flex${
-              !this.surname ? ' none' : ''
-            }"><span>Nachname</span><span>${
+            ${`<p class="text-flex"><span>Nachname</span><span>${
               this.surname ? this.surname : '-'
             }</span></p>`}
 
-            ${`<p class="text-flex${
-              !this.birthdate ? ' none' : ''
-            }"><span>Geburtstag</span><span>${
+            ${`<p class="text-flex"><span>Geburtstag</span><span>${
               this.birthdate
                 ? new Date(this.birthdate).toLocaleDateString('de-CH', {
                     year: 'numeric',
@@ -420,9 +410,7 @@ export class Contact extends Table implements IContact {
                 : '-'
             }</span></p>`}
             <br />              
-            ${`<p class="text-flex${
-              !this.partner ? ' none' : ''
-            }"><span>Partner/in</span><span>${
+            ${`<p class="text-flex"><span>Partner/in</span><span>${
               this.partner
                 ? `${this.partner.toString()} <a class="iconlink" data-navigate="crm/detail/contact/${
                     this.partner.id
@@ -440,7 +428,7 @@ export class Contact extends Table implements IContact {
                     return `<p><a href="${w}" target="_blank" rel="noopener">${w}</a></p>`
                   })
                   .join('')}`
-                : '<h4 class="none">Websites</h4><p class="none">Keine Websites</p>'
+                : '<h4>Websites</h4><p>Keine Websites</p>'
             }
           </div>
           <div class="flex-item">
@@ -456,9 +444,7 @@ export class Contact extends Table implements IContact {
                     .join('')
                 : ''
             }
-            ${`<p class="text-flex${
-              !this.department ? ' none' : ''
-            }"><span>Abteilung</span><span>${
+            ${`<p class="text-flex"><span>Abteilung</span><span>${
               this.department ? this.department : '-'
             }</span></p>`}
             ${
@@ -467,21 +453,17 @@ export class Contact extends Table implements IContact {
               <h4>Bemerkungen</h4>
               <p class="remark">${this.remarks.split('\n').join('<br />')}</p>
               `
-                : '<h4 class="none">Bemerkungen</h4><p class="none remark"></p>'
+                : '<h4>Bemerkungen</h4><p class="remark"></p>'
             }
             ${
               !!this.rwstatus || !!this.relationship || !!this.categories.length
                 ? '<h4>Kategorisierung</h4>'
-                : '<h4 class="none">Kategorisierung</h4>'
+                : '<h4>Kategorisierung</h4>'
             }
-            ${`<p class="text-flex${
-              !this.rwstatus ? ' none' : ''
-            }"><span>RW-Status</span><span>${
+            ${`<p class="text-flex"><span>RW-Status</span><span>${
               this.rwstatus ? this.rwstatus.label : '-'
             }</span></p>`}
-            ${`<p class="text-flex${
-              !this.relationship ? ' none' : ''
-            }"><span>Beziehung</span><span>${
+            ${`<p class="text-flex"><span>Beziehung</span><span>${
               this.relationship ? this.relationship.label : '-'
             }</span></p>`}
             ${
@@ -518,7 +500,7 @@ export class Contact extends Table implements IContact {
                   })
                   .join('<br />')}
                 `
-                : '<h4 class="none">Adressen</h4><p class="none">Keine Adressen</p>'
+                : '<h4>Adressen</h4><p>Keine Adressen</p>'
             }
           </div>
         </div>
@@ -554,7 +536,7 @@ export class Contact extends Table implements IContact {
                   })
                   .join('<br />')}
                 `
-                : '<h4 class="none">Firmen</h4><p class="none">Keine Firmen</p>'
+                : '<h4>Firmen</h4><p>Keine Firmen</p>'
             }
           </div>
         </div>
@@ -576,7 +558,7 @@ export class Contact extends Table implements IContact {
                     }"><i class="linkicon fa fa-phone-alt"></i>${p.toString()}</a></p>`
                   })
                   .join('')}`
-                : '<h4 class="none">Mobilnummern</h4><p class="none">Keine Nummern</p>'
+                : '<h4>Mobilnummern</h4><p>Keine Nummern</p>'
             }
             ${
               businessPhones && businessPhones.length
@@ -592,7 +574,7 @@ export class Contact extends Table implements IContact {
                     }"><i class="linkicon fa fa-phone-alt"></i>${p.toString()}</a></p>`
                   })
                   .join('')}`
-                : '<h4 class="none">Geschäftsnummern</h4><p class="none">Keine Nummern</p>'
+                : '<h4>Geschäftsnummern</h4><p>Keine Nummern</p>'
             }
             ${
               homePhones && homePhones.length
@@ -608,7 +590,7 @@ export class Contact extends Table implements IContact {
                     }"><i class="linkicon fa fa-phone-alt"></i>${p.toString()}</a></p>`
                   })
                   .join('')}`
-                : '<h4 class="none">Privatnummern</h4><p class="none">Keine Nummern</p>'
+                : '<h4>Privatnummern</h4><p>Keine Nummern</p>'
             }
           </div>
         </div>
@@ -627,7 +609,7 @@ export class Contact extends Table implements IContact {
                     return `<p><a href="mailto:${e.address}"><i class="linkicon far fa-envelope"></i>${e.address}</a></p>`
                   })
                   .join('')}`
-                : '<h4 class="none">Geschäftliche E-Mail Adressen</h4><p class="none">Keine E-Mail-Adressen</p>'
+                : '<h4>Geschäftliche E-Mail Adressen</h4><p>Keine E-Mail-Adressen</p>'
             }
             ${
               privateEmail &&
@@ -642,7 +624,7 @@ export class Contact extends Table implements IContact {
                     return `<p><a href="mailto:${e.address}"><i class="linkicon far fa-envelope"></i>${e.address}</a></p>`
                   })
                   .join('')}`
-                : '<h4 class="none">Private E-Mail-Adressen</h4><p class="none">Keine E-Mail-Adressen</p>'
+                : '<h4>Private E-Mail-Adressen</h4><p>Keine E-Mail-Adressen</p>'
             }
           </div>
         </div>
@@ -662,7 +644,7 @@ export class Contact extends Table implements IContact {
                   })
                   .join('')}
                 <br />`
-                : '<h4 class="none">Soziale Medien</h4><p class="none">Kein Profile</p>'
+                : '<h4>Soziale Medien</h4><p>Kein Profile</p>'
             }
           </div>
         </div>

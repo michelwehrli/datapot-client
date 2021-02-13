@@ -259,13 +259,11 @@ export class Company extends Table implements ICompany {
     <div class="flex">
       <div class="flex-item">
         <h4>Informationen</h4>   
-        ${`<p class="text-flex${
-          !this.name ? ' none' : ''
-        }"><span>Name</span><span>${this.name ? this.name : '-'}</span></p>`}
+        ${`<p class="text-flex"><span>Name</span><span>${
+          this.name ? this.name : '-'
+        }</span></p>`}
         <br />
-        ${`<p class="text-flex${
-          !this.contact_person ? ' none' : ''
-        }"><span>Kontaktperson</span><span>${
+        ${`<p class="text-flex"><span>Kontaktperson</span><span>${
           this.contact_person
             ? `${this.contact_person}<a class="iconlink" data-navigate="crm/detail/contact/${this.contact_person.id}"><i class="fa fa-external-link-alt"></i></a>`
             : '-'
@@ -281,7 +279,7 @@ export class Company extends Table implements ICompany {
                 return `<p><a href="${w}" target="_blank" rel="noopener">${w}</a></p>`
               })
               .join('')}`
-            : '<h4 class="none">Websites</h4><p class="none">Keine Websites</p>'
+            : '<h4>Websites</h4><p>Keine Websites</p>'
         }
         </div>
         <div class="flex-item">
@@ -292,21 +290,17 @@ export class Company extends Table implements ICompany {
             <h4>Bemerkungen</h4>
             <p class="remark">${this.remarks.split('\n').join('<br />')}</p>
             `
-              : '<h4 class="none">Bemerkungen</h4><p class="none remark"></p>'
+              : '<h4>Bemerkungen</h4><p class="remark"></p>'
           }
           ${
             !!this.rwstatus || !!this.relationship || !!this.categories.length
               ? '<h4>Kategorisierung</h4>'
-              : '<h4 class="none">Kategorisierung</h4>'
+              : '<h4>Kategorisierung</h4>'
           }
-          ${`<p class="text-flex${
-            !this.rwstatus ? ' none' : ''
-          }"><span>RW-Status</span><span>${
+          ${`<p class="text-flex"><span>RW-Status</span><span>${
             this.rwstatus ? this.rwstatus.label : '-'
           }</span></p>`}
-          ${`<p class="text-flex${
-            !this.relationship ? ' none' : ''
-          }"><span>Beziehung</span><span>${
+          ${`<p class="text-flex"><span>Beziehung</span><span>${
             this.relationship ? this.relationship.label : '-'
           }</span></p>`}
           ${
@@ -345,7 +339,7 @@ export class Company extends Table implements ICompany {
                 })
                 .join('<br />')}
               `
-              : '<h4 class="none">Adressen</h4><p class="none">Keine Adressen</p>'
+              : '<h4>Adressen</h4><p>Keine Adressen</p>'
           }
         </div>
       </div>
@@ -364,7 +358,7 @@ export class Company extends Table implements ICompany {
                   }"><i class="fa fa-external-link-alt"></i></a></p>`
                 })
                 .join('')}</div>`
-              : '<h4 class="none">Angestellte</h4><p class="none">Keine Angestellte erfasst</p>'
+              : '<h4>Angestellte</h4><p>Keine Angestellte erfasst</p>'
           }
         </div>
       </div>
@@ -387,7 +381,7 @@ export class Company extends Table implements ICompany {
                     }"><i class="linkicon fa fa-phone-alt"></i>${p.toString()}</a></p>`
                   })
                   .join('')}`
-                : '<h4 class="none">Mobilnummern</h4><p class="none">Keine Nummern</p>'
+                : '<h4>Mobilnummern</h4><p>Keine Nummern</p>'
             }
             ${
               phones && phones.length
@@ -403,7 +397,7 @@ export class Company extends Table implements ICompany {
                     }"><i class="linkicon fa fa-phone-alt"></i>${p.toString()}</a></p>`
                   })
                   .join('')}`
-                : '<h4 class="none">Geschäftsnummern</h4><p class="none">Keine Nummern</p>'
+                : '<h4>Geschäftsnummern</h4><p>Keine Nummern</p>'
             }
           </div>
         </div>
@@ -421,7 +415,7 @@ export class Company extends Table implements ICompany {
                     return `<p><a href="mailto:${e.address}"><i class="linkicon far fa-envelope"></i>${e.address}</a></p>`
                   })
                   .join('')}`
-                : '<h4 class="none">Geschäftliche E-Mail Adressen</h4><p class="none">Keine E-Mail-Adressen</p>'
+                : '<h4>Geschäftliche E-Mail Adressen</h4><p>Keine E-Mail-Adressen</p>'
             }
           </div>
         </div>
@@ -441,7 +435,7 @@ export class Company extends Table implements ICompany {
                   })
                   .join('')}
                 <br />`
-                : '<h4 class="none">Soziale Medien</h4><p class="none">Kein Profile</p>'
+                : '<h4>Soziale Medien</h4><p>Kein Profile</p>'
             }
           </div>
         </div>

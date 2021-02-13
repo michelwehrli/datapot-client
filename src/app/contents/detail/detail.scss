@@ -55,11 +55,6 @@ dp-content-detail {
         &:first-child {
           margin-top: 0;
         }
-
-        &.none {
-          opacity: 0.3;
-          user-select: none;
-        }
       }
 
       .text-flex {
@@ -97,11 +92,6 @@ dp-content-detail {
             font-size: 12px;
             opacity: 0.8;
           }
-        }
-
-        &.none {
-          opacity: 0.3;
-          user-select: none;
         }
 
         &.remark {
