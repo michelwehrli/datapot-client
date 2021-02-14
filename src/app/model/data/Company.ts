@@ -13,6 +13,7 @@ import IPhonenumber from '~/interfaces/data/IPhonenumber'
 import ISocialmedia from '~/interfaces/data/ISocialmedia'
 import { DataService, getSelect } from '~/internal'
 import { ObjectFactory } from '~/services/ObjectFactory'
+import Templater from '~/services/Templater'
 
 import { Table } from '../extend/Table'
 import { Address } from './Address'
@@ -23,6 +24,8 @@ import { Phonenumber } from './Phonenumber'
 import { Relationship } from './Relationship'
 import { RWStatus } from './RWStatus'
 import { Socialmedia } from './Socialmedia'
+
+import template from '../../layouts/company.html'
 
 export class Company extends Table implements ICompany {
   id: number
@@ -146,9 +149,6 @@ export class Company extends Table implements ICompany {
     isInitial?: boolean,
     changed?: (value: Company) => void
   ): Promise<any> {
-    const idParagraph = document.createElement('p')
-    idParagraph.innerText = this.id ? this.id.toString() : null
-
     this.fieldName = new InputTextComponent(
       (value: string) => (this.name = value),
       EInputType.TEXT,
@@ -156,7 +156,6 @@ export class Company extends Table implements ICompany {
       undefined,
       true
     )
-
     this.rwstatusSelect = await getSelect.call(
       this,
       'rwstatus',
@@ -164,7 +163,6 @@ export class Company extends Table implements ICompany {
       RWStatus,
       'uniquename'
     )
-
     this.relationshipSelect = await getSelect.call(
       this,
       'relationship',
@@ -172,273 +170,160 @@ export class Company extends Table implements ICompany {
       Relationship,
       'uniquename'
     )
-
     this.categoriesInput = new InputMultipleComponent(
       (value: Category[]) => (this.categories = value),
       this.categories,
       () => ObjectFactory.create<Category>('Category')
     )
 
-    return {
-      ...(isInitial && {
-        name: this.fieldName,
-        __heading_1: new FormHeadingComponent('Kommunikation'),
-        addresses: new InputMultipleComponent(
-          (value: Address[]) => (this.addresses = value),
-          this.addresses,
-          () => ObjectFactory.create<Address>('Address')
-        ),
-        contact_person: new InputSelectComponent(
-          (value: Contact) => (this.contact_person = value),
-          await Contact.getSelectMap(),
-          this.contact_person ? this.contact_person.id : undefined,
-          undefined,
-          undefined,
-          true
-        ),
-        emails: new InputMultipleComponent(
-          (value: Email[]) => (this.emails = value),
-          this.emails,
-          () => ObjectFactory.create<Email>('Email'),
-          true
-        ),
-        phonenumbers: new InputMultipleComponent(
-          (value: Phonenumber[]) => (this.phonenumbers = value),
-          this.phonenumbers,
-          () => ObjectFactory.create<Phonenumber>('Phonenumber'),
-          true
-        ),
-        __heading_2: new FormHeadingComponent('Weiteres'),
-        social_medias: new InputMultipleComponent(
-          (value: Socialmedia[]) => (this.social_medias = value),
-          this.social_medias,
-          () => ObjectFactory.create<Socialmedia>('Socialmedia'),
-          true
-        ),
-        websites: new InputMultipleComponent(
-          (value: string[]) => (this.websites = value),
-          this.websites,
-          () => ''
-        ),
-        remarks: new InputTextareaComponent(
-          (value: string) => (this.remarks = value),
-          this.remarks,
-          null,
-          6
-        ),
-        __heading_3: new FormHeadingComponent('Klassifizierung'),
-        rwstatus: this.rwstatusSelect,
-        relationship: this.relationshipSelect,
-        categories: this.categoriesInput,
-      }),
-      ...(!isInitial && {
+    if (isInitial) {
+      return {
+        hasTemplate: true,
+        fields: Templater.appendResolve(template, {
+          name: this.fieldName,
+          contact_person: new InputSelectComponent(
+            (value: Contact) => (this.contact_person = value),
+            await Contact.getSelectMap(),
+            this.contact_person ? this.contact_person.id : undefined,
+            undefined,
+            undefined,
+            true
+          ),
+          remarks: new InputTextareaComponent(
+            (value: string) => (this.remarks = value),
+            this.remarks,
+            null,
+            6
+          ),
+          rwstatus: this.rwstatusSelect,
+          relationship: this.relationshipSelect,
+          categories: this.categoriesInput,
+          phonenumbers: new InputMultipleComponent(
+            (value: Phonenumber[]) => (this.phonenumbers = value),
+            this.phonenumbers,
+            () => ObjectFactory.create<Phonenumber>('Phonenumber'),
+            true
+          ),
+          emails: new InputMultipleComponent(
+            (value: Email[]) => (this.emails = value),
+            this.emails,
+            () => ObjectFactory.create<Email>('Email'),
+            true
+          ),
+          websites: new InputMultipleComponent(
+            (value: string[]) => (this.websites = value),
+            this.websites,
+            () => ''
+          ),
+          socialmedia: new InputMultipleComponent(
+            (value: Socialmedia[]) => (this.social_medias = value),
+            this.social_medias,
+            () => ObjectFactory.create<Socialmedia>('Socialmedia'),
+            true
+          ),
+          addresses: new InputMultipleComponent(
+            (value: Address[]) => (this.addresses = value),
+            this.addresses,
+            () => ObjectFactory.create<Address>('Address')
+          ),
+        }),
+      }
+    } else {
+      return {
         company: new InputSelectComponent(
           changed,
           await Company.getSelectMap(),
           this.id
         ),
-      }),
+      }
     }
   }
 
   public async getDetail(): Promise<string> {
-    const mobilePhones: Phonenumber[] = []
-    const phones: Phonenumber[] = []
-    this.phonenumbers.map((p: Phonenumber) => {
-      if (p.line && p.line.uniquename === 'mobile') {
-        mobilePhones.push(p)
-      } else {
-        phones.push(p)
-      }
+    return Templater.resolve(template, {
+      name: this.toString(),
+      contact_person: this.contact_person?.toString(),
+      rwstatus: this.rwstatus?.toString(),
+      relationship: this.relationship?.toString(),
+      categories: this.categories
+        .map((c, i) => {
+          return /*html*/ `${c}${
+            i < this.categories.length - 1 ? `<br />` : ''
+          }`
+        })
+        .join(''),
+      phonenumbers: this.phonenumbers
+        .sort((a: Phonenumber, b: Phonenumber) => {
+          if (a.line.label > b.line.label) return 1
+          if (a.line.label < b.line.label) return -1
+          return 0
+        })
+        .map((p: Phonenumber) => {
+          return /*html*/ `
+          <td>
+            <p>
+              <a href="tel:${p.number}">
+                <i class="fa fa-phone-alt linkicon"></i>${p.toString()}</a>
+            </p>
+          </td>
+          <td><span>${p.line.toString()}</span></td>
+        </tr>`
+        })
+        .join(''),
+      emails: this.emails
+        .sort((a: Email, b: Email) => {
+          if (a.type.label > b.type.label) return 1
+          if (a.type.label < b.type.label) return -1
+          return 0
+        })
+        .map((e: Email) => {
+          return /*html*/ `
+          <td>
+            <p>
+              <a href="mailto:${e.address}">
+                <i class="fa fa-at linkicon"></i>${e.toString()}</a>
+            </p>
+          </td>
+          <td><span>${e.type.toString()}</span></td>
+        </tr>`
+        })
+        .join(''),
+      websites: this.websites
+        .map((w) => {
+          return /*html*/ `
+        <p>
+          <a href="${
+            w.indexOf('http') > -1 ? w : `https://${w}`
+          }" target="_blank" rel="noopener">
+            ${w}
+            <i class="fa fa-external-link-alt linkicon"></i>
+          </a>
+        </p>`
+        })
+        .join(''),
+      socialmedia: this.social_medias
+        .map((s, i) => {
+          return /*html*/ `
+          <a href="${s.url}" target="_blank" rel="noopener">
+            ${s.type.toString()}
+            <i class="fa fa-external-link-alt linkicon"></i>
+          </a>
+          ${i < this.social_medias.length - 1 ? `<br />` : ''}`
+        })
+        .join(''),
+      addresses: this.addresses
+        .filter((address) => {
+          return !!address
+        })
+        .map((address) => {
+          return `<p>${address.toString(
+            '<br />'
+          )}<a href="https://www.google.com/maps?q=${address.toString(
+            ', '
+          )}" target="_blank" rel="noopener" class="map"><i class="fa fa-map-marked-alt"></i></a></p>`
+        })
+        .join('<br />'),
     })
-
-    const employees: Contact[] = await this.getEmployees()
-
-    return /*html*/ `
-    <div class="container">
-    <div class="flex">
-      <div class="flex-item">
-        <h4>Informationen</h4>   
-        ${`<p class="text-flex"><span>Name</span><span>${
-          this.name ? this.name : '-'
-        }</span></p>`}
-        <br />
-        ${`<p class="text-flex"><span>Kontaktperson</span><span>${
-          this.contact_person
-            ? `${this.contact_person}<a class="iconlink" data-navigate="crm/detail/contact/${this.contact_person.id}"><i class="fa fa-external-link-alt"></i></a>`
-            : '-'
-        }</span></p>`}
-        ${
-          this.websites &&
-          this.websites.filter((w) => {
-            return new RegExp(/(https?:\/\/[^\s]+)/g).test(w)
-          }).length
-            ? `<h4>Websites</h4>
-            ${this.websites
-              .map((w) => {
-                return `<p><a href="${w}" target="_blank" rel="noopener">${w}</a></p>`
-              })
-              .join('')}`
-            : '<h4>Websites</h4><p>Keine Websites</p>'
-        }
-        </div>
-        <div class="flex-item">
-          <h4></h4>   
-          ${
-            this.remarks
-              ? `
-            <h4>Bemerkungen</h4>
-            <p class="remark">${this.remarks.split('\n').join('<br />')}</p>
-            `
-              : '<h4>Bemerkungen</h4><p class="remark"></p>'
-          }
-          ${
-            !!this.rwstatus || !!this.relationship || !!this.categories.length
-              ? '<h4>Kategorisierung</h4>'
-              : '<h4>Kategorisierung</h4>'
-          }
-          ${`<p class="text-flex"><span>RW-Status</span><span>${
-            this.rwstatus ? this.rwstatus.label : '-'
-          }</span></p>`}
-          ${`<p class="text-flex"><span>Beziehung</span><span>${
-            this.relationship ? this.relationship.label : '-'
-          }</span></p>`}
-          ${
-            this.categories
-              ? this.categories
-                  .map((category, i) => {
-                    return `<p class="text-flex"><span>${
-                      !i ? 'Kategorien' : ''
-                    }</span><span>${category}</span></p>`
-                  })
-                  .join('')
-              : ''
-          }
-        </div>
-      </div>
-    </div>
-    <div class="flex">
-      <div class="flex-item">
-        <div class="container">
-          ${
-            this.addresses && this.addresses.length
-              ? `
-              <h4>Adressen</h4>
-              ${this.addresses
-                .filter((address) => {
-                  return !!address
-                })
-                .map((address) => {
-                  return `<p>${address.toString(
-                    '<br />'
-                  )}<a href="https://www.google.com/maps?q=${
-                    this.name
-                  }, ${address.toString(
-                    ', '
-                  )}" target="_blank" rel="noopener" class="map"><i class="fa fa-map-marked-alt"></i></a></p>`
-                })
-                .join('<br />')}
-              `
-              : '<h4>Adressen</h4><p>Keine Adressen</p>'
-          }
-        </div>
-      </div>
-
-      <div class="flex-item">
-        <div class="container">
-          ${
-            employees && employees.length
-              ? `<h4>Angestellte</h4><div class="employee-wrap">
-              ${employees
-                .map((employee) => {
-                  return `<p>${employee.toString()}<a class="iconlink" data-navigate="crm/detail/contact/${
-                    employee.id
-                  }"><i class="fa fa-external-link-alt"></i></a></p>`
-                })
-                .join('')}</div>`
-              : '<h4>Angestellte</h4><p>Keine Angestellte erfasst</p>'
-          }
-        </div>
-      </div>
-    </div>
-    </div>
-      <div class="flex">
-        <div class="flex-item">
-          <div class="container">
-            ${
-              mobilePhones && mobilePhones.length
-                ? `
-                <h4>Mobilnummern</h4>
-                ${mobilePhones
-                  .filter((p) => {
-                    return !!p
-                  })
-                  .map((p) => {
-                    return `<p><a href="tel:${
-                      p.number
-                    }"><i class="linkicon fa fa-phone-alt"></i>${p.toString()}</a></p>`
-                  })
-                  .join('')}`
-                : '<h4>Mobilnummern</h4><p>Keine Nummern</p>'
-            }
-            ${
-              phones && phones.length
-                ? `
-                <h4>Nummern</h4>
-                ${phones
-                  .filter((p) => {
-                    return !!p
-                  })
-                  .map((p) => {
-                    return `<p><a href="tel:${
-                      p.number
-                    }"><i class="linkicon fa fa-phone-alt"></i>${p.toString()}</a></p>`
-                  })
-                  .join('')}`
-                : '<h4>Geschäftsnummern</h4><p>Keine Nummern</p>'
-            }
-          </div>
-        </div>
-        <div class="flex-item">
-          <div class="container">
-            ${
-              this.emails && this.emails.length
-                ? `
-                <h4>E-Mail Adressen</h4>
-                ${this.emails
-                  .filter((p) => {
-                    return !!p
-                  })
-                  .map((e) => {
-                    return `<p><a href="mailto:${e.address}"><i class="linkicon far fa-envelope"></i>${e.address}</a></p>`
-                  })
-                  .join('')}`
-                : '<h4>Geschäftliche E-Mail Adressen</h4><p>Keine E-Mail-Adressen</p>'
-            }
-          </div>
-        </div>
-        <div class="flex-item">
-          <div class="container">
-            ${
-              this.social_medias &&
-              this.social_medias.length &&
-              this.social_medias.filter((sm) => {
-                return new RegExp(/(https?:\/\/[^\s]+)/g).test(sm.url)
-              }).length
-                ? `
-                <h4>Soziale Medien</h4>
-                ${this.social_medias
-                  .map((sm) => {
-                    return `<p><a href="${sm.url}" target="_blank" rel="noopener">${sm.type.label}</a></p>`
-                  })
-                  .join('')}
-                <br />`
-                : '<h4>Soziale Medien</h4><p>Kein Profile</p>'
-            }
-          </div>
-        </div>
-      </div>
-    `
   }
 
   public static async getSelectMap(): Promise<any[]> {

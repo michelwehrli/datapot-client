@@ -62,7 +62,7 @@ export default class InputSelectComponent extends BaseComponent {
   }
 
   public focus(): void {
-    this.select.focus()
+    // this.select.focus()
   }
 
   attributeChangedCallback(

@@ -1,0 +1,162 @@
+.contact-layout {
+  .flex {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 15px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    .flex-item {
+      flex: 1;
+      margin-right: 15px;
+
+      &:last-child {
+        margin-right: 0;
+      }
+
+      .layout-container {
+        height: 100%;
+      }
+    }
+  }
+
+  .employee-wrap {
+    max-height: 400px;
+    overflow: auto;
+  }
+
+  .layout-container {
+    padding: 15px;
+    background-color: var(--nearly-white);
+    border-radius: 6px;
+    margin-bottom: 20px;
+    border: 1px solid var(--almost-white);
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    .flex .flex-item {
+      margin-right: 30px;
+    }
+
+    h4 {
+      margin-bottom: 8px;
+      font-size: 17px;
+      font-weight: 700;
+      margin-top: 20px;
+
+      &:first-child {
+        margin-top: 0;
+      }
+    }
+
+    .text-flex {
+      display: flex;
+
+      span {
+        &:first-child {
+          flex: 0 0 120px;
+          font-weight: 400;
+        }
+
+        &:last-child {
+          flex: 1;
+        }
+      }
+    }
+
+    p {
+      margin-bottom: 4px;
+      font-weight: 500;
+
+      a.iconlink {
+        margin-left: 6px;
+        opacity: 0.6;
+        top: -2px;
+        cursor: pointer;
+        position: relative;
+
+        i {
+          font-size: 12px;
+        }
+      }
+
+      a {
+        display: inline-block;
+
+        i.linkicon {
+          margin-right: 6px;
+          font-size: 12px;
+          opacity: 0.8;
+        }
+      }
+
+      &.remark {
+        padding: 10px;
+        background-color: var(--almost-white);
+        display: inline-block;
+        width: 100%;
+        border-radius: 3px;
+        max-height: 120px;
+        overflow: auto;
+        min-height: 50px;
+        opacity: 1;
+      }
+    }
+
+    a {
+      margin-bottom: 0;
+      display: block;
+      text-decoration: none;
+      color: var(--link-base);
+
+      &:hover {
+        color: var(--accent-medium);
+      }
+
+      &.map {
+        display: inline-block;
+        margin-left: 8px;
+        position: relative;
+        top: -1px;
+        opacity: 0.8;
+        font-size: 14px;
+      }
+    }
+
+    table {
+      tr {
+        background-color: transparent !important;
+        cursor: default;
+
+        &:hover {
+          background-color: transparent !important;
+        }
+
+        &:last-child td {
+          border-bottom: none;
+        }
+
+        td {
+          padding: 4px 6px;
+          min-width: initial;
+          max-width: initial;
+          height: auto;
+          border-left: none;
+          border-bottom: solid 1px var(--light-hover);
+
+          &:first-child {
+            padding-right: 0;
+          }
+          &:last-child {
+            border-right: none;
+            text-align: center;
+          }
+        }
+      }
+    }
+  }
+}

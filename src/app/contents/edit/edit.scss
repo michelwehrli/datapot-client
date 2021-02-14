@@ -1,3 +1,5 @@
+@import '../../layouts/contact';
+
 dp-content-edit {
   height: 100%;
   display: flex;
@@ -11,5 +13,33 @@ dp-content-edit {
     padding: 20px;
     flex: 1;
     overflow: auto;
+  }
+
+  .contact-layout {
+    @media only screen and (max-width: 1200px) {
+      .flex {
+        flex-direction: column;
+
+        .flex-item {
+          margin-right: 0;
+          margin-bottom: 15px;
+        }
+      }
+    }
+
+    @media only screen and (max-width: 1600px) {
+      .flex.break-early {
+        flex-direction: column;
+
+        .flex-item {
+          margin-right: 0;
+          margin-bottom: 15px;
+        }
+      }
+    }
+
+    .layout-container .text-flex span:first-child {
+      line-height: 36px;
+    }
   }
 }

@@ -232,23 +232,27 @@ export default class EditContent extends BaseComponent {
     cb(Object.keys(data).length > 0)
     this.obj = ObjectFactory.createFromName(table, data)
     const fields = await this.obj.getField(true)
-    for (const key in fields) {
-      const field = fields[key]
-      let label = ''
-      if (datamodel[key] && datamodel[key].label) {
-        label = datamodel[key].label
-      }
-      if (key.indexOf('__heading') > -1) {
-        this.form.appendChild(field)
+
+    if (fields.hasTemplate) {
+      this.form.appendChild(fields.fields)
+    } else {
+      if (typeof fields === 'string') {
+        this.form.innerHTML = fields
       } else {
-        this.form.appendChild(new FieldComponent(label, field))
+        for (const key in fields) {
+          const field = fields[key]
+          let label = ''
+          if (datamodel[key] && datamodel[key].label) {
+            label = datamodel[key].label
+          }
+          if (key.indexOf('__heading') > -1) {
+            this.form.appendChild(field)
+          } else {
+            this.form.appendChild(new FieldComponent(label, field))
+          }
+        }
       }
     }
-
-    // JO ISCH GRUSIG, MER DOCH GLICH
-    setTimeout(() => {
-      this.__hash = md5(JSON.stringify(this.obj))
-    }, 500)
   }
 
   private async save(): Promise<any> {
@@ -276,7 +280,6 @@ export default class EditContent extends BaseComponent {
       if (result.success) {
         await SessionService.refresh()
 
-        this.__hash = md5(JSON.stringify(this.obj))
         ToastService.add(
           'Der Eintrag wurde erfolgreich gespeichert.',
           EToastType.POSITIVE,

@@ -30,6 +30,9 @@ import { RWStatus } from './RWStatus'
 import { Salutation } from './Salutation'
 import { Socialmedia } from './Socialmedia'
 import { Title } from './Title'
+import template from '../../layouts/contact.html'
+import Templater from '~/services/Templater'
+import HorizontalWrapperComponent from '~/components/form/horizontal-wrapper/horizontal-wrapper'
 
 export class Contact extends Table implements IContact {
   id: number
@@ -182,9 +185,6 @@ export class Contact extends Table implements IContact {
   private fieldGivenname: InputTextComponent
 
   public async getField(isInitial: boolean): Promise<any> {
-    const idParagraph = document.createElement('p')
-    idParagraph.innerText = this.id ? this.id.toString() : null
-
     this.fieldSurname = new InputTextComponent(
       (value: string) => (this.surname = value),
       EInputType.TEXT,
@@ -200,14 +200,6 @@ export class Contact extends Table implements IContact {
       true
     )
 
-    const genderSelect = await getSelect.call(
-      this,
-      'gender',
-      this.gender ? this.gender.uniquename : undefined,
-      Gender,
-      'uniquename'
-    )
-
     const salutationSelect = await getSelect.call(
       this,
       'salutation',
@@ -215,7 +207,13 @@ export class Contact extends Table implements IContact {
       Salutation,
       'uniquename'
     )
-
+    const genderSelect = await getSelect.call(
+      this,
+      'gender',
+      this.gender ? this.gender.uniquename : undefined,
+      Gender,
+      'uniquename'
+    )
     const titleSelect = await getSelect.call(
       this,
       'title',
@@ -223,7 +221,6 @@ export class Contact extends Table implements IContact {
       Title,
       'uniquename'
     )
-
     const partnerSelect = new InputSelectComponent(
       (value: Contact) => (this.partner = value),
       await Contact.getSelectMap(),
@@ -243,7 +240,6 @@ export class Contact extends Table implements IContact {
         )
       }
     )
-
     const rwstatusSelect = await getSelect.call(
       this,
       'rwstatus',
@@ -251,7 +247,6 @@ export class Contact extends Table implements IContact {
       RWStatus,
       'uniquename'
     )
-
     const relationshipSelect = await getSelect.call(
       this,
       'relationship',
@@ -260,387 +255,223 @@ export class Contact extends Table implements IContact {
       'uniquename'
     )
 
-    return {
-      ...(isInitial && {
-        __heading_1: new FormHeadingComponent('Privat'),
-        gender: genderSelect,
-        salutation: salutationSelect,
-        title: titleSelect,
-        surname: this.fieldSurname,
-        givenname: this.fieldGivenname,
-        additional_names: new InputMultipleComponent(
-          (value: string[]) => (this.additional_names = value),
-          this.additional_names,
-          () => ''
-        ),
-        birthdate: new InputDateComponent(
-          (value: number) => (this.birthdate = value),
-          this.birthdate
-        ),
-        partner: partnerSelect,
-        __heading_2: new FormHeadingComponent('Geschäftlich'),
-        companiesWithLocation: new InputMultipleComponent(
-          async (values: CompanyWithLocation[]) =>
-            (this.companiesWithLocation = values),
-          this.companiesWithLocation,
-          () => ObjectFactory.create<CompanyWithLocation>('CompanyWithLocation')
-        ),
-        department: new InputTextComponent(
-          (value: string) => (this.department = value),
-          EInputType.TEXT,
-          this.department
-        ),
-        positions: new InputMultipleComponent(
-          (value: string[]) => (this.positions = value),
-          this.positions,
-          () => ''
-        ),
-        __heading_3: new FormHeadingComponent('Kommunikation'),
-        addresses: new InputMultipleComponent(
-          (value: Address[]) => (this.addresses = value),
-          this.addresses,
-          () => ObjectFactory.create<Address>('Address')
-        ),
-        emails: new InputMultipleComponent(
-          (value: Email[]) => (this.emails = value),
-          this.emails,
-          () => ObjectFactory.create<Email>('Email'),
-          true
-        ),
-        phonenumbers: new InputMultipleComponent(
-          (value: Phonenumber[]) => (this.phonenumbers = value),
-          this.phonenumbers,
-          () => ObjectFactory.create<Phonenumber>('Phonenumber'),
-          true
-        ),
-        __heading_4: new FormHeadingComponent('Weiteres'),
-        social_medias: new InputMultipleComponent(
-          (value: Socialmedia[]) => (this.social_medias = value),
-          this.social_medias,
-          () => ObjectFactory.create<Socialmedia>('Socialmedia'),
-          true
-        ),
-        websites: new InputMultipleComponent(
-          (value: string[]) => (this.websites = value),
-          this.websites,
-          () => ''
-        ),
-        remarks: new InputTextareaComponent(
-          (value: string) => (this.remarks = value),
-          this.remarks,
-          null,
-          6
-        ),
-        __heading_5: new FormHeadingComponent('Klassifizierung'),
-        rwstatus: rwstatusSelect,
-        relationship: relationshipSelect,
-        categories: new InputMultipleComponent(
-          (value: Category[]) => (this.categories = value),
-          this.categories,
-          () => ObjectFactory.create<Category>('Category')
-        ),
-      }),
-      ...(!isInitial && {
+    const additional_names = document.createElement('div')
+    additional_names.innerHTML =
+      '<p class="text-flex"><span>Weitere</span><span class="receiver"></span></p>'
+    additional_names.querySelector('.receiver').appendChild(
+      new InputMultipleComponent(
+        (value: string[]) => (this.additional_names = value),
+        this.additional_names,
+        () => ''
+      )
+    )
+
+    if (isInitial) {
+      return {
+        hasTemplate: true,
+        fields: Templater.appendResolve(template, {
+          salutation: salutationSelect,
+          gender: genderSelect,
+          title: titleSelect,
+          name: new HorizontalWrapperComponent([
+            this.fieldSurname,
+            this.fieldGivenname,
+          ]),
+          additional_names: additional_names,
+          birthdate: new InputDateComponent(
+            (value: number) => (this.birthdate = value),
+            this.birthdate
+          ),
+          partner: partnerSelect,
+          websites: new InputMultipleComponent(
+            (value: string[]) => (this.websites = value),
+            this.websites,
+            () => ''
+          ),
+          positions: new InputMultipleComponent(
+            (value: string[]) => (this.positions = value),
+            this.positions,
+            () => ''
+          ),
+          department: new InputTextComponent(
+            (value: string) => (this.department = value),
+            EInputType.TEXT,
+            this.department
+          ),
+          remarks: new InputTextareaComponent(
+            (value: string) => (this.remarks = value),
+            this.remarks,
+            null,
+            6
+          ),
+          rwstatus: rwstatusSelect,
+          relationship: relationshipSelect,
+          categories: new InputMultipleComponent(
+            (value: Category[]) => (this.categories = value),
+            this.categories,
+            () => ObjectFactory.create<Category>('Category')
+          ),
+          phonenumbers: new InputMultipleComponent(
+            (value: Phonenumber[]) => (this.phonenumbers = value),
+            this.phonenumbers,
+            () => ObjectFactory.create<Phonenumber>('Phonenumber'),
+            true
+          ),
+          emails: new InputMultipleComponent(
+            (value: Email[]) => (this.emails = value),
+            this.emails,
+            () => ObjectFactory.create<Email>('Email'),
+            true
+          ),
+          socialmedia: new InputMultipleComponent(
+            (value: Socialmedia[]) => (this.social_medias = value),
+            this.social_medias,
+            () => ObjectFactory.create<Socialmedia>('Socialmedia'),
+            true
+          ),
+          companyaddresses: new InputMultipleComponent(
+            async (values: CompanyWithLocation[]) =>
+              (this.companiesWithLocation = values),
+            this.companiesWithLocation,
+            () =>
+              ObjectFactory.create<CompanyWithLocation>('CompanyWithLocation')
+          ),
+          addresses: new InputMultipleComponent(
+            (value: Address[]) => (this.addresses = value),
+            this.addresses,
+            () => ObjectFactory.create<Address>('Address')
+          ),
+        }),
+      }
+    } else {
+      return {
         contact: new InputSelectComponent(
           (value: number) => (this.id = value),
           await Contact.getSelectMap(),
           this.id
         ),
-      }),
+      }
     }
   }
 
   public async getDetail(): Promise<string> {
-    const mobilePhones: Phonenumber[] = []
-    const businessPhones: Phonenumber[] = []
-    const homePhones: Phonenumber[] = []
-    this.phonenumbers.map((p: Phonenumber) => {
-      if (p.line.uniquename === 'mobile') {
-        mobilePhones.push(p)
-      } else {
-        if (p.type.uniquename === 'business') {
-          businessPhones.push(p)
-        } else {
-          homePhones.push(p)
-        }
-      }
+    return Templater.resolve(template, {
+      salutation: this.salutation?.toString(),
+      gender: this.gender?.toString(),
+      title: this.title?.toString(),
+      name: this.toString(undefined, true),
+      additional_names: '',
+      birthdate: new Date(this.birthdate)?.toLocaleDateString('de-CH', {
+        year: 'numeric',
+        month: 'long',
+        day: '2-digit',
+      }),
+      partner: this.partner?.toString(),
+      websites: this.websites
+        .map((w) => {
+          return /*html*/ `
+          <p>
+            <a href="${
+              w.indexOf('http') > -1 ? w : `https://${w}`
+            }" target="_blank" rel="noopener">
+              ${w}
+              <i class="fa fa-external-link-alt linkicon"></i>
+            </a>
+          </p>`
+        })
+        .join(''),
+      positions: this.positions
+        .map((p, i) => {
+          return /*html*/ `${p}${i < this.positions.length - 1 ? `<br />` : ''}`
+        })
+        .join(''),
+      department: this.department?.toString(),
+      remarks: this.remarks,
+      rwstatus: this.rwstatus?.toString(),
+      relationship: this.relationship?.toString(),
+      categories: this.categories
+        .map((c, i) => {
+          return /*html*/ `${c}${
+            i < this.categories.length - 1 ? `<br />` : ''
+          }`
+        })
+        .join(''),
+      phonenumbers: this.phonenumbers
+        .sort((a: Phonenumber, b: Phonenumber) => {
+          if (a.line.label > b.line.label) return 1
+          if (a.line.label < b.line.label) return -1
+          return 0
+        })
+        .map((p: Phonenumber) => {
+          return /*html*/ `
+            <td>
+              <p>
+                <a href="tel:${p.number}">
+                  <i class="fa fa-phone-alt linkicon"></i>${p.toString()}</a>
+              </p>
+            </td>
+            <td><span>${p.line.toString()}</span></td>
+          </tr>`
+        })
+        .join(''),
+      emails: this.emails
+        .sort((a: Email, b: Email) => {
+          if (a.type.label > b.type.label) return 1
+          if (a.type.label < b.type.label) return -1
+          return 0
+        })
+        .map((e: Email) => {
+          return /*html*/ `
+            <td>
+              <p>
+                <a href="mailto:${e.address}">
+                  <i class="fa fa-at linkicon"></i>${e.toString()}</a>
+              </p>
+            </td>
+            <td><span>${e.type.toString()}</span></td>
+          </tr>`
+        })
+        .join(''),
+      socialmedia: this.social_medias
+        .map((s, i) => {
+          return /*html*/ `
+            <a href="${s.url}" target="_blank" rel="noopener">
+              ${s.type.toString()}
+              <i class="fa fa-external-link-alt linkicon"></i>
+            </a>
+            ${i < this.social_medias.length - 1 ? `<br />` : ''}`
+        })
+        .join(''),
+      companyaddresses: this.companiesWithLocation
+        .filter((companyWithLocation) => {
+          return companyWithLocation.company && companyWithLocation.address
+        })
+        .map((companyWithLocation) => {
+          return `<p>${companyWithLocation.company.toString()}<a class="iconlink" data-navigate="crm/detail/company/${
+            companyWithLocation.company.id
+          }"><i class="fa fa-external-link-alt"></i></a></p>
+              <p>${companyWithLocation.address.toString(
+                '<br />'
+              )}<a href="https://www.google.com/maps?q=${
+            companyWithLocation.company.name
+          }, ${companyWithLocation.address.toString(
+            ', '
+          )}" target="_blank" rel="noopener" class="map"><i class="fa fa-map-marked-alt"></i></a></p>`
+        })
+        .join('<br />'),
+      addresses: this.addresses
+        .filter((address) => {
+          return !!address
+        })
+        .map((address) => {
+          return `<p>${address.toString(
+            '<br />'
+          )}<a href="https://www.google.com/maps?q=${address.toString(
+            ', '
+          )}" target="_blank" rel="noopener" class="map"><i class="fa fa-map-marked-alt"></i></a></p>`
+        })
+        .join('<br />'),
     })
-
-    const privateEmail = this.emails.filter((p) => {
-      return p.type.uniquename === 'private'
-    })
-    const businessEmail = this.emails.filter((p) => {
-      return p.type.uniquename === 'business'
-    })
-
-    return `
-    <div class="container">
-      <div class="flex">
-        <div class="flex-item">
-            <h4>Persönliche Informationen</h4>              
-            ${`<p class="text-flex"><span>Anrede</span><span>${
-              this.salutation ? this.salutation : '-'
-            }</span></p>`}
-              
-            ${`<p class="text-flex"><span>Titel</span><span>${
-              this.title ? this.title : '-'
-            }</span></p>`}
-              
-            ${`<p class="text-flex"><span>Name</span><span>${this.toString(
-              undefined,
-              true
-            )}</span></p>`}
-
-            ${`<p class="text-flex"><span>Geburtstag</span><span>${
-              this.birthdate
-                ? new Date(this.birthdate).toLocaleDateString('de-CH', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: '2-digit',
-                  })
-                : '-'
-            }</span></p>`}
-            <br />              
-            ${`<p class="text-flex"><span>Partner/in</span><span>${
-              this.partner
-                ? `${this.partner.toString()} <a class="iconlink" data-navigate="crm/detail/contact/${
-                    this.partner.id
-                  }"><i class="fa fa-external-link-alt"></i></a>`
-                : '-'
-            }</span></p>`}
-            ${
-              this.websites &&
-              this.websites.filter((w) => {
-                return new RegExp(/(https?:\/\/[^\s]+)/g).test(w)
-              }).length
-                ? `<h4>Websites</h4>
-                ${this.websites
-                  .map((w) => {
-                    return `<p><a href="${w}" target="_blank" rel="noopener">${w}</a></p>`
-                  })
-                  .join('')}`
-                : '<h4>Websites</h4><p>Keine Websites</p>'
-            }
-          </div>
-          <div class="flex-item">
-            <h4>Geschäftliche Informationen</h4>
-            ${
-              this.positions
-                ? this.positions
-                    .map((p, i) => {
-                      return `<p class="text-flex"><span>${
-                        !i ? 'Positionen' : ''
-                      }</span><span>${p}</span></p>`
-                    })
-                    .join('')
-                : ''
-            }
-            ${`<p class="text-flex"><span>Abteilung</span><span>${
-              this.department ? this.department : '-'
-            }</span></p>`}
-            ${
-              this.remarks
-                ? `
-              <h4>Bemerkungen</h4>
-              <p class="remark">${this.remarks.split('\n').join('<br />')}</p>
-              `
-                : '<h4>Bemerkungen</h4><p class="remark"></p>'
-            }
-            ${
-              !!this.rwstatus || !!this.relationship || !!this.categories.length
-                ? '<h4>Kategorisierung</h4>'
-                : '<h4>Kategorisierung</h4>'
-            }
-            ${`<p class="text-flex"><span>RW-Status</span><span>${
-              this.rwstatus ? this.rwstatus.label : '-'
-            }</span></p>`}
-            ${`<p class="text-flex"><span>Beziehung</span><span>${
-              this.relationship ? this.relationship.label : '-'
-            }</span></p>`}
-            ${
-              this.categories
-                ? this.categories
-                    .map((category, i) => {
-                      return `<p class="text-flex"><span>${
-                        !i ? 'Kategorien' : ''
-                      }</span><span>${category}</span></p>`
-                    })
-                    .join('')
-                : ''
-            }
-          </div>
-        </div>
-      </div>
-      <div class="flex">
-        <div class="flex-item">
-          <div class="container">
-            ${
-              this.addresses && this.addresses.length
-                ? `
-                <h4>Adressen</h4>
-                ${this.addresses
-                  .filter((address) => {
-                    return !!address
-                  })
-                  .map((address) => {
-                    return `<p>${address.toString(
-                      '<br />'
-                    )}<a href="https://www.google.com/maps?q=${address.toString(
-                      ', '
-                    )}" target="_blank" rel="noopener" class="map"><i class="fa fa-map-marked-alt"></i></a></p>`
-                  })
-                  .join('<br />')}
-                `
-                : '<h4>Adressen</h4><p>Keine Adressen</p>'
-            }
-          </div>
-        </div>
-        <div class="flex-item">
-          <div class="container">
-            ${
-              this.companiesWithLocation &&
-              this.companiesWithLocation.length &&
-              this.companiesWithLocation.filter((companyWithLocation) => {
-                return (
-                  companyWithLocation.company && companyWithLocation.address
-                )
-              }).length
-                ? `
-                <h4>Firmen</h4>
-                ${this.companiesWithLocation
-                  .filter((companyWithLocation) => {
-                    return (
-                      companyWithLocation.company && companyWithLocation.address
-                    )
-                  })
-                  .map((companyWithLocation) => {
-                    return `<p>${companyWithLocation.company.toString()}<a class="iconlink" data-navigate="crm/detail/company/${
-                      companyWithLocation.company.id
-                    }"><i class="fa fa-external-link-alt"></i></a></p>
-                      <p>${companyWithLocation.address.toString(
-                        '<br />'
-                      )}<a href="https://www.google.com/maps?q=${
-                      companyWithLocation.company.name
-                    }, ${companyWithLocation.address.toString(
-                      ', '
-                    )}" target="_blank" rel="noopener" class="map"><i class="fa fa-map-marked-alt"></i></a></p>`
-                  })
-                  .join('<br />')}
-                `
-                : '<h4>Firmen</h4><p>Keine Firmen</p>'
-            }
-          </div>
-        </div>
-      </div>
-      <div class="flex">
-        <div class="flex-item">
-          <div class="container">
-            ${
-              mobilePhones && mobilePhones.length
-                ? `
-                <h4>Mobilnummern</h4>
-                ${mobilePhones
-                  .filter((p) => {
-                    return !!p
-                  })
-                  .map((p) => {
-                    return `<p><a href="tel:${
-                      p.number
-                    }"><i class="linkicon fa fa-phone-alt"></i>${p.toString()}</a></p>`
-                  })
-                  .join('')}`
-                : '<h4>Mobilnummern</h4><p>Keine Nummern</p>'
-            }
-            ${
-              businessPhones && businessPhones.length
-                ? `
-                <h4>Geschäftsnummern</h4>
-                ${businessPhones
-                  .filter((p) => {
-                    return !!p
-                  })
-                  .map((p) => {
-                    return `<p><a href="tel:${
-                      p.number
-                    }"><i class="linkicon fa fa-phone-alt"></i>${p.toString()}</a></p>`
-                  })
-                  .join('')}`
-                : '<h4>Geschäftsnummern</h4><p>Keine Nummern</p>'
-            }
-            ${
-              homePhones && homePhones.length
-                ? `
-                <h4>Privatnummern</h4>
-                ${homePhones
-                  .filter((p) => {
-                    return !!p
-                  })
-                  .map((p) => {
-                    return `<p><a href="tel:${
-                      p.number
-                    }"><i class="linkicon fa fa-phone-alt"></i>${p.toString()}</a></p>`
-                  })
-                  .join('')}`
-                : '<h4>Privatnummern</h4><p>Keine Nummern</p>'
-            }
-          </div>
-        </div>
-        <div class="flex-item">
-          <div class="container">
-            ${
-              businessEmail &&
-              businessEmail.length &&
-              businessEmail.filter((email) => {
-                return email.address && email.address.indexOf('@') > -1
-              }).length
-                ? `
-                <h4>Geschäftliche E-Mail Adressen</h4>
-                ${businessEmail
-                  .map((e) => {
-                    return `<p><a href="mailto:${e.address}"><i class="linkicon far fa-envelope"></i>${e.address}</a></p>`
-                  })
-                  .join('')}`
-                : '<h4>Geschäftliche E-Mail Adressen</h4><p>Keine E-Mail-Adressen</p>'
-            }
-            ${
-              privateEmail &&
-              privateEmail.length &&
-              privateEmail.filter((email) => {
-                return email.address && email.address.indexOf('@') > -1
-              }).length
-                ? `
-                <h4>Private E-Mail-Adressen</h4>
-                ${privateEmail
-                  .map((e) => {
-                    return `<p><a href="mailto:${e.address}"><i class="linkicon far fa-envelope"></i>${e.address}</a></p>`
-                  })
-                  .join('')}`
-                : '<h4>Private E-Mail-Adressen</h4><p>Keine E-Mail-Adressen</p>'
-            }
-          </div>
-        </div>
-        <div class="flex-item">
-          <div class="container">
-            ${
-              this.social_medias &&
-              this.social_medias.length &&
-              this.social_medias.filter((sm) => {
-                return new RegExp(/(https?:\/\/[^\s]+)/g).test(sm.url)
-              }).length
-                ? `
-                <h4>Soziale Medien</h4>
-                ${this.social_medias
-                  .map((sm) => {
-                    return `<p><a href="${sm.url}" target="_blank" rel="noopener">${sm.type.label}</a></p>`
-                  })
-                  .join('')}
-                <br />`
-                : '<h4>Soziale Medien</h4><p>Kein Profile</p>'
-            }
-          </div>
-        </div>
-      </div>
-    `
   }
 
   public static async getSelectMap(): Promise<any[]> {
