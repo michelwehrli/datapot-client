@@ -30,8 +30,6 @@ export default class EditContent extends BaseComponent {
   table: string
   id
 
-  private __hash: string
-
   constructor(isInModal = false, p?: string[], onSave?: (value: any) => void) {
     super(tmpl)
 
@@ -92,7 +90,7 @@ export default class EditContent extends BaseComponent {
 
     if (!isInModal) {
       backButton.addEventListener('button-click', (e) => {
-        if (this.__hash !== md5(JSON.stringify(this.obj))) {
+        /*if (this.__hash !== md5(JSON.stringify(this.obj))) {
           const modal = new ModalComponent(
             new ConfirmationComponent(
               'Möchest du das das Formular wirklich verlassen?\n\n Deine ungespeicherten Änderungen gehen verloren!',
@@ -126,13 +124,13 @@ export default class EditContent extends BaseComponent {
             undefined,
             true
           )
+        } else {*/
+        if (this.obj.getDetail && this.id) {
+          Router.navigate(`crm/detail/${this.table}/${this.id}`, 'crm', e)
         } else {
-          if (this.obj.getDetail && this.id) {
-            Router.navigate(`crm/detail/${this.table}/${this.id}`, 'crm', e)
-          } else {
-            Router.navigate(`crm/list/${this.table}`, 'crm', e)
-          }
+          Router.navigate(`crm/list/${this.table}`, 'crm', e)
         }
+        // }
       })
       if (rocketButton) {
         rocketButton.addEventListener('button-click', async (e) => {
