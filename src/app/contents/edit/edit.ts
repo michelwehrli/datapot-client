@@ -14,7 +14,6 @@ import {
   TitleService,
   ToastService,
 } from '~/internal'
-import md5 from 'md5'
 
 import tmpl from './edit.html'
 
@@ -29,6 +28,7 @@ export default class EditContent extends BaseComponent {
   db: string
   table: string
   id
+  direct
 
   constructor(isInModal = false, p?: string[], onSave?: (value: any) => void) {
     super(tmpl)
@@ -46,6 +46,9 @@ export default class EditContent extends BaseComponent {
     }
     if (params[1]) {
       this.id = params[1]
+    }
+    if (params[2]) {
+      this.direct = true
     }
 
     const datamodel = DataService.getDatamodel(this.table)
@@ -125,7 +128,7 @@ export default class EditContent extends BaseComponent {
             true
           )
         } else {*/
-        if (this.obj.getDetail && this.id) {
+        if (!this.direct && this.obj.getDetail && this.id) {
           Router.navigate(`crm/detail/${this.table}/${this.id}`, 'crm', e)
         } else {
           Router.navigate(`crm/list/${this.table}`, 'crm', e)

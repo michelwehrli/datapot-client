@@ -4,7 +4,6 @@ import ListTemplate from '~/model/ListTemplate'
 
 import ButtonComponent from '../button/button'
 import ConfirmationComponent from '../confirmation/confirmation'
-import ContentHeaderComponent from '../content-header/content-header'
 import InputCheckboxComponent from '../form/input-checkbox/input-checkbox'
 import InputTextComponent from '../form/input-text/input-text'
 import ModalComponent from '../modal/modal'
@@ -220,6 +219,21 @@ export default class ListComponent extends BaseComponent {
         }
       }
 
+      /*const methods = document.createElement('div')
+      methods.classList.add('list-methods')
+
+      const editButton = new ButtonComponent(undefined, 'fa fa-pen', 'positive')
+      editButton.addEventListener('button-click', (e: MouseEvent) => {
+        Router.navigate(
+          `${Router.getUrl(['CrmModule', 'EditContent'])}/direct`,
+          'crm',
+          e
+        )
+      })
+      methods.appendChild(editButton)
+
+      trElement.appendChild(methods)*/
+
       fragment.appendChild(trElement)
     }
 
@@ -380,7 +394,7 @@ export default class ListComponent extends BaseComponent {
             e &&
             e.toString() &&
             value &&
-            e.toString().toLowerCase().indexOf(value.toLowerCase()) > -1
+            e.toString().toLowerCase().startsWith(value.toLowerCase())
         }
       }
       return allMatches

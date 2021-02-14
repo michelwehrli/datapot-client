@@ -12,6 +12,21 @@ dp-list {
 
     table {
       padding: 10px;
+
+      tr .list-methods {
+        position: fixed;
+        margin-top: 4px;
+        left: calc(100vw - 54px);
+
+        dp-button button {
+          padding: 4px 8px;
+          opacity: 0.1;
+        }
+
+        &:hover dp-button button {
+          opacity: 1;
+        }
+      }
     }
 
     .loader {
