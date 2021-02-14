@@ -1,4 +1,4 @@
-.exports {
+.tasks {
   padding: 20px;
 
   table {
@@ -9,8 +9,8 @@
     }
 
     tbody tr {
-      background-color: transparent;
       cursor: default;
+      background-color: transparent !important;
 
       &:hover {
         background-color: transparent !important;
